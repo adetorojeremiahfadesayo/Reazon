@@ -295,13 +295,14 @@ class LearningPathCuratorAgent(BaseAgent):
             return []
 
         curated_paths = []
+        used_resource_urls = set()
         for d in cert.get("domains", []):
             self.log_reasoning(f"Searching Foundry IQ for domain: {d['name']}...")
             search_res = foundry_iq.search_knowledge(d["name"], profile.certification_target)
             
             citation = "Grounded Link"
             resource_url = "https://learn.microsoft.com/en-us/credentials/certifications/"
-            registry_resource = fabric_iq.get_learning_resource(profile.certification_target, d["name"])
+            registry_resource = fabric_iq.get_learning_resource(profile.certification_target, d["name"], used_resource_urls)
             resource_url = registry_resource.get("learn_path_url", resource_url)
             resource_title = registry_resource.get("resource_title", f"{profile.certification_target} Microsoft Learn course")
             
@@ -323,6 +324,7 @@ class LearningPathCuratorAgent(BaseAgent):
                 "skills_covered": d["skills"],
                 "citation": citation
             })
+            used_resource_urls.add(resource_url)
             self.log_reasoning(f"Mapped {d['name']} to course: {resource_title} ({resource_url}) with citation: {citation}")
             
         return curated_paths

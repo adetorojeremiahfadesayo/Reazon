@@ -9,6 +9,16 @@ import type { AppView, Health, LearnerOption, LearnerWorkspace, ManagerInsights,
 
 const TOUR_STORAGE_KEY = "reazon-guided-tour-seen";
 
+function getPersonaGoal(role: string) {
+  return role.toLowerCase().includes("intern")
+    ? "I am taking the exam to qualify for a worker role."
+    : "I am taking the exam to prepare for promotion.";
+}
+
+function buildPrompt(learner: LearnerOption) {
+  return `I am ${learner.name}, a ${learner.role}. ${getPersonaGoal(learner.role)} My target exam is ${learner.certification_target}.`;
+}
+
 export function App() {
   const [activeView, setActiveView] = useState<AppView>("learner");
   const [learners, setLearners] = useState<LearnerOption[]>([]);
@@ -45,9 +55,7 @@ export function App() {
         setLearners(items);
         if (items[0]) {
           setSelectedEmployeeId(items[0].employee_id);
-          setPrompt(
-            `I am ${items[0].name}, working as a ${items[0].role}. My target exam is ${items[0].certification_target}.`
-          );
+          setPrompt(buildPrompt(items[0]));
         }
       })
       .catch((err) => setError(err instanceof Error ? err.message : "Could not load learners"));
@@ -58,7 +66,7 @@ export function App() {
     setSelectedEmployeeId(employeeId);
     setWorkspace(null);
     if (learner) {
-      setPrompt(`I am ${learner.name}, working as a ${learner.role}. My target exam is ${learner.certification_target}.`);
+      setPrompt(buildPrompt(learner));
     }
   };
 

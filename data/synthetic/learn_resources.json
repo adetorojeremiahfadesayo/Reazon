@@ -356,132 +356,152 @@
     },
     "AI-200": {
       "certification_url": "https://learn.microsoft.com/en-us/credentials/certifications/azure-ai-cloud-developer-associate/",
-      "learn_path_url": "https://learn.microsoft.com/en-us/training/browse/?terms=AI-200",
+      "learn_path_url": "https://learn.microsoft.com/en-us/training/modules/explore-azure-openai/",
       "courses": [
         {
           "match": "containerized",
           "resource_title": "Deploy containerized apps on Azure",
-          "resource_url": "https://learn.microsoft.com/en-us/training/browse/?terms=containerized%20apps%20azure"
+          "resource_url": "https://learn.microsoft.com/en-us/training/paths/deploy-manage-apps-azure-container-apps/"
         },
         {
           "match": "data services",
-          "resource_title": "Build AI apps with Azure data services",
-          "resource_url": "https://learn.microsoft.com/en-us/training/browse/?terms=Azure%20AI%20data%20services"
+          "resource_title": "Build a RAG solution with Azure AI Search",
+          "resource_url": "https://learn.microsoft.com/en-us/azure/search/search-get-started-rag"
         },
         {
           "match": "consume Azure services",
-          "resource_title": "Connect applications to Azure services",
-          "resource_url": "https://learn.microsoft.com/en-us/training/browse/?terms=Azure%20SDK%20messaging%20events"
+          "resource_title": "Implement message-based workflows with Azure Service Bus",
+          "resource_url": "https://learn.microsoft.com/en-us/training/modules/implement-message-workflows-with-service-bus/"
         },
         {
           "match": "monitor",
           "resource_title": "Monitor and troubleshoot Azure applications",
-          "resource_url": "https://learn.microsoft.com/en-us/training/browse/?terms=Azure%20Monitor%20application%20troubleshooting"
+          "resource_url": "https://learn.microsoft.com/en-us/training/modules/monitor-app-performance/"
         }
       ]
     },
     "AI-901": {
       "certification_url": "https://learn.microsoft.com/en-us/credentials/certifications/azure-ai-fundamentals/",
-      "learn_path_url": "https://learn.microsoft.com/en-us/training/browse/?terms=AI-901",
+      "learn_path_url": "https://learn.microsoft.com/en-us/training/paths/introduction-generative-ai/",
       "courses": [
         {
           "match": "responsible AI",
           "resource_title": "Explore responsible AI and generative AI concepts",
-          "resource_url": "https://learn.microsoft.com/en-us/training/browse/?terms=responsible%20AI%20generative%20AI"
+          "resource_url": "https://learn.microsoft.com/en-us/training/paths/operationalize-ai-responsibly/"
         },
         {
           "match": "machine learning",
           "resource_title": "Explore machine learning concepts",
-          "resource_url": "https://learn.microsoft.com/en-us/training/browse/?terms=machine%20learning%20azure"
+          "resource_url": "https://learn.microsoft.com/en-us/training/paths/get-started-with-artificial-intelligence-on-azure/"
         },
         {
           "match": "Azure AI services",
           "resource_title": "Explore Azure AI services and AI Foundry",
-          "resource_url": "https://learn.microsoft.com/en-us/training/browse/?terms=Azure%20AI%20Foundry"
+          "resource_url": "https://learn.microsoft.com/en-us/training/paths/introduction-generative-ai/"
         }
       ]
     },
     "DP-600": {
       "certification_url": "https://learn.microsoft.com/en-us/credentials/certifications/fabric-analytics-engineer-associate/",
-      "learn_path_url": "https://learn.microsoft.com/en-us/training/browse/?terms=DP-600",
+      "learn_path_url": "https://learn.microsoft.com/en-us/training/paths/work-semantic-models-microsoft-fabric/",
       "courses": [
         {
           "match": "analytics environment",
           "resource_title": "Get started with Microsoft Fabric",
-          "resource_url": "https://learn.microsoft.com/en-us/training/browse/?terms=Microsoft%20Fabric"
+          "resource_url": "https://learn.microsoft.com/en/training/paths/get-started-fabric"
         },
         {
           "match": "semantic models",
           "resource_title": "Build semantic models in Power BI",
-          "resource_url": "https://learn.microsoft.com/en-us/training/browse/?terms=semantic%20models%20Power%20BI"
+          "resource_url": "https://learn.microsoft.com/en-us/training/paths/work-semantic-models-microsoft-fabric/"
         },
         {
           "match": "DAX",
           "resource_title": "Write DAX calculations for semantic models",
-          "resource_url": "https://learn.microsoft.com/en-us/training/browse/?terms=DAX%20Power%20BI"
+          "resource_url": "https://learn.microsoft.com/en-us/training/modules/dax-power-bi-add-measures/"
+        },
+        {
+          "match": "reports",
+          "resource_title": "Design scalable semantic models",
+          "resource_url": "https://learn.microsoft.com/en-us/training/modules/design-scalable-semantic-models/"
         }
       ]
     },
     "DP-700": {
       "certification_url": "https://learn.microsoft.com/en-us/credentials/certifications/fabric-data-engineer-associate/",
-      "learn_path_url": "https://learn.microsoft.com/en-us/training/browse/?terms=DP-700",
+      "learn_path_url": "https://learn.microsoft.com/en/training/paths/get-started-fabric",
       "courses": [
         {
           "match": "analytics solution",
           "resource_title": "Implement analytics solutions with Microsoft Fabric",
-          "resource_url": "https://learn.microsoft.com/en-us/training/browse/?terms=Fabric%20analytics%20solution"
+          "resource_url": "https://learn.microsoft.com/en/training/paths/get-started-fabric"
         },
         {
           "match": "ingest",
           "resource_title": "Ingest and transform data in Fabric",
-          "resource_url": "https://learn.microsoft.com/en-us/training/browse/?terms=Fabric%20data%20engineering"
+          "resource_url": "https://learn.microsoft.com/en-us/training/modules/use-dataflow-gen-2-fabric/"
         },
         {
           "match": "monitor",
           "resource_title": "Monitor and optimize Fabric workloads",
-          "resource_url": "https://learn.microsoft.com/en-us/training/browse/?terms=Fabric%20monitor%20optimize"
+          "resource_url": "https://learn.microsoft.com/en-us/training/modules/get-started-kusto-fabric/"
+        },
+        {
+          "match": "transform",
+          "resource_title": "Use Data Factory pipelines in Microsoft Fabric",
+          "resource_url": "https://learn.microsoft.com/en-us/training/modules/use-data-factory-pipelines-fabric/"
         }
       ]
     },
     "MB-800": {
       "certification_url": "https://learn.microsoft.com/en-us/learn/certifications/exams/mb-800",
-      "learn_path_url": "https://learn.microsoft.com/en-us/training/browse/?terms=MB-800",
+      "learn_path_url": "https://learn.microsoft.com/training/courses/MB-800T00",
       "courses": [
         {
           "match": "Business Central",
           "resource_title": "Get started with Dynamics 365 Business Central",
-          "resource_url": "https://learn.microsoft.com/en-us/training/browse/?terms=Business%20Central"
+          "resource_url": "https://learn.microsoft.com/en-us/training/dynamics365/business-central"
         },
         {
           "match": "financials",
           "resource_title": "Configure financials in Business Central",
-          "resource_url": "https://learn.microsoft.com/en-us/training/browse/?terms=Business%20Central%20financials"
+          "resource_url": "https://learn.microsoft.com/en-us/training/modules/posting-groups-dynamics-365-business-central/"
         },
         {
           "match": "sales and purchasing",
           "resource_title": "Configure sales and purchasing in Business Central",
-          "resource_url": "https://learn.microsoft.com/en-us/training/browse/?terms=Business%20Central%20sales%20purchasing"
+          "resource_url": "https://learn.microsoft.com/en-us/training/paths/configure-sales-purchasing/"
+        },
+        {
+          "match": "operations",
+          "resource_title": "Manage business solutions with Dynamics 365 Business Central",
+          "resource_url": "https://learn.microsoft.com/training/courses/MB-800T00"
         }
       ]
     },
     "SC-100": {
       "certification_url": "https://learn.microsoft.com/en-us/credentials/certifications/cybersecurity-architect-expert/",
-      "learn_path_url": "https://learn.microsoft.com/en-us/training/browse/?terms=SC-100",
+      "learn_path_url": "https://learn.microsoft.com/en-us/training/paths/sc-100-design-solutions-best-practices-priorities/",
       "courses": [
         {
           "match": "security best practices",
           "resource_title": "Design solutions aligned to security best practices",
-          "resource_url": "https://learn.microsoft.com/en-us/training/browse/?terms=SC-100%20security%20best%20practices"
+          "resource_url": "https://learn.microsoft.com/en-us/training/paths/sc-100-design-solutions-best-practices-priorities/"
         },
         {
           "match": "identity",
           "resource_title": "Design identity and access security solutions",
-          "resource_url": "https://learn.microsoft.com/en-us/training/browse/?terms=identity%20security%20architecture"
+          "resource_url": "https://learn.microsoft.com/en-us/training/paths/sc-100-design-operations-identity-compliance-capabilities/"
         },
         {
           "match": "infrastructure",
           "resource_title": "Design infrastructure security solutions",
-          "resource_url": "https://learn.microsoft.com/en-us/training/browse/?terms=infrastructure%20security%20architecture"
+          "resource_url": "https://learn.microsoft.com/en-us/training/paths/sc-100-design-security-solutions-infrastructure/"
+        },
+        {
+          "match": "applications and data",
+          "resource_title": "Design security solutions for applications and data",
+          "resource_url": "https://learn.microsoft.com/en-us/training/paths/sc-100-design-security-solutions-applications-data/"
         }
       ]
     }

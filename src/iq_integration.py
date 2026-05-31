@@ -118,13 +118,12 @@ class FabricIQ:
                 return c
         return None
 
-    def get_learning_resource(self, cert_id: str, domain_name: str = "") -> Dict[str, Any]:
+    def get_learning_resource(self, cert_id: str, domain_name: str = "", used_urls: Optional[set[str]] = None) -> Dict[str, Any]:
         resource = self.resources_cache.get(cert_id, {})
         if not resource:
-            query = cert_id if not domain_name else f"{cert_id}%20{domain_name.replace(' ', '%20')}"
             return {
                 "certification_url": "https://learn.microsoft.com/en-us/credentials/certifications/",
-                "learn_path_url": f"https://learn.microsoft.com/en-us/training/browse/?terms={query}",
+                "learn_path_url": "https://learn.microsoft.com/en-us/training/",
                 "resource_title": f"{cert_id} Microsoft Learn resources"
             }
 
@@ -132,6 +131,7 @@ class FabricIQ:
         if not courses:
             return resource
 
+        used_urls = used_urls or set()
         domain_lower = domain_name.lower()
         best_course = courses[0]
         best_score = -1
@@ -144,6 +144,8 @@ class FabricIQ:
             if match_text and (match_text in domain_lower or domain_lower in match_text):
                 score += 10
             score += len(domain_terms.intersection(re.findall(r"[a-z0-9]+", f"{match_text} {title_text}")))
+            if course.get("resource_url") in used_urls:
+                score -= 25
             if score > best_score:
                 best_course = course
                 best_score = score

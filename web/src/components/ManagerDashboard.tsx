@@ -7,6 +7,11 @@ import { TooltipButton } from "./TooltipButton";
 
 const READINESS_THRESHOLD = 65;
 const MAX_RISK_MEETING_HOURS = 40;
+const RISK_COLORS: Record<string, string> = {
+  High: "#c2410c",
+  Medium: "#b7791f",
+  Low: "#0f9f6e"
+};
 
 type ManagerDashboardProps = {
   insights: ManagerInsights | null;
@@ -54,6 +59,18 @@ export function ManagerDashboard({
       (a, b) => (riskRank[b.risk_level] ?? 0) - (riskRank[a.risk_level] ?? 0) || b.meeting_hours - a.meeting_hours
     );
   }, [insights]);
+  const riskGroups = useMemo(() => {
+    const groups = { High: [] as typeof sortedRisks, Medium: [] as typeof sortedRisks, Low: [] as typeof sortedRisks };
+    sortedRisks.forEach((risk) => {
+      if (risk.risk_level === "High" || risk.risk_level === "Medium" || risk.risk_level === "Low") {
+        groups[risk.risk_level].push(risk);
+      }
+    });
+    return groups;
+  }, [sortedRisks]);
+  const totalRiskCount = sortedRisks.length;
+  const highPercent = totalRiskCount ? Math.round((riskGroups.High.length / totalRiskCount) * 100) : 0;
+  const mediumPercent = totalRiskCount ? Math.round((riskGroups.Medium.length / totalRiskCount) * 100) : 0;
 
   return (
     <div className="manager-grid">
@@ -179,6 +196,50 @@ export function ManagerDashboard({
                   <small>{risk.meeting_hours >= 30 ? "Action: protect study time this week" : "Action: monitor workload and checkpoints"}</small>
                 </article>
               ))}
+            </div>
+          </section>
+
+          <section className="panel risk-summary-panel">
+            <div className="section-heading">
+              <div>
+                <p>Risk distribution</p>
+                <h2>Overall risk by worker</h2>
+              </div>
+              <AlertTriangle size={20} />
+            </div>
+            <div className="risk-pie-layout">
+              <div
+                className="risk-donut"
+                style={
+                  {
+                    "--high": `${highPercent}%`,
+                    "--medium": `${highPercent + mediumPercent}%`
+                  } as CSSProperties
+                }
+                role="img"
+                aria-label={`Risk distribution: ${riskGroups.High.length} high, ${riskGroups.Medium.length} medium, ${riskGroups.Low.length} low.`}
+              >
+                <div>
+                  <strong>{totalRiskCount}</strong>
+                  <span>at risk</span>
+                </div>
+              </div>
+              <div className="risk-breakdown">
+                {(["High", "Medium", "Low"] as const).map((level) => (
+                  <article className="risk-breakdown-row" key={level}>
+                    <div>
+                      <span className="risk-dot" style={{ background: RISK_COLORS[level] }} />
+                      <strong>{level}</strong>
+                      <small>{riskGroups[level].length} worker(s)</small>
+                    </div>
+                    <p>
+                      {riskGroups[level].length
+                        ? riskGroups[level].map((risk) => `${risk.name} (${risk.meeting_hours}h)`).join(", ")
+                        : "No workers in this tier"}
+                    </p>
+                  </article>
+                ))}
+              </div>
             </div>
           </section>
 

@@ -7,16 +7,24 @@ import type {
   ReportFile
 } from "./types";
 
-const API_BASE = import.meta.env.VITE_API_BASE_URL ?? "";
+const API_BASE = import.meta.env.VITE_API_BASE_URL ?? (import.meta.env.DEV ? "http://127.0.0.1:8000" : "");
 
 async function request<T>(path: string, init?: RequestInit): Promise<T> {
-  const response = await fetch(`${API_BASE}${path}`, {
-    headers: {
-      "Content-Type": "application/json",
-      ...(init?.headers ?? {})
-    },
-    ...init
-  });
+  let response: Response;
+  try {
+    response = await fetch(`${API_BASE}${path}`, {
+      headers: {
+        "Content-Type": "application/json",
+        ...(init?.headers ?? {})
+      },
+      ...init
+    });
+  } catch (err) {
+    const target = API_BASE || "the local API proxy";
+    throw new Error(
+      `Cannot reach ${target}. Check that the FastAPI backend is running on http://127.0.0.1:8000 and reload the app.`
+    );
+  }
 
   if (!response.ok) {
     const detail = await response.text();

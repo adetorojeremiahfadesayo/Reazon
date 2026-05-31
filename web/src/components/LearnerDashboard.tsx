@@ -47,6 +47,12 @@ const pipelineSteps = [
   { label: "Badge", icon: Trophy }
 ];
 
+function getJourneyProgress(workspace: LearnerWorkspace | null, loading: boolean) {
+  if (workspace) return 100;
+  if (loading) return 18;
+  return 0;
+}
+
 export function LearnerDashboard({
   selectedLearner,
   workspace,
@@ -68,6 +74,7 @@ export function LearnerDashboard({
     return learnerMatch && (report.report_type === "Study plan" || report.report_type === "Badge certificate");
   });
   const studyPlanReport = learnerReports.find((report) => report.report_type === "Study plan");
+  const journeyProgress = getJourneyProgress(workspace, loading);
   const badgeReportById = new Map(
     learnerReports
       .filter((report) => report.report_type === "Badge certificate")
@@ -77,13 +84,10 @@ export function LearnerDashboard({
   return (
     <div className="dashboard-grid">
       <section className="command-strip" data-tour="agent-pipeline">
-        <div>
-          <p>Agent pipeline</p>
-          <h2>{learner ? `${learner.name} - ${learner.certification_target}` : "Select a learner"}</h2>
-          <span>
-            Run the workforce development flow for profiling, course curation, scheduling, checkpoint assessment, activity
-            verification, booking guidance, and guardrail traces.
-          </span>
+        <div className="welcome-copy">
+          <p>Welcome</p>
+          <h2>{learner ? learner.name : "Select a learner"}</h2>
+          <span>{learner?.role ?? "Choose an intern or junior worker"}</span>
         </div>
         <label className="prompt-box">
           Worker prompt
@@ -99,15 +103,22 @@ export function LearnerDashboard({
             </div>
           ) : null}
         </label>
-        <TooltipButton
-          tooltip="Execute the full learner pipeline for the selected persona and current week count"
-          icon={<Play size={18} />}
-          variant="primary"
-          onClick={onRun}
-          disabled={!selectedLearner || loading}
-        >
-          {loading ? "Running agents" : "Execute pipeline"}
-        </TooltipButton>
+        <div className="pipeline-action">
+          <p>Agent pipeline</p>
+          <span>
+            Run the pipeline for profiling, curation, scheduling, checkpoint assessment, activity verification, booking
+            guidance, and guardrail traces.
+          </span>
+          <TooltipButton
+            tooltip="Execute the full learner pipeline for the selected persona and current week count"
+            icon={<Play size={18} />}
+            variant="primary"
+            onClick={onRun}
+            disabled={!selectedLearner || loading}
+          >
+            {loading ? "Running agents" : "Execute pipeline"}
+          </TooltipButton>
+        </div>
       </section>
 
       <section className="pipeline-stage-rail" aria-label="Agent pipeline stages" data-tour="pipeline-stages">
@@ -122,6 +133,29 @@ export function LearnerDashboard({
             </article>
           );
         })}
+      </section>
+
+      <section
+        className="worker-journey-panel"
+        aria-label={`Worker development journey is ${journeyProgress}% complete`}
+      >
+        <div className="journey-copy">
+          <p>Worker journey</p>
+          <h2>{workspace ? "Certification preparation path is built" : loading ? "Building the learning path" : "Ready to start"}</h2>
+        </div>
+        <div className="journey-track-wrap">
+          <div className="journey-track">
+            <i style={{ inlineSize: `${journeyProgress}%` }} />
+          </div>
+          <span>{journeyProgress}%</span>
+        </div>
+        <div className="journey-steps" aria-hidden="true">
+          {pipelineSteps.map((step, index) => (
+            <span className={workspace || (loading && index === 0) ? "complete" : ""} key={step.label}>
+              {step.label}
+            </span>
+          ))}
+        </div>
       </section>
 
       <section className="metric-grid">

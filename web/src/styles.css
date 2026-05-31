@@ -207,6 +207,10 @@ select {
   max-width: 100%;
 }
 
+.topbar-controls label:first-of-type select {
+  inline-size: min(360px, 48vw);
+}
+
 textarea {
   min-height: 86px;
   resize: vertical;
@@ -363,10 +367,15 @@ input:focus-visible {
 .command-strip {
   display: grid;
   grid-column: 1 / -1;
-  grid-template-columns: minmax(280px, 1fr) minmax(340px, 0.8fr) auto;
+  grid-template-columns: minmax(220px, 0.72fr) minmax(340px, 1fr) minmax(260px, 0.82fr);
   gap: 18px;
   align-items: end;
   padding: 18px;
+  min-width: 0;
+}
+
+.welcome-copy,
+.pipeline-action {
   min-width: 0;
 }
 
@@ -384,6 +393,32 @@ input:focus-visible {
   color: var(--muted);
   font-size: 14px;
   line-height: 1.55;
+}
+
+.pipeline-action {
+  display: grid;
+  gap: 8px;
+  align-self: stretch;
+  align-content: end;
+}
+
+.pipeline-action p {
+  margin: 0;
+  color: var(--muted);
+  font-size: 12px;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.pipeline-action span {
+  margin: 0;
+  font-size: 13px;
+  line-height: 1.45;
+}
+
+.pipeline-action .tooltip-button {
+  width: 100%;
 }
 
 .prompt-tags {
@@ -424,6 +459,82 @@ input:focus-visible {
   color: var(--muted);
   font-size: 12px;
   font-weight: 900;
+}
+
+.worker-journey-panel {
+  display: grid;
+  grid-column: 1 / -1;
+  grid-template-columns: minmax(220px, 0.8fr) minmax(260px, 1fr);
+  gap: 14px;
+  align-items: center;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: #ffffff;
+  padding: 14px 16px;
+}
+
+.journey-copy p {
+  margin: 0 0 4px;
+  color: var(--muted);
+  font-size: 12px;
+  font-weight: 900;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.journey-copy h2 {
+  margin: 0;
+  font-size: 18px;
+  line-height: 1.25;
+}
+
+.journey-track-wrap {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 48px;
+  gap: 10px;
+  align-items: center;
+}
+
+.journey-track {
+  overflow: hidden;
+  height: 14px;
+  border-radius: 999px;
+  background: var(--surface-2);
+}
+
+.journey-track i {
+  display: block;
+  height: 100%;
+  border-radius: inherit;
+  background: linear-gradient(90deg, var(--blue), var(--green));
+  transition: inline-size calc(220ms * var(--motion-speed)) ease;
+}
+
+.journey-track-wrap > span {
+  color: var(--text);
+  font-size: 13px;
+  font-weight: 950;
+  text-align: right;
+}
+
+.journey-steps {
+  grid-column: 1 / -1;
+  display: grid;
+  grid-template-columns: repeat(6, minmax(0, 1fr));
+  gap: 6px;
+}
+
+.journey-steps span {
+  overflow: hidden;
+  color: var(--muted);
+  font-size: 11px;
+  font-weight: 850;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.journey-steps span.complete {
+  color: var(--blue);
 }
 
 .stage.complete {
@@ -1546,6 +1657,106 @@ summary {
   gap: 12px;
 }
 
+.risk-summary-panel {
+  grid-column: 1 / -1;
+}
+
+.risk-pie-layout {
+  display: grid;
+  grid-template-columns: 220px minmax(0, 1fr);
+  gap: 20px;
+  align-items: center;
+}
+
+.risk-donut {
+  display: grid;
+  width: 190px;
+  aspect-ratio: 1;
+  place-items: center;
+  border-radius: 50%;
+  background:
+    conic-gradient(
+      var(--red) 0 var(--high),
+      var(--amber) var(--high) var(--medium),
+      var(--green) var(--medium) 100%
+    );
+}
+
+.risk-donut > div {
+  display: grid;
+  width: 118px;
+  aspect-ratio: 1;
+  place-items: center;
+  border-radius: 50%;
+  background: #ffffff;
+  text-align: center;
+}
+
+.risk-donut strong,
+.risk-donut span {
+  display: block;
+}
+
+.risk-donut strong {
+  color: var(--text);
+  font-size: 34px;
+  line-height: 1;
+}
+
+.risk-donut span {
+  color: var(--muted);
+  font-size: 12px;
+  font-weight: 850;
+}
+
+.risk-breakdown {
+  display: grid;
+  gap: 10px;
+}
+
+.risk-breakdown-row {
+  display: grid;
+  grid-template-columns: 150px minmax(0, 1fr);
+  gap: 12px;
+  align-items: start;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: #ffffff;
+  padding: 12px;
+}
+
+.risk-breakdown-row > div {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  gap: 4px 8px;
+  align-items: center;
+}
+
+.risk-dot {
+  display: inline-block;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+}
+
+.risk-breakdown-row strong {
+  font-size: 13px;
+}
+
+.risk-breakdown-row small {
+  grid-column: 2;
+  color: var(--muted);
+  font-size: 12px;
+  font-weight: 850;
+}
+
+.risk-breakdown-row p {
+  margin: 0;
+  color: var(--text);
+  font-size: 13px;
+  line-height: 1.45;
+}
+
 .risk-row.high {
   border-color: rgba(194, 65, 12, 0.36);
   background: linear-gradient(90deg, var(--red-2), #ffffff 60%);
@@ -1844,9 +2055,21 @@ summary {
   }
 
   .pipeline-stage-rail,
+  .journey-steps,
   .report-card-grid,
   .report-mini-list {
     grid-template-columns: 1fr;
+  }
+
+  .worker-journey-panel,
+  .risk-pie-layout,
+  .risk-breakdown-row {
+    grid-template-columns: 1fr;
+  }
+
+  .risk-donut {
+    width: min(190px, 72vw);
+    justify-self: center;
   }
 
   .timeline-row {

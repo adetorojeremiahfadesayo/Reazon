@@ -96,7 +96,7 @@ export function AppShell({
               >
                 {learners.map((learner) => (
                   <option key={learner.employee_id} value={learner.employee_id}>
-                    {learner.name} - {learner.certification_target}
+                    {learner.name} - {learner.role} - {learner.certification_target}
                   </option>
                 ))}
               </select>

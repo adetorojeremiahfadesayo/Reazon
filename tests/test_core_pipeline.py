@@ -30,6 +30,8 @@ def test_learner_pipeline_returns_cited_resources_and_quiz():
     assert profile.certification_target == "AI-200"
     assert paths
     assert all("learn.microsoft.com" in p["resource_url"] for p in paths)
+    assert all("/training/browse/" not in p["resource_url"] for p in paths)
+    assert len({p["resource_url"] for p in paths}) == len(paths)
     assert sum(w.hours_allocated for w in plan.schedule) == plan.total_hours
     assert engagement["recommended_time"]
     assert len(quiz.questions) == 10
