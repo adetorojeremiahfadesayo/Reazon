@@ -1,4 +1,4 @@
-import { BrainCircuit, Gauge, HelpCircle, RefreshCw, Users } from "lucide-react";
+import { BrainCircuit, FileQuestion, Gauge, HelpCircle, RefreshCw, Users } from "lucide-react";
 import type { AppView, Health, LearnerOption } from "../types";
 import { TooltipButton } from "./TooltipButton";
 
@@ -17,7 +17,8 @@ type AppShellProps = {
 };
 
 const titleByView: Record<AppView, string> = {
-  learner: "Intern workspace",
+  learner: "Learning workspace",
+  exam: "Final exam simulator",
   manager: "Program manager portal"
 };
 
@@ -41,7 +42,7 @@ export function AppShell({
           <div className="brand-mark">R</div>
           <div>
             <strong>Reazon</strong>
-            <span>Intern development</span>
+            <span>Workforce development</span>
           </div>
         </div>
 
@@ -52,7 +53,15 @@ export function AppShell({
             variant={activeView === "learner" ? "primary" : "ghost"}
             onClick={() => onViewChange("learner")}
           >
-            Intern Space
+            Learning Space
+          </TooltipButton>
+          <TooltipButton
+            tooltip="Open the final exam simulator for timed certification readiness attempts"
+            icon={<FileQuestion size={18} />}
+            variant={activeView === "exam" ? "primary" : "ghost"}
+            onClick={() => onViewChange("exam")}
+          >
+            Final Exam
           </TooltipButton>
           <TooltipButton
             tooltip="Open the manager portal for team readiness, risks, and buddy matching"
@@ -66,24 +75,24 @@ export function AppShell({
 
         <div className="side-note">
           <Gauge size={18} />
-          <span>Internship development program using synthetic Microsoft Learn, LMS, and Work IQ signals.</span>
+          <span>Workforce development program using synthetic Microsoft Learn, LMS, and Work IQ signals.</span>
         </div>
       </aside>
 
       <main className="workspace">
         <header className="topbar">
           <div>
-            <p className="eyeline">Reazon Internship Development Program</p>
+            <p className="eyeline">Reazon Workforce Development Program</p>
             <h1>{titleByView[activeView]}</h1>
           </div>
 
           <div className="topbar-controls" data-tour="learner-controls">
             <label>
-              Learner
+              Person
               <select
                 value={selectedEmployeeId}
                 onChange={(event) => onLearnerChange(event.target.value)}
-                title="Choose the learner persona used by the pipeline"
+                title="Choose the worker or intern persona used by the pipeline"
               >
                 {learners.map((learner) => (
                   <option key={learner.employee_id} value={learner.employee_id}>

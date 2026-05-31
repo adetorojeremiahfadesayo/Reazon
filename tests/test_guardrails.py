@@ -24,7 +24,7 @@ def _profile(**overrides):
         "employee_id": "EMP-GR",
         "name": "Guardrail Learner",
         "role": "Founder",
-        "certification_target": "AZ-204",
+        "certification_target": "AI-200",
         "practice_score_avg": 72.0,
         "hours_studied": 10.0,
         "weekly_study_budget_hours": 5,
@@ -38,12 +38,12 @@ def _profile(**overrides):
 def _plan(**overrides):
     data = {
         "learner_id": "L-GR",
-        "certification_target": "AZ-204",
+        "certification_target": "AI-200",
         "total_weeks": 2,
         "total_hours": 10,
         "schedule": [
-            StudyWeek(week_number=1, focus_domains=["Develop Azure compute solutions (5h)"], hours_allocated=5, workload_adjusted=False),
-            StudyWeek(week_number=2, focus_domains=["Implement Azure security (5h)"], hours_allocated=5, workload_adjusted=False),
+            StudyWeek(week_number=1, focus_domains=["Develop containerized solutions in Azure (5h)"], hours_allocated=5, workload_adjusted=False),
+            StudyWeek(week_number=2, focus_domains=["Secure, monitor, and troubleshoot Azure solutions (5h)"], hours_allocated=5, workload_adjusted=False),
         ],
     }
     data.update(overrides)
@@ -54,11 +54,11 @@ def _quiz(**overrides):
     questions = [
         QuizQuestion(
             question_id=i,
-            domain="Develop Azure compute solutions",
+            domain="Develop containerized solutions in Azure",
             question_text=f"Question {i}?",
             options=["A", "B", "C", "D"],
             correct_option_index=1,
-            citation="[Ref: AZ204-D1]",
+            citation="[Ref: AI200-D1]",
             explanation="Because this is grounded in the exam guide.",
         )
         for i in range(1, 11)
@@ -66,7 +66,7 @@ def _quiz(**overrides):
     data = {
         "quiz_id": "Q-GR",
         "learner_id": "L-GR",
-        "certification_target": "AZ-204",
+        "certification_target": "AI-200",
         "questions": questions,
     }
     data.update(overrides)
@@ -115,7 +115,7 @@ def test_quiz_guardrails_validate_final_exam_shape_and_grounding():
     guardrails = GuardrailsPipeline()
     guardrails.validate_quiz(_quiz())
 
-    with pytest.raises(GuardrailException, match="10 to 15 questions"):
+    with pytest.raises(GuardrailException, match="10 to 60 questions"):
         guardrails.validate_quiz(_quiz(questions=_quiz().questions[:9]))
 
     bad_questions = _quiz().questions
@@ -128,7 +128,7 @@ def test_readiness_guardrails_validate_reazon_formula_components():
     guardrails = GuardrailsPipeline()
     report = ReadinessReport(
         learner_id="L-GR",
-        certification_target="AZ-204",
+        certification_target="AI-200",
         domain_scores={"Develop Azure compute solutions": 80.0},
         hours_utilization=60.0,
         workload_fit=90.0,
@@ -147,8 +147,8 @@ def test_final_exam_guardrails_enforce_badge_policy():
     guardrails = GuardrailsPipeline()
     badge = ExamBadge(
         badge_id="B-GR",
-        name="AZ-204 Startup Professional Badge",
-        certification_target="AZ-204",
+        name="AI-200 Workforce Professional Badge",
+        certification_target="AI-200",
         issued_to="Guardrail Learner",
         score=65.0,
         criteria="Passed final exam with at least 65%",
@@ -156,7 +156,7 @@ def test_final_exam_guardrails_enforce_badge_policy():
     guardrails.validate_final_exam_result(
         FinalExamResult(
             learner_id="L-GR",
-            certification_target="AZ-204",
+            certification_target="AI-200",
             final_exam_score=65.0,
             passed=True,
             badge=badge,
@@ -168,7 +168,7 @@ def test_final_exam_guardrails_enforce_badge_policy():
         guardrails.validate_final_exam_result(
             FinalExamResult(
                 learner_id="L-GR",
-                certification_target="AZ-204",
+                certification_target="AI-200",
                 final_exam_score=64.0,
                 passed=False,
                 badge=badge,
@@ -182,7 +182,7 @@ def test_learning_activity_and_manager_guardrails_enforce_privacy_and_penalty():
     guardrails.validate_learning_activity_report(
         LearningActivityReport(
             learner_id="L-GR",
-            certification_target="AZ-204",
+            certification_target="AI-200",
             completed_modules=1,
             total_modules=2,
             average_completion_confidence=75.0,
@@ -195,7 +195,7 @@ def test_learning_activity_and_manager_guardrails_enforce_privacy_and_penalty():
     insights = ManagerInsights(
         total_learners=1,
         average_readiness=70.0,
-        readiness_by_exam={"AZ-204": 70.0},
+        readiness_by_exam={"AI-200": 70.0},
         at_risk_learners=[
             RiskAssessment(
                 learner_id="L-GR",
@@ -210,7 +210,7 @@ def test_learning_activity_and_manager_guardrails_enforce_privacy_and_penalty():
             WorkerLearningComment(
                 learner_id="L-GR",
                 name="Guardrail Learner",
-                certification_target="AZ-204",
+                certification_target="AI-200",
                 missed_count=3,
                 penalty_applied=True,
                 comment="Three misses carries a penalty.",
@@ -227,7 +227,7 @@ def test_learning_activity_and_manager_guardrails_enforce_privacy_and_penalty():
                         WorkerLearningComment(
                             learner_id="L-GR",
                             name="Guardrail Learner",
-                            certification_target="AZ-204",
+                            certification_target="AI-200",
                             missed_count=3,
                             penalty_applied=False,
                             comment="No penalty.",
@@ -248,7 +248,7 @@ def test_buddy_guardrails_prevent_self_matching():
                     learner_a_name="A",
                     learner_b_id="L-GR",
                     learner_b_name="A",
-                    certification_target="AZ-204",
+                    certification_target="AI-200",
                     common_slot="Morning",
                 )
             ]

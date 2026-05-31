@@ -1,7 +1,7 @@
 [
   {
     "learner_id": "L-1001",
-    "certification_target": "AZ-204",
+    "certification_target": "AI-200",
     "domain_name": "Develop Azure compute solutions",
     "module_id": "AZ204-D1",
     "source": "Microsoft Learn",
@@ -14,7 +14,7 @@
   },
   {
     "learner_id": "L-1001",
-    "certification_target": "AZ-204",
+    "certification_target": "AI-200",
     "domain_name": "Develop for Azure storage",
     "module_id": "AZ204-D2",
     "source": "LMS",
@@ -27,7 +27,7 @@
   },
   {
     "learner_id": "L-1002",
-    "certification_target": "AI-102",
+    "certification_target": "AI-200",
     "domain_name": "Implement generative AI solutions",
     "module_id": "AI102-D5",
     "source": "Microsoft Learn",
@@ -53,7 +53,7 @@
   },
   {
     "learner_id": "L-1005",
-    "certification_target": "AI-900",
+    "certification_target": "AI-901",
     "domain_name": "Describe Azure AI services",
     "module_id": "AI900-D3",
     "source": "Viva Learning",
@@ -89,5 +89,57 @@
     "watch_percentage": 89,
     "checkpoint_score": 84,
     "reflection_submitted": true
+  },
+  {
+    "learner_id": "L-1019",
+    "certification_target": "DP-600",
+    "domain_name": "Implement and manage semantic models",
+    "module_id": "DP600-D3",
+    "source": "LMS",
+    "status": "partial",
+    "attendance_minutes": 30,
+    "expected_minutes": 60,
+    "watch_percentage": 62,
+    "checkpoint_score": 61,
+    "reflection_submitted": false
+  },
+  {
+    "learner_id": "L-1020",
+    "certification_target": "MB-800",
+    "domain_name": "Configure financials",
+    "module_id": "MB800-D2",
+    "source": "Microsoft Learn",
+    "status": "completed",
+    "attendance_minutes": 52,
+    "expected_minutes": 50,
+    "watch_percentage": 94,
+    "checkpoint_score": 74,
+    "reflection_submitted": true
+  },
+  {
+    "learner_id": "L-1021",
+    "certification_target": "AI-200",
+    "domain_name": "Secure, monitor, and troubleshoot Azure solutions",
+    "module_id": "AI200-D4",
+    "source": "Viva Learning",
+    "status": "completed",
+    "attendance_minutes": 48,
+    "expected_minutes": 45,
+    "watch_percentage": 98,
+    "checkpoint_score": 86,
+    "reflection_submitted": true
+  },
+  {
+    "learner_id": "L-1022",
+    "certification_target": "SC-100",
+    "domain_name": "Design security operations, identity, and compliance capabilities",
+    "module_id": "SC100-D2",
+    "source": "Teams Class Attendance",
+    "status": "partial",
+    "attendance_minutes": 28,
+    "expected_minutes": 60,
+    "watch_percentage": 55,
+    "checkpoint_score": 60,
+    "reflection_submitted": false
   }
 ]

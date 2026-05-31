@@ -1,35 +1,103 @@
 {
-  "pack_name": "Microsoft Startup Professional Exam Pack",
-  "pack_description": "A startup-ready Microsoft certification pack covering cloud fundamentals, AI, data, security, productivity, business applications, low-code, architecture, and operations.",
+  "pack_name": "Microsoft Workforce Development Exam Pack",
+  "pack_description": "A workforce-ready Microsoft certification pack covering cloud, AI, data, security, productivity, business applications, low-code, architecture, and operations.",
   "certifications": [
     {
-      "id": "AI-102",
-      "name": "Azure AI Engineer Associate",
-      "startup_track": "AI Product Engineering",
+      "id": "AI-200",
+      "name": "Azure AI Cloud Developer Associate",
+      "startup_track": "AI Cloud Application Engineering",
       "difficulty": "Intermediate",
-      "recommended_hours": 35,
+      "recommended_hours": 42,
       "prerequisites": [],
+      "exam_type": "role-based",
+      "may_contain_labs": false,
       "domains": [
-        {"name": "Plan and manage an Azure AI solution", "weight": 0.15, "skills": ["Provisioning", "Security", "Cost Management"]},
-        {"name": "Implement image and video processing solutions", "weight": 0.20, "skills": ["Custom Vision", "Face API", "Video Indexer"]},
-        {"name": "Implement natural language processing solutions", "weight": 0.30, "skills": ["CLU", "Text Analytics", "Question Answering"]},
-        {"name": "Implement knowledge mining solutions", "weight": 0.15, "skills": ["Azure AI Search", "Indexers", "Skillsets"]},
-        {"name": "Implement generative AI solutions", "weight": 0.20, "skills": ["Azure OpenAI", "RAG", "Prompt Engineering"]}
+        {
+          "name": "Develop containerized solutions in Azure",
+          "weight": 0.25,
+          "skills": [
+            "Containers",
+            "Azure Container Apps",
+            "Deployment"
+          ]
+        },
+        {
+          "name": "Develop AI solutions using Azure data services",
+          "weight": 0.25,
+          "skills": [
+            "Vector Stores",
+            "Data Access",
+            "RAG Data"
+          ]
+        },
+        {
+          "name": "Connect to and consume Azure services",
+          "weight": 0.25,
+          "skills": [
+            "SDKs",
+            "Messaging",
+            "Events"
+          ]
+        },
+        {
+          "name": "Secure, monitor, and troubleshoot Azure solutions",
+          "weight": 0.25,
+          "skills": [
+            "Managed Identity",
+            "Monitoring",
+            "Diagnostics"
+          ]
+        }
       ]
     },
     {
-      "id": "AZ-204",
-      "name": "Developing Solutions for Microsoft Azure",
-      "startup_track": "Cloud Application Engineering",
+      "id": "DP-600",
+      "name": "Fabric Analytics Engineer Associate",
+      "startup_track": "Analytics Engineering",
       "difficulty": "Intermediate",
       "recommended_hours": 40,
-      "prerequisites": [],
+      "prerequisites": [
+        "DP-900"
+      ],
+      "exam_type": "role-based",
+      "may_contain_labs": false,
       "domains": [
-        {"name": "Develop Azure compute solutions", "weight": 0.30, "skills": ["App Service", "Functions", "Containers"]},
-        {"name": "Develop for Azure storage", "weight": 0.20, "skills": ["Cosmos DB", "Blob Storage"]},
-        {"name": "Implement Azure security", "weight": 0.20, "skills": ["Key Vault", "Managed Identities"]},
-        {"name": "Monitor, troubleshoot, and optimize solutions", "weight": 0.15, "skills": ["App Insights", "Redis Cache"]},
-        {"name": "Connect to and consume Azure and third-party services", "weight": 0.15, "skills": ["API Management", "Event Grid", "Service Bus"]}
+        {
+          "name": "Plan and implement a data analytics environment",
+          "weight": 0.25,
+          "skills": [
+            "Fabric Workspaces",
+            "Lakehouse",
+            "Governance"
+          ]
+        },
+        {
+          "name": "Prepare and serve data",
+          "weight": 0.3,
+          "skills": [
+            "Power Query",
+            "Semantic Models",
+            "SQL"
+          ]
+        },
+        {
+          "name": "Implement and manage semantic models",
+          "weight": 0.3,
+          "skills": [
+            "DAX",
+            "Relationships",
+            "Performance"
+          ]
+        },
+        {
+          "name": "Explore and analyze data",
+          "weight": 0.15,
+          "skills": [
+            "Reports",
+            "Insights",
+            "Visual Analytics"
+          ]
+        }
       ]
     },
     {
@@ -38,13 +106,51 @@
       "startup_track": "DevOps and Platform Delivery",
       "difficulty": "Advanced",
       "recommended_hours": 50,
-      "prerequisites": ["AZ-204"],
+      "prerequisites": [
+        "AZ-104"
+      ],
       "domains": [
-        {"name": "Configure processes and communications", "weight": 0.15, "skills": ["Azure Boards", "Traceability"]},
-        {"name": "Design and implement source control", "weight": 0.15, "skills": ["Git", "Branch Policies"]},
-        {"name": "Design and implement build and release pipelines", "weight": 0.30, "skills": ["CI/CD", "YAML", "Deployment Strategies"]},
-        {"name": "Develop a security and compliance plan", "weight": 0.15, "skills": ["SAST/SCA", "Secret Management"]},
-        {"name": "Implement an instrumentation strategy", "weight": 0.25, "skills": ["DORA Metrics", "Logging"]}
+        {
+          "name": "Configure processes and communications",
+          "weight": 0.15,
+          "skills": [
+            "Azure Boards",
+            "Traceability"
+          ]
+        },
+        {
+          "name": "Design and implement source control",
+          "weight": 0.15,
+          "skills": [
+            "Git",
+            "Branch Policies"
+          ]
+        },
+        {
+          "name": "Design and implement build and release pipelines",
+          "weight": 0.3,
+          "skills": [
+            "CI/CD",
+            "YAML",
+            "Deployment Strategies"
+          ]
+        },
+        {
+          "name": "Develop a security and compliance plan",
+          "weight": 0.15,
+          "skills": [
+            "SAST/SCA",
+            "Secret Management"
+          ]
+        },
+        {
+          "name": "Implement an instrumentation strategy",
+          "weight": 0.25,
+          "skills": [
+            "DORA Metrics",
+            "Logging"
+          ]
+        }
       ]
     },
     {
@@ -55,22 +161,73 @@
       "recommended_hours": 18,
       "prerequisites": [],
       "domains": [
-        {"name": "Describe cloud concepts", "weight": 0.30, "skills": ["Cloud Models", "Shared Responsibility", "Consumption Pricing"]},
-        {"name": "Describe Azure architecture and services", "weight": 0.45, "skills": ["Regions", "Compute", "Storage", "Networking"]},
-        {"name": "Describe Azure management and governance", "weight": 0.25, "skills": ["Cost Management", "Policy", "Resource Manager"]}
+        {
+          "name": "Describe cloud concepts",
+          "weight": 0.3,
+          "skills": [
+            "Cloud Models",
+            "Shared Responsibility",
+            "Consumption Pricing"
+          ]
+        },
+        {
+          "name": "Describe Azure architecture and services",
+          "weight": 0.45,
+          "skills": [
+            "Regions",
+            "Compute",
+            "Storage",
+            "Networking"
+          ]
+        },
+        {
+          "name": "Describe Azure management and governance",
+          "weight": 0.25,
+          "skills": [
+            "Cost Management",
+            "Policy",
+            "Resource Manager"
+          ]
+        }
       ]
     },
     {
-      "id": "AI-900",
+      "id": "AI-901",
       "name": "Microsoft Azure AI Fundamentals",
       "startup_track": "AI Foundations",
       "difficulty": "Fundamentals",
       "recommended_hours": 16,
       "prerequisites": [],
+      "exam_type": "fundamentals",
+      "may_contain_labs": false,
       "domains": [
-        {"name": "Describe AI workloads and principles", "weight": 0.25, "skills": ["Responsible AI", "Computer Vision", "NLP"]},
-        {"name": "Describe machine learning on Azure", "weight": 0.25, "skills": ["Regression", "Classification", "Azure Machine Learning"]},
-        {"name": "Describe Azure AI services", "weight": 0.50, "skills": ["Azure AI Services", "Azure OpenAI", "Bot Service"]}
+        {
+          "name": "Describe AI workloads and responsible AI",
+          "weight": 0.25,
+          "skills": [
+            "Responsible AI",
+            "Generative AI",
+            "Computer Vision"
+          ]
+        },
+        {
+          "name": "Describe machine learning concepts on Azure",
+          "weight": 0.25,
+          "skills": [
+            "Regression",
+            "Classification",
+            "Azure Machine Learning"
+          ]
+        },
+        {
+          "name": "Describe generative AI and Azure AI services",
+          "weight": 0.5,
+          "skills": [
+            "Azure AI Services",
+            "Azure AI Foundry",
+            "Agents"
+          ]
+        }
       ]
     },
     {
@@ -81,9 +238,33 @@
       "recommended_hours": 18,
       "prerequisites": [],
       "domains": [
-        {"name": "Describe core data concepts", "weight": 0.25, "skills": ["Relational Data", "NoSQL", "Analytics"]},
-        {"name": "Identify Azure data services", "weight": 0.35, "skills": ["Azure SQL", "Cosmos DB", "Storage"]},
-        {"name": "Describe analytics workloads", "weight": 0.40, "skills": ["Synapse", "Databricks", "Power BI"]}
+        {
+          "name": "Describe core data concepts",
+          "weight": 0.25,
+          "skills": [
+            "Relational Data",
+            "NoSQL",
+            "Analytics"
+          ]
+        },
+        {
+          "name": "Identify Azure data services",
+          "weight": 0.35,
+          "skills": [
+            "Azure SQL",
+            "Cosmos DB",
+            "Storage"
+          ]
+        },
+        {
+          "name": "Describe analytics workloads",
+          "weight": 0.4,
+          "skills": [
+            "Synapse",
+            "Databricks",
+            "Power BI"
+          ]
+        }
       ]
     },
     {
@@ -94,9 +275,33 @@
       "recommended_hours": 18,
       "prerequisites": [],
       "domains": [
-        {"name": "Describe security and compliance concepts", "weight": 0.25, "skills": ["Zero Trust", "Shared Responsibility", "Defense in Depth"]},
-        {"name": "Describe Microsoft Entra capabilities", "weight": 0.30, "skills": ["Identity", "Conditional Access", "MFA"]},
-        {"name": "Describe Microsoft security solutions", "weight": 0.45, "skills": ["Defender", "Sentinel", "Purview"]}
+        {
+          "name": "Describe security and compliance concepts",
+          "weight": 0.25,
+          "skills": [
+            "Zero Trust",
+            "Shared Responsibility",
+            "Defense in Depth"
+          ]
+        },
+        {
+          "name": "Describe Microsoft Entra capabilities",
+          "weight": 0.3,
+          "skills": [
+            "Identity",
+            "Conditional Access",
+            "MFA"
+          ]
+        },
+        {
+          "name": "Describe Microsoft security solutions",
+          "weight": 0.45,
+          "skills": [
+            "Defender",
+            "Sentinel",
+            "Purview"
+          ]
+        }
       ]
     },
     {
@@ -107,9 +312,33 @@
       "recommended_hours": 16,
       "prerequisites": [],
       "domains": [
-        {"name": "Describe Power Platform business value", "weight": 0.25, "skills": ["Low-Code", "Connectors", "Dataverse"]},
-        {"name": "Build apps and automation", "weight": 0.45, "skills": ["Power Apps", "Power Automate", "Copilot Studio"]},
-        {"name": "Analyze data with Power BI", "weight": 0.30, "skills": ["Reports", "Dashboards", "Semantic Models"]}
+        {
+          "name": "Describe Power Platform business value",
+          "weight": 0.25,
+          "skills": [
+            "Low-Code",
+            "Connectors",
+            "Dataverse"
+          ]
+        },
+        {
+          "name": "Build apps and automation",
+          "weight": 0.45,
+          "skills": [
+            "Power Apps",
+            "Power Automate",
+            "Copilot Studio"
+          ]
+        },
+        {
+          "name": "Analyze data with Power BI",
+          "weight": 0.3,
+          "skills": [
+            "Reports",
+            "Dashboards",
+            "Semantic Models"
+          ]
+        }
       ]
     },
     {
@@ -120,22 +349,82 @@
       "recommended_hours": 16,
       "prerequisites": [],
       "domains": [
-        {"name": "Describe Microsoft 365 cloud concepts", "weight": 0.25, "skills": ["SaaS", "Productivity Cloud", "Tenant Basics"]},
-        {"name": "Describe Microsoft 365 apps and services", "weight": 0.45, "skills": ["Teams", "SharePoint", "Exchange", "Copilot"]},
-        {"name": "Describe security, compliance, and pricing", "weight": 0.30, "skills": ["Defender", "Purview", "Licensing"]}
+        {
+          "name": "Describe Microsoft 365 cloud concepts",
+          "weight": 0.25,
+          "skills": [
+            "SaaS",
+            "Productivity Cloud",
+            "Tenant Basics"
+          ]
+        },
+        {
+          "name": "Describe Microsoft 365 apps and services",
+          "weight": 0.45,
+          "skills": [
+            "Teams",
+            "SharePoint",
+            "Exchange",
+            "Copilot"
+          ]
+        },
+        {
+          "name": "Describe security, compliance, and pricing",
+          "weight": 0.3,
+          "skills": [
+            "Defender",
+            "Purview",
+            "Licensing"
+          ]
+        }
       ]
     },
     {
-      "id": "MB-910",
-      "name": "Microsoft Dynamics 365 Fundamentals CRM",
-      "startup_track": "Startup Sales and Customer Operations",
-      "difficulty": "Fundamentals",
-      "recommended_hours": 18,
+      "id": "MB-800",
+      "name": "Dynamics 365 Business Central Functional Consultant Associate",
+      "startup_track": "Business Applications Operations",
+      "difficulty": "Intermediate",
+      "recommended_hours": 38,
       "prerequisites": [],
+      "exam_type": "role-based",
+      "may_contain_labs": false,
       "domains": [
-        {"name": "Describe Dynamics 365 Sales", "weight": 0.35, "skills": ["Leads", "Opportunities", "Forecasting"]},
-        {"name": "Describe Dynamics 365 Customer Service", "weight": 0.35, "skills": ["Cases", "Knowledge Base", "Omnichannel"]},
-        {"name": "Describe marketing and field service apps", "weight": 0.30, "skills": ["Customer Insights", "Journeys", "Field Service"]}
+        {
+          "name": "Set up Business Central",
+          "weight": 0.25,
+          "skills": [
+            "Companies",
+            "Users",
+            "Dimensions"
+          ]
+        },
+        {
+          "name": "Configure financials",
+          "weight": 0.3,
+          "skills": [
+            "Chart of Accounts",
+            "Posting Groups",
+            "VAT"
+          ]
+        },
+        {
+          "name": "Configure sales and purchasing",
+          "weight": 0.25,
+          "skills": [
+            "Customers",
+            "Vendors",
+            "Orders"
+          ]
+        },
+        {
+          "name": "Perform Business Central operations",
+          "weight": 0.2,
+          "skills": [
+            "Inventory",
+            "Jobs",
+            "Reporting"
+          ]
+        }
       ]
     },
     {
@@ -144,11 +433,38 @@
       "startup_track": "Cloud Operations",
       "difficulty": "Intermediate",
       "recommended_hours": 42,
-      "prerequisites": ["AZ-900"],
+      "prerequisites": [
+        "AZ-900"
+      ],
       "domains": [
-        {"name": "Manage Azure identities and governance", "weight": 0.25, "skills": ["Entra ID", "RBAC", "Policy"]},
-        {"name": "Implement and manage storage", "weight": 0.20, "skills": ["Storage Accounts", "Backup", "File Shares"]},
-        {"name": "Deploy and manage compute and networking", "weight": 0.55, "skills": ["VMs", "VNets", "Load Balancers", "Monitor"]}
+        {
+          "name": "Manage Azure identities and governance",
+          "weight": 0.25,
+          "skills": [
+            "Entra ID",
+            "RBAC",
+            "Policy"
+          ]
+        },
+        {
+          "name": "Implement and manage storage",
+          "weight": 0.2,
+          "skills": [
+            "Storage Accounts",
+            "Backup",
+            "File Shares"
+          ]
+        },
+        {
+          "name": "Deploy and manage compute and networking",
+          "weight": 0.55,
+          "skills": [
+            "VMs",
+            "VNets",
+            "Load Balancers",
+            "Monitor"
+          ]
+        }
       ]
     },
     {
@@ -157,24 +473,78 @@
       "startup_track": "Cloud Architecture",
       "difficulty": "Advanced",
       "recommended_hours": 50,
-      "prerequisites": ["AZ-104"],
+      "prerequisites": [
+        "AZ-104"
+      ],
       "domains": [
-        {"name": "Design identity, governance, and monitoring", "weight": 0.30, "skills": ["Landing Zones", "Governance", "Monitoring"]},
-        {"name": "Design data storage and business continuity", "weight": 0.35, "skills": ["Data Platforms", "Backup", "Disaster Recovery"]},
-        {"name": "Design infrastructure and application solutions", "weight": 0.35, "skills": ["Compute", "Networking", "App Architecture"]}
+        {
+          "name": "Design identity, governance, and monitoring",
+          "weight": 0.3,
+          "skills": [
+            "Landing Zones",
+            "Governance",
+            "Monitoring"
+          ]
+        },
+        {
+          "name": "Design data storage and business continuity",
+          "weight": 0.35,
+          "skills": [
+            "Data Platforms",
+            "Backup",
+            "Disaster Recovery"
+          ]
+        },
+        {
+          "name": "Design infrastructure and application solutions",
+          "weight": 0.35,
+          "skills": [
+            "Compute",
+            "Networking",
+            "App Architecture"
+          ]
+        }
       ]
     },
     {
-      "id": "DP-203",
-      "name": "Data Engineering on Microsoft Azure",
-      "startup_track": "Data Platform Engineering",
+      "id": "DP-700",
+      "name": "Fabric Data Engineer Associate",
+      "startup_track": "Fabric Data Engineering",
       "difficulty": "Intermediate",
       "recommended_hours": 45,
-      "prerequisites": ["DP-900"],
+      "prerequisites": [
+        "DP-900"
+      ],
+      "exam_type": "role-based",
+      "may_contain_labs": false,
       "domains": [
-        {"name": "Design and implement data storage", "weight": 0.30, "skills": ["Data Lake", "Delta", "Synapse"]},
-        {"name": "Develop data processing", "weight": 0.40, "skills": ["Pipelines", "Spark", "Dataflows"]},
-        {"name": "Secure and monitor data solutions", "weight": 0.30, "skills": ["Access Control", "Monitoring", "Optimization"]}
+        {
+          "name": "Implement and manage an analytics solution",
+          "weight": 0.35,
+          "skills": [
+            "Fabric Items",
+            "Security",
+            "Lifecycle"
+          ]
+        },
+        {
+          "name": "Ingest and transform data",
+          "weight": 0.4,
+          "skills": [
+            "Pipelines",
+            "Dataflows",
+            "PySpark"
+          ]
+        },
+        {
+          "name": "Monitor and optimize an analytics solution",
+          "weight": 0.25,
+          "skills": [
+            "Monitoring Hub",
+            "Performance",
+            "KQL"
+          ]
+        }
       ]
     },
     {
@@ -183,11 +553,37 @@
       "startup_track": "Business Process Automation",
       "difficulty": "Intermediate",
       "recommended_hours": 38,
-      "prerequisites": ["PL-900"],
+      "prerequisites": [
+        "PL-900"
+      ],
       "domains": [
-        {"name": "Configure Dataverse and security", "weight": 0.30, "skills": ["Tables", "Relationships", "Security Roles"]},
-        {"name": "Build apps and automation", "weight": 0.45, "skills": ["Model-Driven Apps", "Canvas Apps", "Cloud Flows"]},
-        {"name": "Integrate and analyze solutions", "weight": 0.25, "skills": ["Connectors", "Power BI", "ALM"]}
+        {
+          "name": "Configure Dataverse and security",
+          "weight": 0.3,
+          "skills": [
+            "Tables",
+            "Relationships",
+            "Security Roles"
+          ]
+        },
+        {
+          "name": "Build apps and automation",
+          "weight": 0.45,
+          "skills": [
+            "Model-Driven Apps",
+            "Canvas Apps",
+            "Cloud Flows"
+          ]
+        },
+        {
+          "name": "Integrate and analyze solutions",
+          "weight": 0.25,
+          "skills": [
+            "Connectors",
+            "Power BI",
+            "ALM"
+          ]
+        }
       ]
     },
     {
@@ -196,11 +592,37 @@
       "startup_track": "Startup Analytics",
       "difficulty": "Intermediate",
       "recommended_hours": 38,
-      "prerequisites": ["DP-900"],
+      "prerequisites": [
+        "DP-900"
+      ],
       "domains": [
-        {"name": "Prepare and model data", "weight": 0.45, "skills": ["Power Query", "DAX", "Relationships"]},
-        {"name": "Visualize and analyze data", "weight": 0.35, "skills": ["Reports", "Dashboards", "Insights"]},
-        {"name": "Deploy and maintain assets", "weight": 0.20, "skills": ["Workspaces", "Refresh", "Security"]}
+        {
+          "name": "Prepare and model data",
+          "weight": 0.45,
+          "skills": [
+            "Power Query",
+            "DAX",
+            "Relationships"
+          ]
+        },
+        {
+          "name": "Visualize and analyze data",
+          "weight": 0.35,
+          "skills": [
+            "Reports",
+            "Dashboards",
+            "Insights"
+          ]
+        },
+        {
+          "name": "Deploy and maintain assets",
+          "weight": 0.2,
+          "skills": [
+            "Workspaces",
+            "Refresh",
+            "Security"
+          ]
+        }
       ]
     },
     {
@@ -209,11 +631,37 @@
       "startup_track": "Identity and Access",
       "difficulty": "Intermediate",
       "recommended_hours": 40,
-      "prerequisites": ["SC-900"],
+      "prerequisites": [
+        "SC-900"
+      ],
       "domains": [
-        {"name": "Implement identities in Microsoft Entra ID", "weight": 0.30, "skills": ["Users", "Groups", "Roles"]},
-        {"name": "Implement authentication and access management", "weight": 0.40, "skills": ["MFA", "Conditional Access", "PIM"]},
-        {"name": "Plan and implement app access", "weight": 0.30, "skills": ["Enterprise Apps", "App Registrations", "Access Reviews"]}
+        {
+          "name": "Implement identities in Microsoft Entra ID",
+          "weight": 0.3,
+          "skills": [
+            "Users",
+            "Groups",
+            "Roles"
+          ]
+        },
+        {
+          "name": "Implement authentication and access management",
+          "weight": 0.4,
+          "skills": [
+            "MFA",
+            "Conditional Access",
+            "PIM"
+          ]
+        },
+        {
+          "name": "Plan and implement app access",
+          "weight": 0.3,
+          "skills": [
+            "Enterprise Apps",
+            "App Registrations",
+            "Access Reviews"
+          ]
+        }
       ]
     },
     {
@@ -222,11 +670,37 @@
       "startup_track": "Modern Workplace Administration",
       "difficulty": "Intermediate",
       "recommended_hours": 42,
-      "prerequisites": ["MS-900"],
+      "prerequisites": [
+        "MS-900"
+      ],
       "domains": [
-        {"name": "Deploy and manage Microsoft 365 tenants", "weight": 0.30, "skills": ["Tenant Config", "Domains", "Licenses"]},
-        {"name": "Implement identity and access", "weight": 0.35, "skills": ["Entra ID", "Hybrid Identity", "Conditional Access"]},
-        {"name": "Manage security and compliance", "weight": 0.35, "skills": ["Defender", "Purview", "Secure Score"]}
+        {
+          "name": "Deploy and manage Microsoft 365 tenants",
+          "weight": 0.3,
+          "skills": [
+            "Tenant Config",
+            "Domains",
+            "Licenses"
+          ]
+        },
+        {
+          "name": "Implement identity and access",
+          "weight": 0.35,
+          "skills": [
+            "Entra ID",
+            "Hybrid Identity",
+            "Conditional Access"
+          ]
+        },
+        {
+          "name": "Manage security and compliance",
+          "weight": 0.35,
+          "skills": [
+            "Defender",
+            "Purview",
+            "Secure Score"
+          ]
+        }
       ]
     },
     {
@@ -235,11 +709,88 @@
       "startup_track": "Cloud Security Engineering",
       "difficulty": "Intermediate",
       "recommended_hours": 45,
-      "prerequisites": ["SC-900", "AZ-900"],
+      "prerequisites": [
+        "SC-900",
+        "AZ-900"
+      ],
       "domains": [
-        {"name": "Manage identity and access", "weight": 0.30, "skills": ["RBAC", "PIM", "Managed Identities"]},
-        {"name": "Secure networking and compute", "weight": 0.35, "skills": ["NSG", "Firewall", "Defender for Cloud"]},
-        {"name": "Secure data and applications", "weight": 0.35, "skills": ["Key Vault", "Storage Security", "SQL Security"]}
+        {
+          "name": "Manage identity and access",
+          "weight": 0.3,
+          "skills": [
+            "RBAC",
+            "PIM",
+            "Managed Identities"
+          ]
+        },
+        {
+          "name": "Secure networking and compute",
+          "weight": 0.35,
+          "skills": [
+            "NSG",
+            "Firewall",
+            "Defender for Cloud"
+          ]
+        },
+        {
+          "name": "Secure data and applications",
+          "weight": 0.35,
+          "skills": [
+            "Key Vault",
+            "Storage Security",
+            "SQL Security"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "SC-100",
+      "name": "Microsoft Cybersecurity Architect Expert",
+      "startup_track": "Cybersecurity Architecture",
+      "difficulty": "Advanced",
+      "recommended_hours": 55,
+      "prerequisites": [
+        "AZ-500"
+      ],
+      "exam_type": "role-based",
+      "may_contain_labs": false,
+      "domains": [
+        {
+          "name": "Design solutions that align with security best practices and priorities",
+          "weight": 0.25,
+          "skills": [
+            "Zero Trust",
+            "Security Strategy",
+            "Risk"
+          ]
+        },
+        {
+          "name": "Design security operations, identity, and compliance capabilities",
+          "weight": 0.3,
+          "skills": [
+            "Defender",
+            "Entra",
+            "Purview"
+          ]
+        },
+        {
+          "name": "Design security solutions for infrastructure",
+          "weight": 0.25,
+          "skills": [
+            "Network Security",
+            "Hybrid Cloud",
+            "Platform Protection"
+          ]
+        },
+        {
+          "name": "Design security solutions for applications and data",
+          "weight": 0.2,
+          "skills": [
+            "App Security",
+            "Data Protection",
+            "AI Security"
+          ]
+        }
       ]
     }
   ]

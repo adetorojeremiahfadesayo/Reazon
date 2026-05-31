@@ -1,29 +1,30 @@
-# Reazon Internship Development Program
+# Reazon Workforce Development Program
 
-A 10-agent internship development and Microsoft certification readiness system for startup teams. It helps companies onboard interns into role-aligned technical tracks, generate workload-aware study plans, take cited final assessments, unlock synthetic badges, and give program managers aggregate readiness visibility.
+A 10-agent workforce development and Microsoft certification readiness system for startup teams. It helps companies onboard interns and employees into role-aligned technical tracks, generate workload-aware study plans, take weekly checkpoints, run timed final exam simulations, unlock synthetic badges, and give program managers aggregate readiness visibility.
 
 This project is built for the Reasoning Agents track and uses synthetic data only.
 
 ## What It Does
 
-- Profiles interns from role and exam goals.
-- Supports 18 Microsoft certification tracks across Azure, AI, data, security, Microsoft 365, Dynamics, Power Platform, DevOps, and architecture.
+- Profiles workers and interns from role and exam goals.
+- Supports current-forward Microsoft certification tracks across Azure, AI, Fabric, data, security, Microsoft 365, Dynamics, Power Platform, DevOps, and architecture.
 - Curates certification-specific Microsoft Learn-style course paths using a local registry and cited markdown guides.
 - Generates week-by-week study plans with workload-aware Largest Remainder allocation.
-- Creates grounded final exam questions with citations.
+- Creates grounded weekly checkpoint questions with citations.
+- Provides a timed final exam simulator with Microsoft-style question counts and exam durations.
 - Verifies learning activity from Microsoft Learn/LMS/Teams-style evidence.
-- Calculates WorkIQ-aware intern readiness and returns `GO`, `CONDITIONAL GO`, or `NOT YET`.
+- Calculates WorkIQ-aware worker readiness and returns `GO`, `CONDITIONAL GO`, or `NOT YET`.
 - Unlocks a synthetic badge when the final exam score is at least 65%.
 - Persists traces and badges in SQLite.
 - Exposes both Streamlit and FastAPI surfaces.
 
-## Internship Story
+## Workforce Development Story
 
-The demo can be presented as a company internship program: a startup hires interns across cloud, AI, data, security, operations, and business application roles, then uses Reazon to assign each intern a Microsoft-aligned development track. Reazon turns the intern's role and target track into a study plan, monitors learning evidence, runs a final readiness assessment, and gives managers a simple view of who is ready, who needs remediation, and which PDFs document progress.
+The demo can be presented as a company workforce development program: a startup hires interns and develops employees across cloud, AI, data, security, operations, and business application roles, then uses Reazon to assign each person a Microsoft-aligned development track. Reazon turns the role and target track into a study plan, monitors learning evidence, runs weekly checkpoints, offers a timed final exam simulator, and gives managers a simple view of who is ready, who needs remediation, and which PDFs document progress.
 
 ## Course Specificity
 
-The courses are not random general courses. Reazon maps each intern to a specific Microsoft certification target, such as `AZ-204`, `AI-900`, or `SC-900`, then uses that exam's weighted domains to build the course path. The current demo links to Microsoft Learn certification/search surfaces and cites local guide files in `data/documents`; in production, those links can be replaced with exact company LMS course IDs or Microsoft Learn module assignments.
+The courses are not random general courses. Reazon maps each person to a specific Microsoft certification target, such as `AI-200`, `AI-901`, `DP-600`, or `SC-900`, then uses that exam's weighted domains to build the course path. The current demo links to Microsoft Learn certification/search surfaces and cites local guide files in `data/documents`; in production, those links can be replaced with exact company LMS course IDs or Microsoft Learn module assignments.
 
 ## Agent Architecture
 

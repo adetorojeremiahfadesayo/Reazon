@@ -26,7 +26,7 @@ function getBadgeTier(score: number): BadgeTier {
       ribbon: "Perfect",
       title: "Perfect Score!",
       status: "Status: 100% Mastery",
-      message: "You answered every question correctly. You are fully ready for the final certification exam."
+      message: "You answered every checkpoint question correctly. You are ready to keep moving through the learning plan."
     };
   }
 
@@ -36,7 +36,7 @@ function getBadgeTier(score: number): BadgeTier {
       ribbon: "Victory",
       title: "Quiz Completed!",
       status: "Status: Exam Ready",
-      message: "You have mastered the material well enough to proceed with final certification preparation."
+      message: "You understood this class segment well enough to continue final exam preparation."
     };
   }
 
@@ -46,7 +46,7 @@ function getBadgeTier(score: number): BadgeTier {
       ribbon: "Review",
       title: "Passed With Review",
       status: "Status: Targeted Remediation",
-      message: "You crossed the pass threshold. Review weak domains before booking the final certification exam."
+      message: "You crossed the checkpoint threshold. Review weak domains before the next class or final exam simulation."
     };
   }
 
@@ -55,7 +55,7 @@ function getBadgeTier(score: number): BadgeTier {
     ribbon: "Retry",
     title: "Not Ready Yet",
     status: "Status: Remediation Needed",
-    message: "Your score is below the pass threshold. Revisit the study plan, then retake the assessment."
+      message: "Your score is below the checkpoint threshold. Revisit this class material, then retake the checkpoint."
   };
 }
 
@@ -78,7 +78,7 @@ function ResultBadge({ result }: { result: AssessmentResult }) {
         <p className="result-badge-status">{tier.status}</p>
         <p>{tier.message}</p>
         <small>
-          Recommendation: {result.booking_recommendation}. {result.badge_name ? `Badge unlocked: ${result.badge_name}` : result.remediation_plan}
+          Recommendation: {result.booking_recommendation}. {result.remediation_plan}
         </small>
       </div>
     </div>
@@ -112,7 +112,7 @@ export function AssessmentPanel({ quiz, employeeId, textInput, onAssessmentCompl
       <div className="section-heading">
         <div>
           <p>Grounded practice</p>
-          <h2>Final assessment</h2>
+          <h2>Weekly checkpoint</h2>
         </div>
         <span>{answeredCount}/{quiz.questions.length} answered</span>
       </div>
@@ -185,7 +185,7 @@ export function AssessmentPanel({ quiz, employeeId, textInput, onAssessmentCompl
           onClick={submit}
           disabled={loading || answeredCount === 0}
         >
-          {loading ? "Submitting" : "Submit exam"}
+          {loading ? "Submitting" : "Submit checkpoint"}
         </TooltipButton>
       </div>
     </section>

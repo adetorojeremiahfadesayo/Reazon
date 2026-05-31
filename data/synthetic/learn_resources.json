@@ -1,188 +1,488 @@
 {
-  "description": "Specific Microsoft Learn course/path registry for the Reazon Internship Development Program. Demo data only; links point to named Microsoft Learn training or certification surfaces.",
+  "description": "Specific Microsoft Learn course/path registry for the Reazon Workforce Development Program. Demo data only; links point to named Microsoft Learn training or certification surfaces.",
   "resources": {
-    "AI-102": {
-      "certification_url": "https://learn.microsoft.com/en-us/credentials/certifications/azure-ai-engineer/",
-      "learn_path_url": "https://learn.microsoft.com/en-us/training/paths/get-started-azure-ai/",
-      "courses": [
-        {"match": "Plan and manage", "resource_title": "Create and manage Azure AI services", "resource_url": "https://learn.microsoft.com/en-us/training/modules/create-manage-ai-services/"},
-        {"match": "image and video", "resource_title": "Analyze images with Azure AI Vision", "resource_url": "https://learn.microsoft.com/en-us/training/modules/analyze-images/"},
-        {"match": "natural language", "resource_title": "Analyze text with Azure AI Language", "resource_url": "https://learn.microsoft.com/en-us/training/modules/analyze-text-ai-language/"},
-        {"match": "knowledge mining", "resource_title": "Create an Azure AI Search solution", "resource_url": "https://learn.microsoft.com/en-us/training/modules/create-azure-cognitive-search-solution/"},
-        {"match": "generative AI", "resource_title": "Develop generative AI solutions with Azure OpenAI Service", "resource_url": "https://learn.microsoft.com/en-us/training/paths/develop-ai-solutions-azure-openai/"}
-      ]
-    },
-    "AZ-204": {
-      "certification_url": "https://learn.microsoft.com/en-us/credentials/certifications/azure-developer/",
-      "learn_path_url": "https://learn.microsoft.com/en-us/training/paths/create-azure-app-service-web-apps/",
-      "courses": [
-        {"match": "compute", "resource_title": "Create Azure App Service web apps", "resource_url": "https://learn.microsoft.com/en-us/training/paths/create-azure-app-service-web-apps/"},
-        {"match": "storage", "resource_title": "Develop solutions that use Azure Blob Storage", "resource_url": "https://learn.microsoft.com/en-us/training/paths/develop-solutions-that-use-blob-storage/"},
-        {"match": "security", "resource_title": "Implement user authentication and authorization", "resource_url": "https://learn.microsoft.com/en-us/training/modules/implement-authentication-authorization/"},
-        {"match": "Monitor", "resource_title": "Monitor app performance", "resource_url": "https://learn.microsoft.com/en-us/training/modules/monitor-app-performance/"},
-        {"match": "consume", "resource_title": "Connect your services together", "resource_url": "https://learn.microsoft.com/en-us/training/paths/connect-your-services-together/"}
-      ]
-    },
     "AZ-400": {
       "certification_url": "https://learn.microsoft.com/en-us/credentials/certifications/devops-engineer/",
       "learn_path_url": "https://learn.microsoft.com/en-us/training/paths/evolve-your-devops-practices/",
       "courses": [
-        {"match": "processes", "resource_title": "Get started on a DevOps transformation journey", "resource_url": "https://learn.microsoft.com/en-us/training/modules/get-started-with-devops/"},
-        {"match": "source control", "resource_title": "Introduction to GitHub", "resource_url": "https://learn.microsoft.com/en-us/training/modules/introduction-to-github/"},
-        {"match": "pipelines", "resource_title": "Create a build pipeline with Azure Pipelines", "resource_url": "https://learn.microsoft.com/en-us/training/modules/create-a-build-pipeline/"},
-        {"match": "security", "resource_title": "Secure your Azure Pipelines", "resource_url": "https://learn.microsoft.com/en-us/training/modules/secure-azure-pipelines/"},
-        {"match": "instrumentation", "resource_title": "Monitor applications with Azure Monitor", "resource_url": "https://learn.microsoft.com/en-us/training/modules/monitor-apps-with-azure-monitor/"}
+        {
+          "match": "processes",
+          "resource_title": "Get started on a DevOps transformation journey",
+          "resource_url": "https://learn.microsoft.com/en-us/training/modules/get-started-with-devops/"
+        },
+        {
+          "match": "source control",
+          "resource_title": "Introduction to GitHub",
+          "resource_url": "https://learn.microsoft.com/en-us/training/modules/introduction-to-github/"
+        },
+        {
+          "match": "pipelines",
+          "resource_title": "Create a build pipeline with Azure Pipelines",
+          "resource_url": "https://learn.microsoft.com/en-us/training/modules/create-a-build-pipeline/"
+        },
+        {
+          "match": "security",
+          "resource_title": "Secure your Azure Pipelines",
+          "resource_url": "https://learn.microsoft.com/en-us/training/modules/secure-azure-pipelines/"
+        },
+        {
+          "match": "instrumentation",
+          "resource_title": "Monitor applications with Azure Monitor",
+          "resource_url": "https://learn.microsoft.com/en-us/training/modules/monitor-apps-with-azure-monitor/"
+        }
       ]
     },
     "AZ-900": {
       "certification_url": "https://learn.microsoft.com/en-us/credentials/certifications/azure-fundamentals/",
       "learn_path_url": "https://learn.microsoft.com/en-us/training/paths/microsoft-azure-fundamentals-describe-cloud-concepts/",
       "courses": [
-        {"match": "cloud concepts", "resource_title": "Microsoft Azure Fundamentals: Describe cloud concepts", "resource_url": "https://learn.microsoft.com/en-us/training/paths/microsoft-azure-fundamentals-describe-cloud-concepts/"},
-        {"match": "architecture", "resource_title": "Microsoft Azure Fundamentals: Describe Azure architecture and services", "resource_url": "https://learn.microsoft.com/en-us/training/paths/azure-fundamentals-describe-azure-architecture-services/"},
-        {"match": "governance", "resource_title": "Microsoft Azure Fundamentals: Describe Azure management and governance", "resource_url": "https://learn.microsoft.com/en-us/training/paths/describe-azure-management-governance/"}
-      ]
-    },
-    "AI-900": {
-      "certification_url": "https://learn.microsoft.com/en-us/credentials/certifications/azure-ai-fundamentals/",
-      "learn_path_url": "https://learn.microsoft.com/en-us/training/paths/get-started-with-artificial-intelligence-on-azure/",
-      "courses": [
-        {"match": "AI workloads", "resource_title": "Get started with artificial intelligence on Azure", "resource_url": "https://learn.microsoft.com/en-us/training/paths/get-started-with-artificial-intelligence-on-azure/"},
-        {"match": "machine learning", "resource_title": "Create machine learning models", "resource_url": "https://learn.microsoft.com/en-us/training/paths/create-machine-learn-models/"},
-        {"match": "AI services", "resource_title": "Explore Azure AI services", "resource_url": "https://learn.microsoft.com/en-us/training/modules/prepare-to-develop-ai-solutions-azure/"}
+        {
+          "match": "cloud concepts",
+          "resource_title": "Microsoft Azure Fundamentals: Describe cloud concepts",
+          "resource_url": "https://learn.microsoft.com/en-us/training/paths/microsoft-azure-fundamentals-describe-cloud-concepts/"
+        },
+        {
+          "match": "architecture",
+          "resource_title": "Microsoft Azure Fundamentals: Describe Azure architecture and services",
+          "resource_url": "https://learn.microsoft.com/en-us/training/paths/azure-fundamentals-describe-azure-architecture-services/"
+        },
+        {
+          "match": "governance",
+          "resource_title": "Microsoft Azure Fundamentals: Describe Azure management and governance",
+          "resource_url": "https://learn.microsoft.com/en-us/training/paths/describe-azure-management-governance/"
+        }
       ]
     },
     "DP-900": {
       "certification_url": "https://learn.microsoft.com/en-us/credentials/certifications/azure-data-fundamentals/",
       "learn_path_url": "https://learn.microsoft.com/en-us/training/paths/azure-data-fundamentals-explore-core-data-concepts/",
       "courses": [
-        {"match": "core data", "resource_title": "Explore core data concepts", "resource_url": "https://learn.microsoft.com/en-us/training/paths/azure-data-fundamentals-explore-core-data-concepts/"},
-        {"match": "relational", "resource_title": "Explore relational data in Azure", "resource_url": "https://learn.microsoft.com/en-us/training/paths/azure-data-fundamentals-explore-relational-data/"},
-        {"match": "non-relational", "resource_title": "Explore non-relational data in Azure", "resource_url": "https://learn.microsoft.com/en-us/training/paths/azure-data-fundamentals-explore-non-relational-data/"},
-        {"match": "analytics", "resource_title": "Explore data analytics in Azure", "resource_url": "https://learn.microsoft.com/en-us/training/paths/azure-data-fundamentals-explore-data-warehouse-analytics/"}
+        {
+          "match": "core data",
+          "resource_title": "Explore core data concepts",
+          "resource_url": "https://learn.microsoft.com/en-us/training/paths/azure-data-fundamentals-explore-core-data-concepts/"
+        },
+        {
+          "match": "relational",
+          "resource_title": "Explore relational data in Azure",
+          "resource_url": "https://learn.microsoft.com/en-us/training/paths/azure-data-fundamentals-explore-relational-data/"
+        },
+        {
+          "match": "non-relational",
+          "resource_title": "Explore non-relational data in Azure",
+          "resource_url": "https://learn.microsoft.com/en-us/training/paths/azure-data-fundamentals-explore-non-relational-data/"
+        },
+        {
+          "match": "analytics",
+          "resource_title": "Explore data analytics in Azure",
+          "resource_url": "https://learn.microsoft.com/en-us/training/paths/azure-data-fundamentals-explore-data-warehouse-analytics/"
+        }
       ]
     },
     "SC-900": {
       "certification_url": "https://learn.microsoft.com/en-us/credentials/certifications/security-compliance-and-identity-fundamentals/",
       "learn_path_url": "https://learn.microsoft.com/en-us/training/paths/describe-concepts-of-security-compliance-identity/",
       "courses": [
-        {"match": "security, compliance, and identity", "resource_title": "Describe the concepts of security, compliance, and identity", "resource_url": "https://learn.microsoft.com/en-us/training/paths/describe-concepts-of-security-compliance-identity/"},
-        {"match": "Microsoft Entra", "resource_title": "Describe the capabilities of Microsoft Entra", "resource_url": "https://learn.microsoft.com/en-us/training/paths/describe-capabilities-of-microsoft-identity-access/"},
-        {"match": "Microsoft security", "resource_title": "Describe the capabilities of Microsoft security solutions", "resource_url": "https://learn.microsoft.com/en-us/training/paths/describe-capabilities-of-microsoft-security-solutions/"},
-        {"match": "compliance", "resource_title": "Describe the capabilities of Microsoft compliance solutions", "resource_url": "https://learn.microsoft.com/en-us/training/paths/describe-capabilities-of-microsoft-compliance-solutions/"}
+        {
+          "match": "security, compliance, and identity",
+          "resource_title": "Describe the concepts of security, compliance, and identity",
+          "resource_url": "https://learn.microsoft.com/en-us/training/paths/describe-concepts-of-security-compliance-identity/"
+        },
+        {
+          "match": "Microsoft Entra",
+          "resource_title": "Describe the capabilities of Microsoft Entra",
+          "resource_url": "https://learn.microsoft.com/en-us/training/paths/describe-capabilities-of-microsoft-identity-access/"
+        },
+        {
+          "match": "Microsoft security",
+          "resource_title": "Describe the capabilities of Microsoft security solutions",
+          "resource_url": "https://learn.microsoft.com/en-us/training/paths/describe-capabilities-of-microsoft-security-solutions/"
+        },
+        {
+          "match": "compliance",
+          "resource_title": "Describe the capabilities of Microsoft compliance solutions",
+          "resource_url": "https://learn.microsoft.com/en-us/training/paths/describe-capabilities-of-microsoft-compliance-solutions/"
+        }
       ]
     },
     "PL-900": {
       "certification_url": "https://learn.microsoft.com/en-us/credentials/certifications/power-platform-fundamentals/",
       "learn_path_url": "https://learn.microsoft.com/en-us/training/paths/power-plat-fundamentals/",
       "courses": [
-        {"match": "business value", "resource_title": "Describe the business value of Microsoft Power Platform", "resource_url": "https://learn.microsoft.com/en-us/training/modules/introduction-power-platform/"},
-        {"match": "Power BI", "resource_title": "Describe the business value of Power BI", "resource_url": "https://learn.microsoft.com/en-us/training/modules/introduction-power-bi/"},
-        {"match": "Power Apps", "resource_title": "Describe how to build applications with Power Apps", "resource_url": "https://learn.microsoft.com/en-us/training/modules/introduction-power-apps/"},
-        {"match": "Power Automate", "resource_title": "Describe building automation with Power Automate", "resource_url": "https://learn.microsoft.com/en-us/training/modules/introduction-power-automate/"},
-        {"match": "Power Virtual Agents", "resource_title": "Describe building bots with Microsoft Copilot Studio", "resource_url": "https://learn.microsoft.com/en-us/training/modules/power-virtual-agents-bots/"}
+        {
+          "match": "business value",
+          "resource_title": "Describe the business value of Microsoft Power Platform",
+          "resource_url": "https://learn.microsoft.com/en-us/training/modules/introduction-power-platform/"
+        },
+        {
+          "match": "Power BI",
+          "resource_title": "Describe the business value of Power BI",
+          "resource_url": "https://learn.microsoft.com/en-us/training/modules/introduction-power-bi/"
+        },
+        {
+          "match": "Power Apps",
+          "resource_title": "Describe how to build applications with Power Apps",
+          "resource_url": "https://learn.microsoft.com/en-us/training/modules/introduction-power-apps/"
+        },
+        {
+          "match": "Power Automate",
+          "resource_title": "Describe building automation with Power Automate",
+          "resource_url": "https://learn.microsoft.com/en-us/training/modules/introduction-power-automate/"
+        },
+        {
+          "match": "Power Virtual Agents",
+          "resource_title": "Describe building bots with Microsoft Copilot Studio",
+          "resource_url": "https://learn.microsoft.com/en-us/training/modules/power-virtual-agents-bots/"
+        }
       ]
     },
     "MS-900": {
       "certification_url": "https://learn.microsoft.com/en-us/credentials/certifications/microsoft-365-fundamentals/",
       "learn_path_url": "https://learn.microsoft.com/en-us/training/paths/m365-fundamentals-describe-cloud-concepts/",
       "courses": [
-        {"match": "cloud concepts", "resource_title": "Describe cloud concepts", "resource_url": "https://learn.microsoft.com/en-us/training/paths/m365-fundamentals-describe-cloud-concepts/"},
-        {"match": "Microsoft 365 apps", "resource_title": "Describe Microsoft 365 apps and services", "resource_url": "https://learn.microsoft.com/en-us/training/paths/describe-microsoft-365-core-services-concepts/"},
-        {"match": "security", "resource_title": "Describe security and compliance capabilities in Microsoft 365", "resource_url": "https://learn.microsoft.com/en-us/training/paths/m365-fundamentals-describe-security-compliance-concepts/"},
-        {"match": "pricing", "resource_title": "Describe Microsoft 365 pricing, licensing, and support", "resource_url": "https://learn.microsoft.com/en-us/training/paths/m365-fundamentals-describe-pricing-licensing-support/"}
-      ]
-    },
-    "MB-910": {
-      "certification_url": "https://learn.microsoft.com/en-us/credentials/certifications/d365-fundamentals-customer-engagement-apps-crm/",
-      "learn_path_url": "https://learn.microsoft.com/en-us/training/paths/explore-dynamics-365-customer-engagement/",
-      "courses": [
-        {"match": "Dynamics 365 Marketing", "resource_title": "Explore Dynamics 365 Customer Insights", "resource_url": "https://learn.microsoft.com/en-us/training/paths/explore-dynamics-365-customer-insights/"},
-        {"match": "Dynamics 365 Sales", "resource_title": "Explore Dynamics 365 Sales", "resource_url": "https://learn.microsoft.com/en-us/training/paths/explore-dynamics-365-sales/"},
-        {"match": "Dynamics 365 Customer Service", "resource_title": "Explore Dynamics 365 Customer Service", "resource_url": "https://learn.microsoft.com/en-us/training/paths/explore-dynamics-365-customer-service/"},
-        {"match": "Field Service", "resource_title": "Explore Dynamics 365 Field Service", "resource_url": "https://learn.microsoft.com/en-us/training/paths/explore-dynamics-365-field-service/"}
+        {
+          "match": "cloud concepts",
+          "resource_title": "Describe cloud concepts",
+          "resource_url": "https://learn.microsoft.com/en-us/training/paths/m365-fundamentals-describe-cloud-concepts/"
+        },
+        {
+          "match": "Microsoft 365 apps",
+          "resource_title": "Describe Microsoft 365 apps and services",
+          "resource_url": "https://learn.microsoft.com/en-us/training/paths/describe-microsoft-365-core-services-concepts/"
+        },
+        {
+          "match": "security",
+          "resource_title": "Describe security and compliance capabilities in Microsoft 365",
+          "resource_url": "https://learn.microsoft.com/en-us/training/paths/m365-fundamentals-describe-security-compliance-concepts/"
+        },
+        {
+          "match": "pricing",
+          "resource_title": "Describe Microsoft 365 pricing, licensing, and support",
+          "resource_url": "https://learn.microsoft.com/en-us/training/paths/m365-fundamentals-describe-pricing-licensing-support/"
+        }
       ]
     },
     "AZ-104": {
       "certification_url": "https://learn.microsoft.com/en-us/credentials/certifications/azure-administrator/",
       "learn_path_url": "https://learn.microsoft.com/en-us/training/paths/az-104-manage-identities-governance/",
       "courses": [
-        {"match": "identities", "resource_title": "AZ-104: Manage identities and governance in Azure", "resource_url": "https://learn.microsoft.com/en-us/training/paths/az-104-manage-identities-governance/"},
-        {"match": "storage", "resource_title": "AZ-104: Implement and manage storage in Azure", "resource_url": "https://learn.microsoft.com/en-us/training/paths/az-104-manage-storage/"},
-        {"match": "compute", "resource_title": "AZ-104: Deploy and manage Azure compute resources", "resource_url": "https://learn.microsoft.com/en-us/training/paths/az-104-manage-compute-resources/"},
-        {"match": "networking", "resource_title": "AZ-104: Configure and manage virtual networks", "resource_url": "https://learn.microsoft.com/en-us/training/paths/az-104-manage-virtual-networks/"},
-        {"match": "monitor", "resource_title": "AZ-104: Monitor and maintain Azure resources", "resource_url": "https://learn.microsoft.com/en-us/training/paths/az-104-monitor-backup-resources/"}
+        {
+          "match": "identities",
+          "resource_title": "AZ-104: Manage identities and governance in Azure",
+          "resource_url": "https://learn.microsoft.com/en-us/training/paths/az-104-manage-identities-governance/"
+        },
+        {
+          "match": "storage",
+          "resource_title": "AZ-104: Implement and manage storage in Azure",
+          "resource_url": "https://learn.microsoft.com/en-us/training/paths/az-104-manage-storage/"
+        },
+        {
+          "match": "compute",
+          "resource_title": "AZ-104: Deploy and manage Azure compute resources",
+          "resource_url": "https://learn.microsoft.com/en-us/training/paths/az-104-manage-compute-resources/"
+        },
+        {
+          "match": "networking",
+          "resource_title": "AZ-104: Configure and manage virtual networks",
+          "resource_url": "https://learn.microsoft.com/en-us/training/paths/az-104-manage-virtual-networks/"
+        },
+        {
+          "match": "monitor",
+          "resource_title": "AZ-104: Monitor and maintain Azure resources",
+          "resource_url": "https://learn.microsoft.com/en-us/training/paths/az-104-monitor-backup-resources/"
+        }
       ]
     },
     "AZ-305": {
       "certification_url": "https://learn.microsoft.com/en-us/credentials/certifications/azure-solutions-architect/",
       "learn_path_url": "https://learn.microsoft.com/en-us/training/paths/architect-storage-infrastructure/",
       "courses": [
-        {"match": "identity", "resource_title": "Architect identity and governance in Azure", "resource_url": "https://learn.microsoft.com/en-us/training/paths/architect-identity-governance/"},
-        {"match": "data storage", "resource_title": "Architect storage infrastructure in Azure", "resource_url": "https://learn.microsoft.com/en-us/training/paths/architect-storage-infrastructure/"},
-        {"match": "business continuity", "resource_title": "Architect business continuity and disaster recovery", "resource_url": "https://learn.microsoft.com/en-us/training/paths/architect-business-continuity/"},
-        {"match": "infrastructure", "resource_title": "Architect infrastructure operations in Azure", "resource_url": "https://learn.microsoft.com/en-us/training/paths/architect-infrastructure-operations/"}
-      ]
-    },
-    "DP-203": {
-      "certification_url": "https://learn.microsoft.com/en-us/credentials/certifications/azure-data-engineer/",
-      "learn_path_url": "https://learn.microsoft.com/en-us/training/paths/data-engineer-azure-databricks/",
-      "courses": [
-        {"match": "data storage", "resource_title": "Implement a data warehouse with Azure Synapse Analytics", "resource_url": "https://learn.microsoft.com/en-us/training/paths/implement-data-warehouse-azure-synapse-analytics/"},
-        {"match": "data processing", "resource_title": "Perform data engineering with Azure Databricks", "resource_url": "https://learn.microsoft.com/en-us/training/paths/data-engineer-azure-databricks/"},
-        {"match": "data security", "resource_title": "Secure a data warehouse in Azure Synapse Analytics", "resource_url": "https://learn.microsoft.com/en-us/training/modules/secure-data-warehouse-azure-synapse-analytics/"},
-        {"match": "monitor", "resource_title": "Monitor and optimize data pipelines", "resource_url": "https://learn.microsoft.com/en-us/training/modules/monitor-optimize-data-pipelines/"}
+        {
+          "match": "identity",
+          "resource_title": "Architect identity and governance in Azure",
+          "resource_url": "https://learn.microsoft.com/en-us/training/paths/architect-identity-governance/"
+        },
+        {
+          "match": "data storage",
+          "resource_title": "Architect storage infrastructure in Azure",
+          "resource_url": "https://learn.microsoft.com/en-us/training/paths/architect-storage-infrastructure/"
+        },
+        {
+          "match": "business continuity",
+          "resource_title": "Architect business continuity and disaster recovery",
+          "resource_url": "https://learn.microsoft.com/en-us/training/paths/architect-business-continuity/"
+        },
+        {
+          "match": "infrastructure",
+          "resource_title": "Architect infrastructure operations in Azure",
+          "resource_url": "https://learn.microsoft.com/en-us/training/paths/architect-infrastructure-operations/"
+        }
       ]
     },
     "PL-200": {
       "certification_url": "https://learn.microsoft.com/en-us/credentials/certifications/power-platform-functional-consultant-associate/",
       "learn_path_url": "https://learn.microsoft.com/en-us/training/paths/create-manage-canvas-apps-power-apps/",
       "courses": [
-        {"match": "Dataverse", "resource_title": "Work with Microsoft Dataverse", "resource_url": "https://learn.microsoft.com/en-us/training/paths/work-with-dataverse/"},
-        {"match": "Power Apps", "resource_title": "Create and manage canvas apps with Power Apps", "resource_url": "https://learn.microsoft.com/en-us/training/paths/create-manage-canvas-apps-power-apps/"},
-        {"match": "Power Automate", "resource_title": "Automate a business process using Power Automate", "resource_url": "https://learn.microsoft.com/en-us/training/modules/automate-business-process/"},
-        {"match": "Power BI", "resource_title": "Get data with Power BI", "resource_url": "https://learn.microsoft.com/en-us/training/modules/get-data/"},
-        {"match": "Power Pages", "resource_title": "Get started with Power Pages", "resource_url": "https://learn.microsoft.com/en-us/training/modules/get-started-power-pages/"}
+        {
+          "match": "Dataverse",
+          "resource_title": "Work with Microsoft Dataverse",
+          "resource_url": "https://learn.microsoft.com/en-us/training/paths/work-with-dataverse/"
+        },
+        {
+          "match": "Power Apps",
+          "resource_title": "Create and manage canvas apps with Power Apps",
+          "resource_url": "https://learn.microsoft.com/en-us/training/paths/create-manage-canvas-apps-power-apps/"
+        },
+        {
+          "match": "Power Automate",
+          "resource_title": "Automate a business process using Power Automate",
+          "resource_url": "https://learn.microsoft.com/en-us/training/modules/automate-business-process/"
+        },
+        {
+          "match": "Power BI",
+          "resource_title": "Get data with Power BI",
+          "resource_url": "https://learn.microsoft.com/en-us/training/modules/get-data/"
+        },
+        {
+          "match": "Power Pages",
+          "resource_title": "Get started with Power Pages",
+          "resource_url": "https://learn.microsoft.com/en-us/training/modules/get-started-power-pages/"
+        }
       ]
     },
     "PL-300": {
       "certification_url": "https://learn.microsoft.com/en-us/credentials/certifications/power-bi-data-analyst-associate/",
       "learn_path_url": "https://learn.microsoft.com/en-us/training/paths/get-data-power-bi/",
       "courses": [
-        {"match": "prepare", "resource_title": "Get data in Power BI", "resource_url": "https://learn.microsoft.com/en-us/training/paths/get-data-power-bi/"},
-        {"match": "model", "resource_title": "Model data in Power BI", "resource_url": "https://learn.microsoft.com/en-us/training/paths/model-data-power-bi/"},
-        {"match": "visualize", "resource_title": "Build Power BI visuals and reports", "resource_url": "https://learn.microsoft.com/en-us/training/paths/visualize-data-power-bi/"},
-        {"match": "deploy", "resource_title": "Manage workspaces and datasets in Power BI", "resource_url": "https://learn.microsoft.com/en-us/training/modules/manage-datasets-power-bi/"}
+        {
+          "match": "prepare",
+          "resource_title": "Get data in Power BI",
+          "resource_url": "https://learn.microsoft.com/en-us/training/paths/get-data-power-bi/"
+        },
+        {
+          "match": "model",
+          "resource_title": "Model data in Power BI",
+          "resource_url": "https://learn.microsoft.com/en-us/training/paths/model-data-power-bi/"
+        },
+        {
+          "match": "visualize",
+          "resource_title": "Build Power BI visuals and reports",
+          "resource_url": "https://learn.microsoft.com/en-us/training/paths/visualize-data-power-bi/"
+        },
+        {
+          "match": "deploy",
+          "resource_title": "Manage workspaces and datasets in Power BI",
+          "resource_url": "https://learn.microsoft.com/en-us/training/modules/manage-datasets-power-bi/"
+        }
       ]
     },
     "SC-300": {
       "certification_url": "https://learn.microsoft.com/en-us/credentials/certifications/identity-and-access-administrator/",
       "learn_path_url": "https://learn.microsoft.com/en-us/training/paths/implement-initial-configuration-of-azure-active-directory/",
       "courses": [
-        {"match": "identities", "resource_title": "Implement an initial configuration of Microsoft Entra ID", "resource_url": "https://learn.microsoft.com/en-us/training/paths/implement-initial-configuration-of-azure-active-directory/"},
-        {"match": "authentication", "resource_title": "Implement access management for Azure resources", "resource_url": "https://learn.microsoft.com/en-us/training/paths/implement-access-management-azure-resources/"},
-        {"match": "access", "resource_title": "Implement identity governance", "resource_url": "https://learn.microsoft.com/en-us/training/paths/implement-identity-governance/"},
-        {"match": "monitor", "resource_title": "Monitor and maintain Microsoft Entra ID", "resource_url": "https://learn.microsoft.com/en-us/training/modules/monitor-maintain-azure-active-directory/"}
+        {
+          "match": "identities",
+          "resource_title": "Implement an initial configuration of Microsoft Entra ID",
+          "resource_url": "https://learn.microsoft.com/en-us/training/paths/implement-initial-configuration-of-azure-active-directory/"
+        },
+        {
+          "match": "authentication",
+          "resource_title": "Implement access management for Azure resources",
+          "resource_url": "https://learn.microsoft.com/en-us/training/paths/implement-access-management-azure-resources/"
+        },
+        {
+          "match": "access",
+          "resource_title": "Implement identity governance",
+          "resource_url": "https://learn.microsoft.com/en-us/training/paths/implement-identity-governance/"
+        },
+        {
+          "match": "monitor",
+          "resource_title": "Monitor and maintain Microsoft Entra ID",
+          "resource_url": "https://learn.microsoft.com/en-us/training/modules/monitor-maintain-azure-active-directory/"
+        }
       ]
     },
     "MS-102": {
       "certification_url": "https://learn.microsoft.com/en-us/credentials/certifications/m365-administrator-expert/",
       "learn_path_url": "https://learn.microsoft.com/en-us/training/paths/deploy-manage-microsoft-365-tenant/",
       "courses": [
-        {"match": "tenant", "resource_title": "Deploy and manage a Microsoft 365 tenant", "resource_url": "https://learn.microsoft.com/en-us/training/paths/deploy-manage-microsoft-365-tenant/"},
-        {"match": "identity", "resource_title": "Implement and manage identity and access in Microsoft 365", "resource_url": "https://learn.microsoft.com/en-us/training/paths/implement-manage-identity-access/"},
-        {"match": "security", "resource_title": "Manage security and threats by using Microsoft 365 Defender", "resource_url": "https://learn.microsoft.com/en-us/training/paths/manage-security-threats-microsoft-365-defender/"},
-        {"match": "compliance", "resource_title": "Manage compliance in Microsoft 365", "resource_url": "https://learn.microsoft.com/en-us/training/paths/manage-compliance-microsoft-365/"}
+        {
+          "match": "tenant",
+          "resource_title": "Deploy and manage a Microsoft 365 tenant",
+          "resource_url": "https://learn.microsoft.com/en-us/training/paths/deploy-manage-microsoft-365-tenant/"
+        },
+        {
+          "match": "identity",
+          "resource_title": "Implement and manage identity and access in Microsoft 365",
+          "resource_url": "https://learn.microsoft.com/en-us/training/paths/implement-manage-identity-access/"
+        },
+        {
+          "match": "security",
+          "resource_title": "Manage security and threats by using Microsoft 365 Defender",
+          "resource_url": "https://learn.microsoft.com/en-us/training/paths/manage-security-threats-microsoft-365-defender/"
+        },
+        {
+          "match": "compliance",
+          "resource_title": "Manage compliance in Microsoft 365",
+          "resource_url": "https://learn.microsoft.com/en-us/training/paths/manage-compliance-microsoft-365/"
+        }
       ]
     },
     "AZ-500": {
       "certification_url": "https://learn.microsoft.com/en-us/credentials/certifications/azure-security-engineer/",
       "learn_path_url": "https://learn.microsoft.com/en-us/training/paths/manage-identity-access/",
       "courses": [
-        {"match": "identity", "resource_title": "Manage identity and access in Azure", "resource_url": "https://learn.microsoft.com/en-us/training/paths/manage-identity-access/"},
-        {"match": "platform protection", "resource_title": "Secure Azure networking", "resource_url": "https://learn.microsoft.com/en-us/training/modules/secure-azure-networking/"},
-        {"match": "security operations", "resource_title": "Configure and manage Microsoft Sentinel", "resource_url": "https://learn.microsoft.com/en-us/training/paths/configure-manage-azure-sentinel/"},
-        {"match": "data and applications", "resource_title": "Secure your cloud data", "resource_url": "https://learn.microsoft.com/en-us/training/paths/secure-your-cloud-data/"}
+        {
+          "match": "identity",
+          "resource_title": "Manage identity and access in Azure",
+          "resource_url": "https://learn.microsoft.com/en-us/training/paths/manage-identity-access/"
+        },
+        {
+          "match": "platform protection",
+          "resource_title": "Secure Azure networking",
+          "resource_url": "https://learn.microsoft.com/en-us/training/modules/secure-azure-networking/"
+        },
+        {
+          "match": "security operations",
+          "resource_title": "Configure and manage Microsoft Sentinel",
+          "resource_url": "https://learn.microsoft.com/en-us/training/paths/configure-manage-azure-sentinel/"
+        },
+        {
+          "match": "data and applications",
+          "resource_title": "Secure your cloud data",
+          "resource_url": "https://learn.microsoft.com/en-us/training/paths/secure-your-cloud-data/"
+        }
+      ]
+    },
+    "AI-200": {
+      "certification_url": "https://learn.microsoft.com/en-us/credentials/certifications/azure-ai-cloud-developer-associate/",
+      "learn_path_url": "https://learn.microsoft.com/en-us/training/browse/?terms=AI-200",
+      "courses": [
+        {
+          "match": "containerized",
+          "resource_title": "Deploy containerized apps on Azure",
+          "resource_url": "https://learn.microsoft.com/en-us/training/browse/?terms=containerized%20apps%20azure"
+        },
+        {
+          "match": "data services",
+          "resource_title": "Build AI apps with Azure data services",
+          "resource_url": "https://learn.microsoft.com/en-us/training/browse/?terms=Azure%20AI%20data%20services"
+        },
+        {
+          "match": "consume Azure services",
+          "resource_title": "Connect applications to Azure services",
+          "resource_url": "https://learn.microsoft.com/en-us/training/browse/?terms=Azure%20SDK%20messaging%20events"
+        },
+        {
+          "match": "monitor",
+          "resource_title": "Monitor and troubleshoot Azure applications",
+          "resource_url": "https://learn.microsoft.com/en-us/training/browse/?terms=Azure%20Monitor%20application%20troubleshooting"
+        }
+      ]
+    },
+    "AI-901": {
+      "certification_url": "https://learn.microsoft.com/en-us/credentials/certifications/azure-ai-fundamentals/",
+      "learn_path_url": "https://learn.microsoft.com/en-us/training/browse/?terms=AI-901",
+      "courses": [
+        {
+          "match": "responsible AI",
+          "resource_title": "Explore responsible AI and generative AI concepts",
+          "resource_url": "https://learn.microsoft.com/en-us/training/browse/?terms=responsible%20AI%20generative%20AI"
+        },
+        {
+          "match": "machine learning",
+          "resource_title": "Explore machine learning concepts",
+          "resource_url": "https://learn.microsoft.com/en-us/training/browse/?terms=machine%20learning%20azure"
+        },
+        {
+          "match": "Azure AI services",
+          "resource_title": "Explore Azure AI services and AI Foundry",
+          "resource_url": "https://learn.microsoft.com/en-us/training/browse/?terms=Azure%20AI%20Foundry"
+        }
+      ]
+    },
+    "DP-600": {
+      "certification_url": "https://learn.microsoft.com/en-us/credentials/certifications/fabric-analytics-engineer-associate/",
+      "learn_path_url": "https://learn.microsoft.com/en-us/training/browse/?terms=DP-600",
+      "courses": [
+        {
+          "match": "analytics environment",
+          "resource_title": "Get started with Microsoft Fabric",
+          "resource_url": "https://learn.microsoft.com/en-us/training/browse/?terms=Microsoft%20Fabric"
+        },
+        {
+          "match": "semantic models",
+          "resource_title": "Build semantic models in Power BI",
+          "resource_url": "https://learn.microsoft.com/en-us/training/browse/?terms=semantic%20models%20Power%20BI"
+        },
+        {
+          "match": "DAX",
+          "resource_title": "Write DAX calculations for semantic models",
+          "resource_url": "https://learn.microsoft.com/en-us/training/browse/?terms=DAX%20Power%20BI"
+        }
+      ]
+    },
+    "DP-700": {
+      "certification_url": "https://learn.microsoft.com/en-us/credentials/certifications/fabric-data-engineer-associate/",
+      "learn_path_url": "https://learn.microsoft.com/en-us/training/browse/?terms=DP-700",
+      "courses": [
+        {
+          "match": "analytics solution",
+          "resource_title": "Implement analytics solutions with Microsoft Fabric",
+          "resource_url": "https://learn.microsoft.com/en-us/training/browse/?terms=Fabric%20analytics%20solution"
+        },
+        {
+          "match": "ingest",
+          "resource_title": "Ingest and transform data in Fabric",
+          "resource_url": "https://learn.microsoft.com/en-us/training/browse/?terms=Fabric%20data%20engineering"
+        },
+        {
+          "match": "monitor",
+          "resource_title": "Monitor and optimize Fabric workloads",
+          "resource_url": "https://learn.microsoft.com/en-us/training/browse/?terms=Fabric%20monitor%20optimize"
+        }
+      ]
+    },
+    "MB-800": {
+      "certification_url": "https://learn.microsoft.com/en-us/learn/certifications/exams/mb-800",
+      "learn_path_url": "https://learn.microsoft.com/en-us/training/browse/?terms=MB-800",
+      "courses": [
+        {
+          "match": "Business Central",
+          "resource_title": "Get started with Dynamics 365 Business Central",
+          "resource_url": "https://learn.microsoft.com/en-us/training/browse/?terms=Business%20Central"
+        },
+        {
+          "match": "financials",
+          "resource_title": "Configure financials in Business Central",
+          "resource_url": "https://learn.microsoft.com/en-us/training/browse/?terms=Business%20Central%20financials"
+        },
+        {
+          "match": "sales and purchasing",
+          "resource_title": "Configure sales and purchasing in Business Central",
+          "resource_url": "https://learn.microsoft.com/en-us/training/browse/?terms=Business%20Central%20sales%20purchasing"
+        }
+      ]
+    },
+    "SC-100": {
+      "certification_url": "https://learn.microsoft.com/en-us/credentials/certifications/cybersecurity-architect-expert/",
+      "learn_path_url": "https://learn.microsoft.com/en-us/training/browse/?terms=SC-100",
+      "courses": [
+        {
+          "match": "security best practices",
+          "resource_title": "Design solutions aligned to security best practices",
+          "resource_url": "https://learn.microsoft.com/en-us/training/browse/?terms=SC-100%20security%20best%20practices"
+        },
+        {
+          "match": "identity",
+          "resource_title": "Design identity and access security solutions",
+          "resource_url": "https://learn.microsoft.com/en-us/training/browse/?terms=identity%20security%20architecture"
+        },
+        {
+          "match": "infrastructure",
+          "resource_title": "Design infrastructure security solutions",
+          "resource_url": "https://learn.microsoft.com/en-us/training/browse/?terms=infrastructure%20security%20architecture"
+        }
       ]
     }
   }

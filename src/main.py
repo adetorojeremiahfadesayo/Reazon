@@ -288,8 +288,8 @@ class OrchestratorEngine:
         badge = None
         if passed:
             badge = ExamBadge(
-                badge_id=f"MS-STARTUP-{profile.certification_target}-{profile.learner_id}",
-                name=f"{profile.certification_target} Startup Professional Badge",
+                badge_id=f"MS-WORKFORCE-{profile.certification_target}-{profile.learner_id}",
+                name=f"{profile.certification_target} Workforce Professional Badge",
                 certification_target=profile.certification_target,
                 issued_to=profile.name,
                 score=round(score, 1),
@@ -408,7 +408,7 @@ if __name__ == "__main__":
     print("\n--- Running Learner Pipeline for Jane Doe ---")
     profile, paths, plan, eng, quiz = engine.run_learner_pipeline(
         session,
-        "I am Jane Doe. I want to study for the AZ-204 exam.",
+        "I am Jane Doe. I want to study for the AI-200 exam.",
         "EMP-001"
     )
     print(f"Profile: {profile.name} - Target: {profile.certification_target}")

@@ -34,6 +34,10 @@ function extractHours(label: string) {
   return match ? Number(match[1]) : 0;
 }
 
+function formatDomainName(label: string) {
+  return label.replace(/\s\(\d+h\)/, "");
+}
+
 const pipelineSteps = [
   { label: "Profile", icon: BrainCircuit },
   { label: "Curation", icon: BookOpen },
@@ -77,12 +81,12 @@ export function LearnerDashboard({
           <p>Agent pipeline</p>
           <h2>{learner ? `${learner.name} - ${learner.certification_target}` : "Select a learner"}</h2>
           <span>
-            Run the intern development flow for profiling, course curation, scheduling, assessment, activity
+            Run the workforce development flow for profiling, course curation, scheduling, checkpoint assessment, activity
             verification, booking guidance, and guardrail traces.
           </span>
         </div>
         <label className="prompt-box">
-          Learner prompt
+          Worker prompt
           <textarea
             value={prompt}
             onChange={(event) => onPromptChange(event.target.value)}
@@ -109,17 +113,19 @@ export function LearnerDashboard({
       <section className="pipeline-stage-rail" aria-label="Agent pipeline stages" data-tour="pipeline-stages">
         {pipelineSteps.map((step, index) => {
           const StepIcon = step.icon;
+          const stageState = workspace ? "complete" : loading && index === 0 ? "running" : "pending";
           return (
-            <article className={workspace || index < 2 ? "stage complete" : "stage"} key={step.label}>
+            <article className={`stage ${stageState}`} key={step.label}>
               <StepIcon size={18} />
               <span>{step.label}</span>
+              <small className="sr-only">{stageState}</small>
             </article>
           );
         })}
       </section>
 
       <section className="metric-grid">
-        <StatCard label="Intern pathway" value={learner?.role ?? "-"} tone="blue" helper="Profile input" />
+        <StatCard label="Worker pathway" value={learner?.role ?? "-"} tone="blue" helper="Role/persona input" />
         <StatCard
           label="Certification"
           value={learner?.certification_target ?? "-"}
@@ -146,8 +152,8 @@ export function LearnerDashboard({
           <div>
             <h2>Ready for the web workflow</h2>
             <p>
-              Select an intern, adjust the prompt if needed, and execute the pipeline. Results will populate the
-              study plan, learning resources, activity verification, practice exam, badge state, and trace console.
+              Select a worker or intern, adjust the prompt if needed, and execute the pipeline. Results will populate the
+              study plan, learning resources, activity verification, weekly checkpoint, badge state, and trace console.
             </p>
           </div>
         </section>
@@ -167,7 +173,7 @@ export function LearnerDashboard({
                     href={studyPlanReport.download_url}
                     target="_blank"
                     rel="noreferrer"
-                    title="Download this intern's auto-generated study plan PDF"
+                    title="Download this worker's auto-generated study plan PDF"
                     aria-label="Download study plan PDF"
                   >
                     <Download size={17} />
@@ -199,16 +205,23 @@ export function LearnerDashboard({
                       <strong>{week.hours_allocated}h allocated</strong>
                       {week.workload_adjusted ? <span className="status warning">Adjusted</span> : <span className="status ok">Standard</span>}
                     </div>
-                    <div className="domain-bars">
-                      {week.focus_domains.map((domain) => (
-                        <span
-                          key={domain}
-                          style={{ inlineSize: `${Math.max(18, extractHours(domain) * 16)}px` }}
-                          title={domain}
-                        >
-                          {domain.replace(/\s\(\d+h\)/, "")}
-                        </span>
-                      ))}
+                    <div
+                      className="domain-allocation-list"
+                      aria-label={`Week ${week.week_number} domain allocation`}
+                    >
+                      {week.focus_domains.map((domain) => {
+                        const hours = extractHours(domain);
+                        const width = week.hours_allocated > 0 ? Math.min(100, (hours / week.hours_allocated) * 100) : 0;
+                        return (
+                          <div className="domain-allocation-row" key={domain}>
+                            <span>{formatDomainName(domain)}</span>
+                            <div>
+                              <i style={{ inlineSize: `${width}%` }} />
+                            </div>
+                            <strong>{hours > 0 ? `${hours}h` : "-"}</strong>
+                          </div>
+                        );
+                      })}
                     </div>
                     {week.adjustment_reason ? <small>{week.adjustment_reason}</small> : null}
                   </div>
@@ -299,12 +312,12 @@ export function LearnerDashboard({
             <div className="section-heading">
               <div>
                 <p>Credential state</p>
-                <h2>Unlocked badges</h2>
+              <h2>Unlocked badges</h2>
               </div>
               <Trophy size={20} />
             </div>
             {workspace.badges.length === 0 ? (
-              <p className="empty-state">No badges yet. Passing the final assessment at 65%+ unlocks one.</p>
+              <p className="empty-state">No badges yet. Passing the final exam simulator at 65%+ unlocks one.</p>
             ) : (
               workspace.badges.map((badge) => {
                 const badgeReport = badgeReportById.get(badge.badge_id);
@@ -320,7 +333,7 @@ export function LearnerDashboard({
                         href={badgeReport.download_url}
                         target="_blank"
                         rel="noreferrer"
-                        title="Download this intern's badge certificate PDF"
+                        title="Download this person's badge certificate PDF"
                         aria-label="Download badge certificate PDF"
                       >
                         <Download size={17} />

@@ -2,15 +2,15 @@
 
 ## 1. Opening
 
-This is the Microsoft Startup Professional Exam Pack, a 10-agent certification readiness platform for startup teams preparing for Microsoft exams.
+This is the Microsoft Workforce Development Exam Pack, a 10-agent certification readiness platform for startup teams preparing workers and interns for Microsoft exams.
 
 The system uses synthetic data only and demonstrates Foundry IQ, Fabric IQ, and Work IQ concepts locally for reliable demo execution.
 
-## 2. Learner Demo
+## 2. Learning Demo
 
 1. Run `streamlit run ui/app.py`.
-2. Open the Personal Learner Space.
-3. Select a learner persona.
+2. Open the Learning Space.
+3. Select a worker or intern persona.
 4. Click **Execute Collaborative Agent Pipeline**.
 5. Show:
    - learner profile
@@ -24,7 +24,7 @@ The system uses synthetic data only and demonstrates Foundry IQ, Fabric IQ, and 
 
 1. Answer the final exam questions.
 2. Submit the final exam.
-3. Explain that 65% unlocks a synthetic startup professional badge.
+3. Explain that 65% unlocks a synthetic workforce professional badge.
 4. Show the badge card and persistent badge count.
 5. Explain that the badge is not an official Microsoft credential.
 

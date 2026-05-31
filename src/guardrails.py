@@ -16,9 +16,9 @@ class GuardrailsPipeline:
     def __init__(self):
         self.traces = []
         self.valid_certs = {
-            "AI-102", "AZ-204", "AZ-400", "AZ-900", "AI-900", "DP-900",
-            "SC-900", "PL-900", "MS-900", "MB-910", "AZ-104", "AZ-305",
-            "DP-203", "PL-200", "PL-300", "SC-300", "MS-102", "AZ-500"
+            "AI-200", "AI-901", "AZ-400", "AZ-900", "DP-600", "DP-700", "DP-900",
+            "SC-900", "SC-100", "PL-900", "MS-900", "MB-800", "AZ-104", "AZ-305",
+            "PL-200", "PL-300", "SC-300", "MS-102", "AZ-500"
         }
 
     def _log(self, rule_id: str, status: str, message: str):
@@ -154,10 +154,10 @@ class GuardrailsPipeline:
         self._log("GR-21", "PASS", "Assessment citations are present.")
         self._log("GR-22", "PASS", "Assessment citations avoid insecure links.")
 
-        if not (10 <= len(quiz.questions) <= 15):
+        if not (10 <= len(quiz.questions) <= 60):
             self._log("GR-20", "FAIL", "Quiz question count is outside the final exam range.")
-            raise GuardrailException("Final exam quiz must contain 10 to 15 questions.")
-        self._log("GR-20", "PASS", "Final exam question count validated.")
+            raise GuardrailException("Assessment must contain 10 to 60 questions.")
+        self._log("GR-20", "PASS", "Assessment question count validated.")
 
         for q in quiz.questions:
             if len(q.options) != 4:

@@ -62,6 +62,10 @@ export type Quiz = {
   learner_id: string;
   certification_target: string;
   questions: QuizQuestion[];
+  assessment_type?: "checkpoint" | "final";
+  duration_minutes?: number;
+  seat_minutes?: number;
+  question_count_standard?: string;
 };
 
 export type LearningActivityReport = {
@@ -141,7 +145,7 @@ export type Health = {
   mock_mode: boolean;
 };
 
-export type AppView = "learner" | "manager";
+export type AppView = "learner" | "exam" | "manager";
 
 export type ReportFile = {
   file_name: string;

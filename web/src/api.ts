@@ -48,14 +48,26 @@ export function runLearnerWorkspace(employeeId: string, textInput: string, weeks
 export function submitAssessment(
   employeeId: string,
   textInput: string,
-  answers: Record<string, number>
+  answers: Record<string, number>,
+  assessmentType: "checkpoint" | "final" = "checkpoint"
 ) {
   return request<AssessmentResult>("/api/learner/assessment/submit", {
     method: "POST",
     body: JSON.stringify({
       employee_id: employeeId,
       text_input: textInput,
-      answers
+      answers,
+      assessment_type: assessmentType
+    })
+  });
+}
+
+export function getFinalExam(employeeId: string, textInput: string) {
+  return request<LearnerWorkspace["quiz"]>("/api/learner/final-exam", {
+    method: "POST",
+    body: JSON.stringify({
+      employee_id: employeeId,
+      text_input: textInput
     })
   });
 }

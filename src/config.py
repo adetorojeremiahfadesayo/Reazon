@@ -86,6 +86,10 @@ class Quiz(BaseModel):
     learner_id: str
     certification_target: str
     questions: List[QuizQuestion]
+    assessment_type: str = "checkpoint"
+    duration_minutes: int = 20
+    seat_minutes: int = 30
+    question_count_standard: str = "10 checkpoint questions"
 
 class ReadinessReport(BaseModel):
     learner_id: str

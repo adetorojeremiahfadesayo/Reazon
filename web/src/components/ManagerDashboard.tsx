@@ -1,9 +1,12 @@
 import { AlertTriangle, RefreshCw, Users } from "lucide-react";
-import { useMemo } from "react";
+import { type CSSProperties, useMemo } from "react";
 import type { LearnerOption, ManagerInsights, ReportFile } from "../types";
 import { ReportList } from "./ReportList";
 import { StatCard } from "./StatCard";
 import { TooltipButton } from "./TooltipButton";
+
+const READINESS_THRESHOLD = 65;
+const MAX_RISK_MEETING_HOURS = 40;
 
 type ManagerDashboardProps = {
   insights: ManagerInsights | null;
@@ -32,14 +35,32 @@ export function ManagerDashboard({
         (report.learner_id === selectedLearner.learner_id || report.learner_id === selectedLearner.employee_id)
     );
   }, [reports, selectedLearner]);
-  const readinessTitle = selectedLearner ? `${selectedLearner.name} readiness PDF` : "Selected intern readiness PDF";
+  const readinessTitle = selectedLearner ? `${selectedLearner.name} readiness PDF` : "Selected person readiness PDF";
+  const sortedReadiness = useMemo(() => {
+    if (!insights) return [];
+    return Object.entries(insights.readiness_by_exam)
+      .map(([exam, score]) => ({ exam, score }))
+      .sort((a, b) => a.score - b.score);
+  }, [insights]);
+  const readinessLow = sortedReadiness[0];
+  const readinessHigh = sortedReadiness[sortedReadiness.length - 1];
+  const atRiskPercent = insights?.total_learners
+    ? Math.round((insights.at_risk_learners.length / insights.total_learners) * 100)
+    : 0;
+  const sortedRisks = useMemo(() => {
+    if (!insights) return [];
+    const riskRank: Record<string, number> = { High: 3, Medium: 2, Low: 1 };
+    return [...insights.at_risk_learners].sort(
+      (a, b) => (riskRank[b.risk_level] ?? 0) - (riskRank[a.risk_level] ?? 0) || b.meeting_hours - a.meeting_hours
+    );
+  }, [insights]);
 
   return (
     <div className="manager-grid">
       <section className="command-strip manager-command" data-tour="manager-command">
         <div>
-          <p>Intern cohort analytics</p>
-          <h2>Aggregate readiness and internship risk</h2>
+          <p>Workforce cohort analytics</p>
+          <h2>Aggregate readiness and development risk</h2>
           <span>Refresh the program pipeline to recompute readiness by track, risk flags, peer matches, and manager comments.</span>
         </div>
         <TooltipButton
@@ -59,8 +80,8 @@ export function ManagerDashboard({
         eyebrow="Manager evidence"
         emptyText={
           selectedLearner
-            ? `No readiness PDF is available for ${selectedLearner.name} yet. Submit that intern's assessment to generate one automatically.`
-            : "Select an intern to view their readiness PDF."
+            ? `No readiness PDF is available for ${selectedLearner.name} yet. Submit that person's final exam to generate one automatically.`
+            : "Select a person to view their readiness PDF."
         }
         reports={readinessReports}
         loading={reportsLoading}
@@ -70,30 +91,65 @@ export function ManagerDashboard({
       {insights ? (
         <>
           <section className="metric-grid manager-metrics">
-            <StatCard label="Active interns" value={insights.total_learners} tone="blue" helper="Synthetic cohort" />
-            <StatCard label="Average readiness" value={`${insights.average_readiness}%`} tone="green" helper="Team score" />
-            <StatCard label="At-risk learners" value={insights.at_risk_learners.length} tone="red" helper="Workload pressure" />
-            <StatCard label="Buddy matches" value={insights.buddy_recommendations.length} tone="amber" helper="Same-track peers" />
+            <StatCard label="Active people" value={insights.total_learners} tone="blue" helper="Synthetic cohort" />
+            <StatCard
+              label="Average readiness"
+              value={`${insights.average_readiness}%`}
+              tone="green"
+              helper={`${READINESS_THRESHOLD}% booking threshold`}
+            />
+            <StatCard
+              label="At-risk learners"
+              value={`${insights.at_risk_learners.length} of ${insights.total_learners}`}
+              tone="red"
+              helper={`${atRiskPercent}% need attention`}
+            />
+            <StatCard
+              label="Buddy matches"
+              value={insights.buddy_recommendations.length}
+              tone="amber"
+              helper="Same-track pairs"
+            />
           </section>
 
           <section className="panel readiness-chart">
             <div className="section-heading">
               <div>
                 <p>Fabric IQ semantic layer</p>
-                <h2>Readiness by internship track</h2>
+                <h2>Readiness by development track</h2>
               </div>
               <Users size={20} />
             </div>
-            <div className="bar-list">
-              {Object.entries(insights.readiness_by_exam).map(([exam, score]) => (
+            <div className="readiness-summary">
+              <span>Lowest: {readinessLow ? `${readinessLow.exam} ${readinessLow.score}%` : "-"}</span>
+              <span>Highest: {readinessHigh ? `${readinessHigh.exam} ${readinessHigh.score}%` : "-"}</span>
+              <span>Cohort average: {insights.average_readiness}%</span>
+            </div>
+            <div
+              className="bar-list readiness-bars"
+              aria-label={`Readiness ranked from lowest to highest. Booking threshold is ${READINESS_THRESHOLD} percent. Cohort average is ${insights.average_readiness} percent.`}
+            >
+              {sortedReadiness.map(({ exam, score }) => (
                 <div className="bar-row" key={exam}>
                   <span>{exam}</span>
-                  <div>
-                    <i style={{ inlineSize: `${score}%` }} />
+                  <div
+                    className="bar-track"
+                    style={
+                      {
+                        "--threshold": `${READINESS_THRESHOLD}%`,
+                        "--average": `${insights.average_readiness}%`
+                      } as CSSProperties
+                    }
+                  >
+                    <i className={score < READINESS_THRESHOLD ? "below-threshold" : ""} style={{ inlineSize: `${score}%` }} />
                   </div>
                   <strong>{score}%</strong>
                 </div>
               ))}
+            </div>
+            <div className="chart-legend" aria-hidden="true">
+              <span><i className="threshold-line" /> {READINESS_THRESHOLD}% threshold</span>
+              <span><i className="average-line" /> Cohort average</span>
             </div>
           </section>
 
@@ -101,16 +157,26 @@ export function ManagerDashboard({
             <div className="section-heading">
               <div>
                 <p>Calendar overload</p>
-                <h2>Risk heatmap</h2>
+                <h2>Risk triage heatmap</h2>
               </div>
               <AlertTriangle size={20} />
             </div>
-            <div className="risk-list">
-              {insights.at_risk_learners.map((risk) => (
-                <article className="risk-row" key={risk.name}>
-                  <strong>{risk.name}</strong>
-                  <span>{risk.risk_level} - {risk.meeting_hours} meeting hours/week</span>
+            <div className="risk-heatmap" aria-label="At-risk learners ranked by risk level and meeting load">
+              {sortedRisks.map((risk) => (
+                <article className={`risk-row ${risk.risk_level.toLowerCase()}`} key={risk.name}>
+                  <div className="risk-row-header">
+                    <strong>{risk.name}</strong>
+                    <span className="risk-level">{risk.risk_level}</span>
+                  </div>
+                  <div className="risk-meter">
+                    <span>Meeting load</span>
+                    <div>
+                      <i style={{ inlineSize: `${Math.min(100, (risk.meeting_hours / MAX_RISK_MEETING_HOURS) * 100)}%` }} />
+                    </div>
+                    <strong>{risk.meeting_hours}h/wk</strong>
+                  </div>
                   <p>{risk.reason}</p>
+                  <small>{risk.meeting_hours >= 30 ? "Action: protect study time this week" : "Action: monitor workload and checkpoints"}</small>
                 </article>
               ))}
             </div>
@@ -120,7 +186,7 @@ export function ManagerDashboard({
             <div className="section-heading">
               <div>
                 <p>Peer collaboration</p>
-                <h2>Intern study buddy matches</h2>
+                <h2>Study buddy matches</h2>
               </div>
             </div>
             <div className="table-wrap">
@@ -151,7 +217,7 @@ export function ManagerDashboard({
             <div className="section-heading">
               <div>
                 <p>Worker learning comments</p>
-                <h2>Intern remediation notes</h2>
+                <h2>Remediation notes</h2>
               </div>
             </div>
             <div className="comment-list">
@@ -171,7 +237,7 @@ export function ManagerDashboard({
           <Users size={34} />
           <div>
             <h2>Manager portal is ready</h2>
-            <p>Refresh insights to aggregate intern readiness, risk, learning comments, and peer study matches.</p>
+            <p>Refresh insights to aggregate workforce readiness, risk, learning comments, and peer study matches.</p>
           </div>
         </section>
       )}

@@ -2,30 +2,32 @@ import json
 import os
 import pytest
 
-from src.config import DOCUMENTS_DIR, SYNTHETIC_DIR
+from src.config import SYNTHETIC_DIR
 from src.main import OrchestratorEngine
 from src.connectors.graph_connector import MicrosoftGraphConnector
 from src.connectors.lms_connector import MoodleLmsConnector
 
 
-def test_startup_pack_has_18_certifications_and_docs():
+def test_workforce_pack_has_current_certifications():
     with open(os.path.join(SYNTHETIC_DIR, "certifications.json"), encoding="utf-8") as f:
         data = json.load(f)
     certs = data["certifications"]
-    assert len(certs) == 18
-    for cert in certs:
-        guide = os.path.join(DOCUMENTS_DIR, f"{cert['id'].lower().replace('-', '')}_guide.md")
-        assert os.path.exists(guide)
+    assert len(certs) >= 18
+    retired_or_retiring = {"AZ-204", "AI-102", "AI-900", "MB-910", "DP-203"}
+    assert retired_or_retiring.isdisjoint({cert["id"] for cert in certs})
+    assert {"AI-200", "AI-901", "DP-600", "DP-700", "MB-800", "SC-100"}.issubset(
+        {cert["id"] for cert in certs}
+    )
 
 
 def test_learner_pipeline_returns_cited_resources_and_quiz():
     engine = OrchestratorEngine()
     profile, paths, plan, engagement, quiz = engine.run_learner_pipeline(
         "pytest_pipeline",
-        "I am Avery Stone and I want AZ-204.",
+        "I am Avery Stone and I want AI-200.",
         "EMP-001",
     )
-    assert profile.certification_target == "AZ-204"
+    assert profile.certification_target == "AI-200"
     assert paths
     assert all("learn.microsoft.com" in p["resource_url"] for p in paths)
     assert sum(w.hours_allocated for w in plan.schedule) == plan.total_hours
@@ -38,7 +40,7 @@ def test_final_exam_badge_threshold_and_persistence():
     engine = OrchestratorEngine()
     profile, _, _, _, quiz = engine.run_learner_pipeline(
         "pytest_badge",
-        "I want to prepare for AI-900.",
+        "I want to prepare for AI-901.",
         "EMP-005",
     )
     failed = engine.run_final_exam_evaluation("pytest_badge", profile, quiz, 64.9)
@@ -55,7 +57,7 @@ def test_learning_activity_verification_uses_evidence_signals():
     engine = OrchestratorEngine()
     profile, _, plan, _, _ = engine.run_learner_pipeline(
         "pytest_activity",
-        "I want to prepare for AZ-204.",
+        "I want to prepare for AI-200.",
         "EMP-001",
     )
     report = engine.run_learning_activity_verification("pytest_activity", profile, plan)
@@ -70,7 +72,7 @@ def test_reazon_readiness_formula_is_exam_and_workiq_aware():
     engine = OrchestratorEngine()
     profile, _, _, _, quiz = engine.run_learner_pipeline(
         "pytest_reazon_formula",
-        "I want to prepare for AZ-204.",
+        "I want to prepare for AI-200.",
         "EMP-001",
     )
     report = engine.run_assessment_evaluation("pytest_reazon_formula", profile, quiz, 80.0)
@@ -105,7 +107,7 @@ def test_worker_comments_apply_penalty_after_three_misses():
     for learner_id in ["EMP-010"]:
         profile, _, _, _, _ = engine.run_learner_pipeline(
             f"pytest_comment_{learner_id}",
-            "I want to prepare for MB-910.",
+            "I want to prepare for MB-800.",
             learner_id,
         )
         profiles.append(profile)

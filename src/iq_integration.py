@@ -174,10 +174,10 @@ class FabricIQ:
             
         # If their role aligns with DevOps and they are attempting AZ-400
         if profile.certification_target == "AZ-400":
-            # Check if they have cloud background or completed AZ-204
+            # Check if they have cloud background or completed AZ-104
             if "Cloud Engineer" in profile.role or "Architect" in profile.role:
                 return True, "Prerequisites satisfied via professional experience."
-            return False, "Warning: AZ-400 requires AZ-204. Please complete AZ-204 path first."
+            return False, "Warning: AZ-400 requires Azure administration experience. Please complete AZ-104 path first."
 
         return True, "Prerequisites check passed."
 
@@ -193,7 +193,7 @@ class FabricIQ:
         elif "power platform" in role_lower or "automation" in role_lower:
             return ["PL-900", "PL-200"]
         elif "sales" in role_lower or "revenue" in role_lower or "customer" in role_lower:
-            return ["MB-910"]
+            return ["MB-800"]
         elif "microsoft 365" in role_lower or "workplace" in role_lower:
             return ["MS-900", "MS-102"]
         elif "architect" in role_lower:
@@ -201,17 +201,17 @@ class FabricIQ:
         elif "operations" in role_lower or "administrator" in role_lower:
             return ["AZ-900", "AZ-104"]
         elif "ai" in role_lower:
-            return ["AI-900", "AI-102"]
+            return ["AI-901", "AI-200"]
         elif "data" in role_lower:
-            return ["DP-900", "DP-203"]
+            return ["DP-900", "DP-600", "DP-700"]
         elif "founder" in role_lower or "startup" in role_lower:
-            return ["AZ-900", "AI-900", "SC-900", "MS-900"]
+            return ["AZ-900", "AI-901", "SC-900", "MS-900"]
         elif "devops" in role_lower or "sre" in role_lower:
-            return ["AZ-204", "AZ-400"]
+            return ["AZ-104", "AZ-400"]
         elif "cloud" in role_lower or "developer" in role_lower:
-            return ["AZ-900", "AZ-204"]
+            return ["AZ-900", "AI-200"]
         else:
-            return ["AZ-900", "AZ-204"]  # Default entry path
+            return ["AZ-900", "AI-901"]  # Default entry path
 
 class WorkIQ:
     """

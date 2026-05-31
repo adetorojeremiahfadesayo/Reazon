@@ -72,13 +72,19 @@ class QuizQuestionResponse(BaseModel):
 
 class QuizResponse(BaseModel):
     quiz_id: str
+    learner_id: str
     certification_target: str
     questions: List[QuizQuestionResponse]
+    assessment_type: str = "checkpoint"
+    duration_minutes: int = 20
+    seat_minutes: int = 30
+    question_count_standard: str = "10 checkpoint questions"
 
 class QuizSubmitRequest(BaseModel):
     employee_id: str
     text_input: str = "I want to take a practice assessment."
     answers: dict  # question_id -> selected_option_index
+    assessment_type: str = "checkpoint"
 
 class AssessmentResultResponse(BaseModel):
     score_percentage: float
@@ -208,7 +214,7 @@ def list_reports():
             continue
 
         stem = file_name[:-4]
-        report_type = "Badge certificate" if stem.startswith("MS-STARTUP") else "Readiness report"
+        report_type = "Badge certificate" if stem.startswith(("MS-STARTUP", "MS-WORKFORCE")) else "Readiness report"
         if "study_plan" in stem:
             report_type = "Study plan"
         elif "readiness" in stem:
@@ -342,8 +348,52 @@ def get_quiz(request: QuizRequest):
         ]
         return QuizResponse(
             quiz_id=quiz.quiz_id,
+            learner_id=quiz.learner_id,
             certification_target=quiz.certification_target,
-            questions=questions
+            questions=questions,
+            assessment_type=quiz.assessment_type,
+            duration_minutes=quiz.duration_minutes,
+            seat_minutes=quiz.seat_minutes,
+            question_count_standard=quiz.question_count_standard
+        )
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
+
+@app.post("/api/learner/final-exam", response_model=QuizResponse, tags=["Learner"])
+def get_final_exam(request: QuizRequest):
+    """
+    Generates a Microsoft-style final exam simulator question set.
+    This stays synthetic and grounded to the certification ontology for demo speed.
+    """
+    session_id = f"api_final_{uuid.uuid4().hex[:8]}"
+    try:
+        profile, _, _, _, _ = engine.run_learner_pipeline(
+            session_id, request.text_input, request.employee_id
+        )
+        quiz = engine.assessment.execute(profile, engine.foundry_iq, engine.fabric_iq, assessment_type="final")
+        engine.critic.audit_quiz(quiz)
+        questions = [
+            QuizQuestionResponse(
+                question_id=q.question_id,
+                domain=q.domain,
+                question_text=q.question_text,
+                options=q.options,
+                correct_option_index=q.correct_option_index,
+                citation=q.citation,
+                explanation=q.explanation
+            )
+            for q in quiz.questions
+        ]
+        return QuizResponse(
+            quiz_id=quiz.quiz_id,
+            learner_id=quiz.learner_id,
+            certification_target=quiz.certification_target,
+            questions=questions,
+            assessment_type=quiz.assessment_type,
+            duration_minutes=quiz.duration_minutes,
+            seat_minutes=quiz.seat_minutes,
+            question_count_standard=quiz.question_count_standard
         )
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
@@ -362,6 +412,9 @@ def submit_assessment(request: QuizSubmitRequest):
         profile, _, _, _, quiz = engine.run_learner_pipeline(
             session_id, request.text_input, request.employee_id
         )
+        if request.assessment_type == "final":
+            quiz = engine.assessment.execute(profile, engine.foundry_iq, engine.fabric_iq, assessment_type="final")
+            engine.critic.audit_quiz(quiz)
 
         # Score the answers
         correct_count = 0
@@ -378,22 +431,25 @@ def submit_assessment(request: QuizSubmitRequest):
             session_id, profile, quiz, score_percentage
         )
 
-        # Run final exam evaluation (badge unlock logic)
-        final_result = engine.run_final_exam_evaluation(
-            session_id, profile, quiz, score_percentage
-        )
         engine.export_readiness_report(profile, readiness_report)
-        if final_result.badge:
-            engine.export_badge_report(final_result.badge)
+
+        final_result = None
+        if request.assessment_type == "final":
+            # Run final exam evaluation (badge unlock logic)
+            final_result = engine.run_final_exam_evaluation(
+                session_id, profile, quiz, score_percentage
+            )
+            if final_result.badge:
+                engine.export_badge_report(final_result.badge)
 
         return AssessmentResultResponse(
             score_percentage=round(score_percentage, 1),
-            passed=final_result.passed,
+            passed=final_result.passed if final_result else score_percentage >= FINAL_EXAM_PASS_THRESHOLD,
             overall_readiness=readiness_report.overall_readiness,
             booking_recommendation=readiness_report.booking_recommendation,
             remediation_plan=readiness_report.remediation_plan,
-            badge_id=final_result.badge.badge_id if final_result.badge else None,
-            badge_name=final_result.badge.name if final_result.badge else None
+            badge_id=final_result.badge.badge_id if final_result and final_result.badge else None,
+            badge_name=final_result.badge.name if final_result and final_result.badge else None
         )
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))

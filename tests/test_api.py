@@ -28,12 +28,12 @@ def test_study_plan_endpoint():
     assert sum(w["hours_allocated"] for w in body["schedule"]) == body["total_hours"]
 
 
-def test_assessment_and_submit_endpoint_unlocks_badge_when_answers_are_correct():
+def test_checkpoint_submit_scores_without_unlocking_badge():
     quiz_response = client.post(
         "/api/learner/assessment",
         json={
             "employee_id": "EMP-005",
-            "text_input": "I want to prepare for AI-900.",
+            "text_input": "I want to prepare for AI-901.",
         },
     )
     assert quiz_response.status_code == 200
@@ -44,7 +44,34 @@ def test_assessment_and_submit_endpoint_unlocks_badge_when_answers_are_correct()
         "/api/learner/assessment/submit",
         json={
             "employee_id": "EMP-005",
-            "text_input": "I want to prepare for AI-900.",
+            "text_input": "I want to prepare for AI-901.",
+            "answers": answers,
+        },
+    )
+    assert submit_response.status_code == 200
+    body = submit_response.json()
+    assert body["passed"]
+    assert body["badge_id"] is None
+
+
+def test_final_exam_submit_unlocks_badge_when_answers_are_correct():
+    quiz_response = client.post(
+        "/api/learner/final-exam",
+        json={
+            "employee_id": "EMP-005",
+            "text_input": "I want to prepare for AI-901.",
+        },
+    )
+    assert quiz_response.status_code == 200
+    quiz = quiz_response.json()
+    answers = {str(q["question_id"]): q["correct_option_index"] for q in quiz["questions"]}
+
+    submit_response = client.post(
+        "/api/learner/assessment/submit",
+        json={
+            "employee_id": "EMP-005",
+            "text_input": "I want to prepare for AI-901.",
+            "assessment_type": "final",
             "answers": answers,
         },
     )
@@ -69,16 +96,32 @@ def test_learning_activity_endpoint():
         "/api/learner/activity",
         json={
             "employee_id": "EMP-001",
-            "text_input": "I want to prepare for AZ-204.",
+            "text_input": "I want to prepare for AI-200.",
             "weeks": 4,
         },
     )
     assert response.status_code == 200
     body = response.json()
     assert body["learner_id"] == "L-1001"
-    assert body["certification_target"] == "AZ-204"
+    assert body["certification_target"] == "AI-200"
     assert 0 <= body["average_completion_confidence"] <= 100
     assert body["evidence_summary"]
+
+
+def test_final_exam_endpoint_generates_standard_sized_exam():
+    response = client.post(
+        "/api/learner/final-exam",
+        json={
+            "employee_id": "EMP-004",
+            "text_input": "I am a startup founder preparing for AZ-900.",
+        },
+    )
+    assert response.status_code == 200
+    body = response.json()
+    assert body["assessment_type"] == "final"
+    assert body["duration_minutes"] == 45
+    assert body["seat_minutes"] == 65
+    assert len(body["questions"]) == 40
 
 
 def test_workspace_uses_specific_courses_and_auto_creates_study_plan_pdf():

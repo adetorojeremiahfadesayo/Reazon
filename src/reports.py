@@ -26,7 +26,7 @@ def export_study_plan_pdf(profile: LearnerProfile, plan: StudyPlan, output_dir: 
     path = os.path.join(output_dir, f"{_safe_filename(profile.learner_id)}_{plan.certification_target}_study_plan.pdf")
     styles = getSampleStyleSheet()
     story = [
-        Paragraph("Reazon Internship Development Program", styles["Title"]),
+        Paragraph("Reazon Workforce Development Program", styles["Title"]),
         Paragraph(f"Study Plan: {profile.name} - {plan.certification_target}", styles["Heading2"]),
         Paragraph(f"Role: {profile.role}", styles["Normal"]),
         Paragraph(f"Total: {plan.total_hours} hours across {plan.total_weeks} weeks", styles["Normal"]),
@@ -58,7 +58,7 @@ def export_readiness_pdf(profile: LearnerProfile, report: ReadinessReport, outpu
     path = os.path.join(output_dir, f"{_safe_filename(profile.learner_id)}_{report.certification_target}_readiness.pdf")
     styles = getSampleStyleSheet()
     story = [
-        Paragraph("Intern Certification Readiness Report", styles["Title"]),
+        Paragraph("Workforce Certification Readiness Report", styles["Title"]),
         Paragraph(f"{profile.name} - {report.certification_target}", styles["Heading2"]),
         Paragraph(f"Overall readiness: {report.overall_readiness}%", styles["Normal"]),
         Paragraph(f"Booking recommendation: {report.booking_recommendation}", styles["Normal"]),
@@ -85,7 +85,7 @@ def export_badge_pdf(badge: ExamBadge, output_dir: Optional[str] = None) -> str:
     path = os.path.join(output_dir, f"{_safe_filename(badge.badge_id)}.pdf")
     styles = getSampleStyleSheet()
     story = [
-        Paragraph("Internship Development Badge Certificate", styles["Title"]),
+        Paragraph("Workforce Development Badge Certificate", styles["Title"]),
         Spacer(1, 18),
         Paragraph(badge.name, styles["Heading1"]),
         Paragraph(f"Issued to: {badge.issued_to}", styles["Heading2"]),
@@ -94,7 +94,7 @@ def export_badge_pdf(badge: ExamBadge, output_dir: Optional[str] = None) -> str:
         Paragraph(f"Criteria: {badge.criteria}", styles["Normal"]),
         Paragraph(f"Badge ID: {badge.badge_id}", styles["Normal"]),
         Spacer(1, 18),
-        Paragraph("Synthetic internship credential. Not an official Microsoft certification.", styles["Italic"]),
+        Paragraph("Synthetic workforce development credential. Not an official Microsoft certification.", styles["Italic"]),
     ]
     _doc(path).build(story)
     return path

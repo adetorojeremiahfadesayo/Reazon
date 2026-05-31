@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useState } from "react";
 import { getHealth, getLearners, getManagerInsights, getReports, runLearnerWorkspace } from "./api";
 import { AppShell } from "./components/AppShell";
+import { FinalExamPanel } from "./components/FinalExamPanel";
 import { GuidedTour } from "./components/GuidedTour";
 import { LearnerDashboard } from "./components/LearnerDashboard";
 import { ManagerDashboard } from "./components/ManagerDashboard";
@@ -150,6 +151,8 @@ export function App() {
           onRun={runWorkspace}
           loading={loadingLearner}
         />
+      ) : activeView === "exam" ? (
+        <FinalExamPanel selectedLearner={selectedLearner} prompt={prompt} onAssessmentComplete={refreshReports} />
       ) : (
         <ManagerDashboard
           insights={managerInsights}

@@ -23,22 +23,22 @@ const tourSteps: TourStep[] = [
     selector: '[data-tour="view-nav"]',
     view: "learner",
     eyebrow: "Orientation",
-    title: "Two judging paths",
-    body: "Use Intern Space to demo the learner journey, then Manager Portal to show cohort analytics and intervention signals."
+    title: "Three judging paths",
+    body: "Use Learning Space for weekly proof, Final Exam for timed certification readiness, then Manager Portal for cohort analytics."
   },
   {
     selector: '[data-tour="learner-controls"]',
     view: "learner",
     eyebrow: "Input controls",
-    title: "Pick the intern and plan length",
-    body: "Judges can switch the synthetic learner persona and study duration to see how the pipeline adapts its recommendations."
+    title: "Pick the person and plan length",
+    body: "Judges can switch the synthetic worker or intern persona and study duration to see how the pipeline adapts its recommendations."
   },
   {
     selector: '[data-tour="agent-pipeline"]',
     view: "learner",
     eyebrow: "Core workflow",
     title: "Run the learner agent pipeline",
-    body: "This starts profiling, course curation, scheduling, assessment, activity verification, booking guidance, and trace logging."
+    body: "This starts profiling, course curation, scheduling, checkpoint assessment, activity verification, booking guidance, and trace logging."
   },
   {
     selector: '[data-tour="pipeline-stages"]',

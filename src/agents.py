@@ -147,11 +147,11 @@ class LearnerProfilerAgent(BaseAgent):
 
         # Determine target cert using Fabric IQ
         profile_lower = text_input.lower()
-        target_cert = "AZ-204"  # Default
+        target_cert = "AZ-900"  # Default entry path
         cert_patterns = [
-            "AI-102", "AZ-204", "AZ-400", "AZ-900", "AI-900", "DP-900",
-            "SC-900", "PL-900", "MS-900", "MB-910", "AZ-104", "AZ-305",
-            "DP-203", "PL-200", "PL-300", "SC-300", "MS-102", "AZ-500"
+            "AI-200", "AI-901", "AZ-400", "AZ-900", "DP-600", "DP-700", "DP-900",
+            "SC-900", "SC-100", "PL-900", "MS-900", "MB-800", "AZ-104", "AZ-305",
+            "PL-200", "PL-300", "SC-300", "MS-102", "AZ-500"
         ]
         for cert_id in cert_patterns:
             if cert_id.lower() in profile_lower or cert_id.replace("-", "").lower() in profile_lower:
@@ -161,23 +161,23 @@ class LearnerProfilerAgent(BaseAgent):
             if "security" in profile_lower:
                 target_cert = "SC-900"
             elif "power bi" in profile_lower or "analytics" in profile_lower:
-                target_cert = "PL-300"
+                target_cert = "DP-600"
             elif "power platform" in profile_lower or "automation" in profile_lower:
                 target_cert = "PL-900"
             elif "data engineer" in profile_lower:
-                target_cert = "DP-203"
+                target_cert = "DP-700"
             elif "data" in profile_lower:
                 target_cert = "DP-900"
             elif "microsoft 365" in profile_lower or "workplace" in profile_lower:
                 target_cert = "MS-900"
             elif "dynamics" in profile_lower or "sales" in profile_lower:
-                target_cert = "MB-910"
+                target_cert = "MB-800"
             elif "architect" in profile_lower:
                 target_cert = "AZ-305"
             elif "admin" in profile_lower or "operations" in profile_lower:
                 target_cert = "AZ-104"
             elif "ai" in profile_lower:
-                target_cert = "AI-900"
+                target_cert = "AI-901"
             elif "devops" in profile_lower:
                 target_cert = "AZ-400"
             
@@ -421,7 +421,89 @@ class AssessmentAgent(BaseAgent):
             })
         return questions
 
-    def execute(self, profile: LearnerProfile, foundry_iq: FoundryIQ, fabric_iq: FabricIQ) -> Quiz:
+    def _exam_timing(self, cert: Dict[str, Any]) -> Dict[str, Any]:
+        difficulty = str(cert.get("difficulty", "")).lower()
+        exam_type = str(cert.get("exam_type", "")).lower()
+        if "mos" in exam_type:
+            return {"duration": 50, "seat": 60, "questions": 35, "standard": "33-37 MOS exam-style questions"}
+        if "fundamental" in difficulty:
+            return {"duration": 45, "seat": 65, "questions": 40, "standard": "40 fundamentals exam-style questions"}
+        if cert.get("may_contain_labs"):
+            return {"duration": 120, "seat": 140, "questions": 50, "standard": "50 role-based questions with lab-aware timing"}
+        return {"duration": 100, "seat": 120, "questions": 50, "standard": "50 role-based exam-style questions"}
+
+    def _generate_domain_question(
+        self,
+        question_id: int,
+        domain: Dict[str, Any],
+        profile: LearnerProfile,
+        citation: str,
+        variant: int = 0
+    ) -> QuizQuestion:
+        domain_name = domain["name"]
+        skills = domain.get("skills", [])
+        primary_skill = skills[variant % len(skills)] if skills else domain_name
+        scenarios = [
+            (
+                f"A team is preparing for {profile.certification_target} and needs to demonstrate {primary_skill}. "
+                f"Which choice best aligns with the {domain_name} objective?",
+                [
+                    f"Use the recommended Microsoft practice for {primary_skill}",
+                    "Skip the prerequisite configuration and document it later",
+                    "Use an unrelated service because it is already familiar",
+                    "Delay validation until after the certification attempt"
+                ],
+                0
+            ),
+            (
+                f"During a class checkpoint for {domain_name}, what evidence best proves the learner understood {primary_skill}?",
+                [
+                    "Attendance only, without any activity evidence",
+                    f"A completed module plus a scored checkpoint for {primary_skill}",
+                    "A manager note that the learner was busy",
+                    "A copied summary without reflection or quiz evidence"
+                ],
+                1
+            ),
+            (
+                f"A worker has limited study time this week. Which action best protects readiness for {domain_name}?",
+                [
+                    "Move all study activity to the final exam day",
+                    "Ignore weak domains until the score drops",
+                    f"Prioritize the {primary_skill} objective and verify progress with a checkpoint",
+                    "Replace official Microsoft Learn material with untracked notes"
+                ],
+                2
+            ),
+            (
+                f"Which review habit is most useful before attempting a final exam section on {domain_name}?",
+                [
+                    "Only reread completed topics with high confidence",
+                    "Focus only on the shortest module",
+                    "Avoid practice questions to save time",
+                    f"Review weak {primary_skill} evidence, then retake a short checkpoint"
+                ],
+                3
+            )
+        ]
+        question_text, options, correct_idx = scenarios[variant % len(scenarios)]
+        return QuizQuestion(
+            question_id=question_id,
+            domain=domain_name,
+            question_text=question_text,
+            options=options,
+            correct_option_index=correct_idx,
+            citation=citation,
+            explanation=f"The best answer is grounded in the {domain_name} objective for {profile.certification_target}. [Citation: {citation}]"
+        )
+
+    def execute(
+        self,
+        profile: LearnerProfile,
+        foundry_iq: FoundryIQ,
+        fabric_iq: FabricIQ,
+        assessment_type: str = "checkpoint"
+    ) -> Quiz:
         self.clear_traces()
         self.log_reasoning(f"Retrieving practice questions for target: {profile.certification_target}...")
         
@@ -433,7 +515,8 @@ class AssessmentAgent(BaseAgent):
         quiz_questions = []
         q_id = 1
         
-        max_questions = 10
+        timing = self._exam_timing(cert)
+        max_questions = timing["questions"] if assessment_type == "final" else 10
         for d in domains:
             if len(quiz_questions) >= max_questions:
                 break
@@ -444,7 +527,7 @@ class AssessmentAgent(BaseAgent):
             q_text = f"Review the key objectives for {d['name']}. What is the recommended deployment pattern?"
             options = ["Blue-Green Swap", "Canary Rollout", "Direct Hotfix", "Multi-Region Hub"]
             correct_idx = 1
-            citation = f"[{profile.certification_target.replace('-', '')}-D-GEN]"
+            citation = f"[Ref: {profile.certification_target.replace('-', '')}-D-GEN]"
             explanation = f"Always review safety guides. [Citation: {citation}]"
             
             # If questions are pre-seeded in the guide, extract them
@@ -484,12 +567,33 @@ class AssessmentAgent(BaseAgent):
             )
             q_id += 1
             self.log_reasoning(f"Grounded question {q_id-1} generated with citation: {citation}")
-            
+
+        if assessment_type in {"checkpoint", "final"}:
+            domain_index = 0
+            while quiz_questions and len(quiz_questions) < max_questions:
+                domain = domains[domain_index % len(domains)]
+                citation = f"[Ref: {profile.certification_target.replace('-', '')}-SIM-{domain_index + 1}]"
+                quiz_questions.append(
+                    self._generate_domain_question(
+                        q_id,
+                        domain,
+                        profile,
+                        citation,
+                        variant=domain_index
+                    )
+                )
+                q_id += 1
+                domain_index += 1
+
         return Quiz(
             quiz_id=f"Q-{random.randint(100, 999)}",
             learner_id=profile.learner_id,
             certification_target=profile.certification_target,
-            questions=quiz_questions
+            questions=quiz_questions,
+            assessment_type=assessment_type,
+            duration_minutes=timing["duration"] if assessment_type == "final" else 20,
+            seat_minutes=timing["seat"] if assessment_type == "final" else 30,
+            question_count_standard=timing["standard"] if assessment_type == "final" else "10 weekly checkpoint questions"
         )
 
 class ProgressAgent(BaseAgent):
