@@ -1,0 +1,30 @@
+{
+  "description": "Synthetic Microsoft Graph-style calendar and Teams attendance signals. Demo data only.",
+  "users": [
+    {
+      "employee_id": "EMP-001",
+      "user_principal_name": "avery.stone@example.invalid",
+      "meeting_hours_per_week": 26,
+      "focus_hours_per_week": 8,
+      "preferred_learning_slot": "Afternoon",
+      "weekly_study_budget_hours": 3,
+      "class_attendance": [
+        {"module_id": "AZ204-D1", "joined": true, "attendance_minutes": 48, "expected_minutes": 45},
+        {"module_id": "AZ204-D2", "joined": true, "attendance_minutes": 22, "expected_minutes": 45},
+        {"module_id": "AZ204-D3", "joined": false, "attendance_minutes": 0, "expected_minutes": 45}
+      ]
+    },
+    {
+      "employee_id": "EMP-004",
+      "user_principal_name": "morgan.lane@example.invalid",
+      "meeting_hours_per_week": 30,
+      "focus_hours_per_week": 5,
+      "preferred_learning_slot": "Afternoon",
+      "weekly_study_budget_hours": 2,
+      "class_attendance": [
+        {"module_id": "AZ900-D1", "joined": true, "attendance_minutes": 44, "expected_minutes": 45},
+        {"module_id": "AZ900-D2", "joined": false, "attendance_minutes": 0, "expected_minutes": 45}
+      ]
+    }
+  ]
+}

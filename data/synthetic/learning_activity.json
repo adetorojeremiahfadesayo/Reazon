@@ -1,0 +1,93 @@
+[
+  {
+    "learner_id": "L-1001",
+    "certification_target": "AZ-204",
+    "domain_name": "Develop Azure compute solutions",
+    "module_id": "AZ204-D1",
+    "source": "Microsoft Learn",
+    "status": "completed",
+    "attendance_minutes": 48,
+    "expected_minutes": 45,
+    "watch_percentage": 96,
+    "checkpoint_score": 82,
+    "reflection_submitted": true
+  },
+  {
+    "learner_id": "L-1001",
+    "certification_target": "AZ-204",
+    "domain_name": "Develop for Azure storage",
+    "module_id": "AZ204-D2",
+    "source": "LMS",
+    "status": "partial",
+    "attendance_minutes": 22,
+    "expected_minutes": 45,
+    "watch_percentage": 51,
+    "checkpoint_score": 58,
+    "reflection_submitted": false
+  },
+  {
+    "learner_id": "L-1002",
+    "certification_target": "AI-102",
+    "domain_name": "Implement generative AI solutions",
+    "module_id": "AI102-D5",
+    "source": "Microsoft Learn",
+    "status": "completed",
+    "attendance_minutes": 50,
+    "expected_minutes": 45,
+    "watch_percentage": 100,
+    "checkpoint_score": 88,
+    "reflection_submitted": true
+  },
+  {
+    "learner_id": "L-1004",
+    "certification_target": "AZ-900",
+    "domain_name": "Describe cloud concepts",
+    "module_id": "AZ900-D1",
+    "source": "Teams Class Attendance",
+    "status": "completed",
+    "attendance_minutes": 44,
+    "expected_minutes": 45,
+    "watch_percentage": 90,
+    "checkpoint_score": 76,
+    "reflection_submitted": true
+  },
+  {
+    "learner_id": "L-1005",
+    "certification_target": "AI-900",
+    "domain_name": "Describe Azure AI services",
+    "module_id": "AI900-D3",
+    "source": "Viva Learning",
+    "status": "completed",
+    "attendance_minutes": 42,
+    "expected_minutes": 45,
+    "watch_percentage": 94,
+    "checkpoint_score": 81,
+    "reflection_submitted": true
+  },
+  {
+    "learner_id": "L-1007",
+    "certification_target": "SC-900",
+    "domain_name": "Describe Microsoft Entra capabilities",
+    "module_id": "SC900-D2",
+    "source": "Microsoft Learn",
+    "status": "completed",
+    "attendance_minutes": 46,
+    "expected_minutes": 45,
+    "watch_percentage": 91,
+    "checkpoint_score": 79,
+    "reflection_submitted": true
+  },
+  {
+    "learner_id": "L-1015",
+    "certification_target": "PL-300",
+    "domain_name": "Prepare and model data",
+    "module_id": "PL300-D1",
+    "source": "LMS",
+    "status": "completed",
+    "attendance_minutes": 55,
+    "expected_minutes": 60,
+    "watch_percentage": 89,
+    "checkpoint_score": 84,
+    "reflection_submitted": true
+  }
+]

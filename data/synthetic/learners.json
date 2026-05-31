@@ -1,0 +1,200 @@
+[
+  {
+    "learner_id": "L-1001",
+    "employee_id": "EMP-001",
+    "name": "Avery Stone",
+    "role": "Cloud Developer",
+    "certification_target": "AZ-204",
+    "practice_score_avg": 68.5,
+    "hours_studied": 12.0,
+    "exam_outcome": "None",
+    "status": "IN PROGRESS"
+  },
+  {
+    "learner_id": "L-1002",
+    "employee_id": "EMP-002",
+    "name": "Jordan Vale",
+    "role": "AI Engineer",
+    "certification_target": "AI-102",
+    "practice_score_avg": 82.0,
+    "hours_studied": 25.0,
+    "exam_outcome": "None",
+    "status": "READY"
+  },
+  {
+    "learner_id": "L-1003",
+    "employee_id": "EMP-003",
+    "name": "Riley Park",
+    "role": "DevOps Engineer",
+    "certification_target": "AZ-400",
+    "practice_score_avg": 45.0,
+    "hours_studied": 5.0,
+    "exam_outcome": "None",
+    "status": "NOT YET"
+  },
+  {
+    "learner_id": "L-1004",
+    "employee_id": "EMP-004",
+    "name": "Morgan Lane",
+    "role": "Startup Founder",
+    "certification_target": "AZ-900",
+    "practice_score_avg": 58.0,
+    "hours_studied": 6.0,
+    "exam_outcome": "None",
+    "status": "IN PROGRESS"
+  },
+  {
+    "learner_id": "L-1005",
+    "employee_id": "EMP-005",
+    "name": "Casey North",
+    "role": "AI Product Manager",
+    "certification_target": "AI-900",
+    "practice_score_avg": 74.0,
+    "hours_studied": 10.0,
+    "exam_outcome": "None",
+    "status": "READY"
+  },
+  {
+    "learner_id": "L-1006",
+    "employee_id": "EMP-006",
+    "name": "Taylor Reed",
+    "role": "Data Analyst",
+    "certification_target": "DP-900",
+    "practice_score_avg": 63.0,
+    "hours_studied": 8.0,
+    "exam_outcome": "None",
+    "status": "IN PROGRESS"
+  },
+  {
+    "learner_id": "L-1007",
+    "employee_id": "EMP-007",
+    "name": "Quinn Brooks",
+    "role": "Security Lead",
+    "certification_target": "SC-900",
+    "practice_score_avg": 71.0,
+    "hours_studied": 9.0,
+    "exam_outcome": "None",
+    "status": "READY"
+  },
+  {
+    "learner_id": "L-1008",
+    "employee_id": "EMP-008",
+    "name": "Sky Harper",
+    "role": "Operations Automator",
+    "certification_target": "PL-900",
+    "practice_score_avg": 61.0,
+    "hours_studied": 7.0,
+    "exam_outcome": "None",
+    "status": "IN PROGRESS"
+  },
+  {
+    "learner_id": "L-1009",
+    "employee_id": "EMP-009",
+    "name": "Rowan Gray",
+    "role": "Workplace Admin",
+    "certification_target": "MS-900",
+    "practice_score_avg": 69.0,
+    "hours_studied": 8.0,
+    "exam_outcome": "None",
+    "status": "IN PROGRESS"
+  },
+  {
+    "learner_id": "L-1010",
+    "employee_id": "EMP-010",
+    "name": "Emery Fox",
+    "role": "Revenue Operations Associate",
+    "certification_target": "MB-910",
+    "practice_score_avg": 57.0,
+    "hours_studied": 5.0,
+    "exam_outcome": "None",
+    "status": "NOT YET"
+  },
+  {
+    "learner_id": "L-1011",
+    "employee_id": "EMP-011",
+    "name": "Drew Ellis",
+    "role": "Cloud Operations Engineer",
+    "certification_target": "AZ-104",
+    "practice_score_avg": 67.0,
+    "hours_studied": 16.0,
+    "exam_outcome": "None",
+    "status": "IN PROGRESS"
+  },
+  {
+    "learner_id": "L-1012",
+    "employee_id": "EMP-012",
+    "name": "Parker Wells",
+    "role": "Solution Architect",
+    "certification_target": "AZ-305",
+    "practice_score_avg": 76.0,
+    "hours_studied": 24.0,
+    "exam_outcome": "None",
+    "status": "READY"
+  },
+  {
+    "learner_id": "L-1013",
+    "employee_id": "EMP-013",
+    "name": "Sage Monroe",
+    "role": "Data Engineer",
+    "certification_target": "DP-203",
+    "practice_score_avg": 72.0,
+    "hours_studied": 20.0,
+    "exam_outcome": "None",
+    "status": "READY"
+  },
+  {
+    "learner_id": "L-1014",
+    "employee_id": "EMP-014",
+    "name": "Finley Ross",
+    "role": "Power Platform Consultant",
+    "certification_target": "PL-200",
+    "practice_score_avg": 64.0,
+    "hours_studied": 13.0,
+    "exam_outcome": "None",
+    "status": "IN PROGRESS"
+  },
+  {
+    "learner_id": "L-1015",
+    "employee_id": "EMP-015",
+    "name": "Blair Chen",
+    "role": "BI Analyst",
+    "certification_target": "PL-300",
+    "practice_score_avg": 79.0,
+    "hours_studied": 22.0,
+    "exam_outcome": "None",
+    "status": "READY"
+  },
+  {
+    "learner_id": "L-1016",
+    "employee_id": "EMP-016",
+    "name": "Kendall Ray",
+    "role": "Identity Administrator",
+    "certification_target": "SC-300",
+    "practice_score_avg": 66.0,
+    "hours_studied": 14.0,
+    "exam_outcome": "None",
+    "status": "IN PROGRESS"
+  },
+  {
+    "learner_id": "L-1017",
+    "employee_id": "EMP-017",
+    "name": "Arden Cole",
+    "role": "Microsoft 365 Administrator",
+    "certification_target": "MS-102",
+    "practice_score_avg": 70.0,
+    "hours_studied": 18.0,
+    "exam_outcome": "None",
+    "status": "IN PROGRESS"
+  },
+  {
+    "learner_id": "L-1018",
+    "employee_id": "EMP-018",
+    "name": "Reese Flynn",
+    "role": "Cloud Security Engineer",
+    "certification_target": "AZ-500",
+    "practice_score_avg": 73.0,
+    "hours_studied": 19.0,
+    "exam_outcome": "None",
+    "status": "READY"
+  }
+]

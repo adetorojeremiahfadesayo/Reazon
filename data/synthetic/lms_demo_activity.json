@@ -1,0 +1,11 @@
+{
+  "platform": "moodle",
+  "description": "Synthetic Moodle-style LMS completion and checkpoint signals. Demo data only.",
+  "records": [
+    {"learner_id": "L-1001", "module_id": "AZ204-D1", "status": "completed", "watch_percentage": 96, "checkpoint_score": 82, "reflection_submitted": true},
+    {"learner_id": "L-1001", "module_id": "AZ204-D2", "status": "partial", "watch_percentage": 51, "checkpoint_score": 58, "reflection_submitted": false},
+    {"learner_id": "L-1004", "module_id": "AZ900-D1", "status": "completed", "watch_percentage": 90, "checkpoint_score": 76, "reflection_submitted": true},
+    {"learner_id": "L-1005", "module_id": "AI900-D3", "status": "completed", "watch_percentage": 94, "checkpoint_score": 81, "reflection_submitted": true},
+    {"learner_id": "L-1015", "module_id": "PL300-D1", "status": "completed", "watch_percentage": 89, "checkpoint_score": 84, "reflection_submitted": true}
+  ]
+}
