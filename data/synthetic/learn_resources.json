@@ -1,5 +1,5 @@
 {
-  "description": "Specific Microsoft Learn course/path registry for the Reazon Workforce Development Program. Demo data only; links point to named Microsoft Learn training or certification surfaces.",
+  "description": "Specific Microsoft Learn course/path registry for Reazon: Microsoft Certification Readiness. Demo data only; links point to named Microsoft Learn training or certification surfaces.",
   "resources": {
     "AZ-400": {
       "certification_url": "https://learn.microsoft.com/en-us/credentials/certifications/devops-engineer/",

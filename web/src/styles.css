@@ -19,6 +19,7 @@
   --red: #c2410c;
   --red-2: #ffedd5;
   --shadow: 0 10px 30px rgba(20, 34, 52, 0.08);
+  --shadow-strong: 0 22px 70px rgba(16, 33, 63, 0.14);
   --motion-speed: 1;
 }
 
@@ -34,6 +35,9 @@ body {
   margin: 0;
   min-width: 320px;
   min-height: 100vh;
+  background:
+    linear-gradient(120deg, rgba(255, 255, 255, 0.82), rgba(255, 255, 255, 0.68)),
+    url("/reazon-bg.png") center / cover fixed;
 }
 
 button,
@@ -67,8 +71,8 @@ a:hover {
   min-height: 100vh;
   grid-template-columns: 280px minmax(0, 1fr);
   background:
-    linear-gradient(180deg, rgba(37, 99, 235, 0.06), transparent 290px),
-    var(--bg);
+    linear-gradient(110deg, rgba(255, 255, 255, 0.72), rgba(255, 255, 255, 0.5)),
+    radial-gradient(circle at 68% 8%, rgba(255, 255, 255, 0.58), transparent 34%);
 }
 
 .sidebar {
@@ -79,7 +83,8 @@ a:hover {
   flex-direction: column;
   gap: 26px;
   border-right: 1px solid var(--line);
-  background: #ffffff;
+  background: rgba(255, 255, 255, 0.74);
+  backdrop-filter: blur(20px) saturate(1.05);
   padding: 22px;
 }
 
@@ -94,10 +99,11 @@ a:hover {
   width: 42px;
   height: 42px;
   place-items: center;
-  border-radius: 8px;
-  background: #172033;
+  border-radius: 10px;
+  background: linear-gradient(135deg, #172033, #2563eb);
   color: #ffffff;
   font-weight: 900;
+  box-shadow: 0 12px 28px rgba(23, 32, 51, 0.2);
 }
 
 .brand-block strong,
@@ -139,6 +145,21 @@ a:hover {
 .workspace {
   min-width: 0;
   padding: 22px 28px 40px;
+}
+
+.view-transition {
+  animation: viewEnter calc(280ms * var(--motion-speed)) ease both;
+}
+
+@keyframes viewEnter {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 .topbar {
@@ -358,10 +379,11 @@ input:focus-visible {
 .metric-grid,
 .panel,
 .pipeline-stage-rail {
-  border: 1px solid var(--line);
-  border-radius: 8px;
-  background: rgba(255, 255, 255, 0.9);
-  box-shadow: var(--shadow);
+  border: 1px solid rgba(255, 255, 255, 0.72);
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.82);
+  box-shadow: var(--shadow-strong);
+  backdrop-filter: blur(18px) saturate(1.06);
 }
 
 .command-strip {
@@ -372,6 +394,18 @@ input:focus-visible {
   align-items: end;
   padding: 18px;
   min-width: 0;
+  animation: panelRise calc(300ms * var(--motion-speed)) ease both;
+}
+
+@keyframes panelRise {
+  from {
+    opacity: 0;
+    transform: translateY(14px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 .welcome-copy,
@@ -469,8 +503,9 @@ input:focus-visible {
   align-items: center;
   border: 1px solid var(--line);
   border-radius: 8px;
-  background: #ffffff;
+  background: rgba(255, 255, 255, 0.84);
   padding: 14px 16px;
+  box-shadow: var(--shadow);
 }
 
 .journey-copy p {
@@ -550,7 +585,7 @@ input:focus-visible {
 }
 
 .stage.pending {
-  background: #ffffff;
+  background: rgba(255, 255, 255, 0.76);
 }
 
 .metric-grid {
@@ -611,6 +646,7 @@ input:focus-visible {
 .panel {
   min-width: 0;
   padding: 18px;
+  animation: panelRise calc(320ms * var(--motion-speed)) ease both;
 }
 
 .section-heading {
@@ -1626,10 +1662,23 @@ summary {
   height: 100%;
   border-radius: inherit;
   background: linear-gradient(90deg, var(--blue), var(--green));
+  transform-origin: left center;
+  animation: chartFill calc(520ms * var(--motion-speed)) ease both;
 }
 
 .bar-row i.below-threshold {
   background: linear-gradient(90deg, var(--amber), var(--red));
+}
+
+@keyframes chartFill {
+  from {
+    transform: scaleX(0.04);
+    opacity: 0.55;
+  }
+  to {
+    transform: scaleX(1);
+    opacity: 1;
+  }
 }
 
 .chart-legend {
@@ -1657,20 +1706,17 @@ summary {
   gap: 12px;
 }
 
-.risk-summary-panel {
-  grid-column: 1 / -1;
-}
-
-.risk-pie-layout {
+.risk-compact-layout {
   display: grid;
-  grid-template-columns: 220px minmax(0, 1fr);
-  gap: 20px;
-  align-items: center;
+  grid-template-columns: minmax(150px, 180px) minmax(190px, 0.8fr) minmax(260px, 1.2fr);
+  gap: 14px;
+  align-items: stretch;
+  min-width: 0;
 }
 
 .risk-donut {
   display: grid;
-  width: 190px;
+  width: 168px;
   aspect-ratio: 1;
   place-items: center;
   border-radius: 50%;
@@ -1680,11 +1726,27 @@ summary {
       var(--amber) var(--high) var(--medium),
       var(--green) var(--medium) 100%
     );
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.45), 0 18px 40px rgba(16, 33, 63, 0.14);
+}
+
+.risk-donut.animated-chart {
+  animation: donutArrive calc(520ms * var(--motion-speed)) ease both;
+}
+
+@keyframes donutArrive {
+  from {
+    opacity: 0;
+    transform: scale(0.86) rotate(-18deg);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1) rotate(0deg);
+  }
 }
 
 .risk-donut > div {
   display: grid;
-  width: 118px;
+  width: 102px;
   aspect-ratio: 1;
   place-items: center;
   border-radius: 50%;
@@ -1699,37 +1761,88 @@ summary {
 
 .risk-donut strong {
   color: var(--text);
-  font-size: 34px;
+  font-size: 30px;
   line-height: 1;
 }
 
-.risk-donut span {
+.risk-donut span,
+.risk-focus-card p {
   color: var(--muted);
   font-size: 12px;
   font-weight: 850;
 }
 
-.risk-breakdown {
-  display: grid;
-  gap: 10px;
-}
-
-.risk-breakdown-row {
-  display: grid;
-  grid-template-columns: 150px minmax(0, 1fr);
-  gap: 12px;
-  align-items: start;
+.risk-view-tabs {
+  display: inline-flex;
+  gap: 6px;
+  margin: -4px 0 16px;
   border: 1px solid var(--line);
-  border-radius: 8px;
-  background: #ffffff;
-  padding: 12px;
+  border-radius: 10px;
+  background: rgba(255, 255, 255, 0.66);
+  padding: 4px;
 }
 
-.risk-breakdown-row > div {
+.risk-view-tabs button,
+.risk-tile {
+  border: 0;
+  color: var(--text);
+  cursor: pointer;
+  font: inherit;
+}
+
+.risk-view-tabs button {
+  min-height: 32px;
+  border-radius: 8px;
+  background: transparent;
+  padding: 0 10px;
+  font-size: 12px;
+  font-weight: 900;
+}
+
+.risk-view-tabs button.active {
+  background: #172033;
+  color: #ffffff;
+}
+
+.risk-tile-board {
+  display: grid;
+  gap: 8px;
+  min-width: 0;
+}
+
+.risk-tile {
   display: grid;
   grid-template-columns: auto minmax(0, 1fr);
   gap: 4px 8px;
   align-items: center;
+  min-width: 0;
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.72);
+  padding: 12px;
+  text-align: left;
+  transition:
+    transform calc(150ms * var(--motion-speed)) ease,
+    border-color calc(150ms * var(--motion-speed)) ease,
+    box-shadow calc(150ms * var(--motion-speed)) ease;
+}
+
+.risk-tile:hover,
+.risk-tile.active {
+  transform: translateY(-1px);
+  box-shadow: var(--shadow);
+}
+
+.risk-tile.active.high {
+  border-color: rgba(194, 65, 12, 0.45);
+}
+
+.risk-tile.active.medium {
+  border-color: rgba(183, 121, 31, 0.45);
+}
+
+.risk-tile.active.low {
+  border-color: rgba(15, 159, 110, 0.35);
 }
 
 .risk-dot {
@@ -1739,21 +1852,78 @@ summary {
   border-radius: 50%;
 }
 
-.risk-breakdown-row strong {
+.risk-tile strong {
   font-size: 13px;
+  overflow-wrap: anywhere;
 }
 
-.risk-breakdown-row small {
+.risk-tile small {
   grid-column: 2;
   color: var(--muted);
   font-size: 12px;
   font-weight: 850;
+  overflow-wrap: anywhere;
 }
 
-.risk-breakdown-row p {
+.risk-focus-card {
+  display: grid;
+  gap: 12px;
+  min-width: 0;
+  max-width: 100%;
+  overflow: hidden;
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.72);
+  padding: 14px;
+}
+
+.risk-focus-card p {
+  margin: 0 0 4px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.risk-focus-card h3 {
   margin: 0;
   color: var(--text);
-  font-size: 13px;
+  font-size: 18px;
+  line-height: 1.35;
+}
+
+.risk-focus-list {
+  display: grid;
+  gap: 8px;
+  min-width: 0;
+  max-height: 230px;
+  overflow: auto;
+}
+
+.risk-focus-list article {
+  min-width: 0;
+  border: 1px solid rgba(217, 225, 234, 0.82);
+  border-radius: 10px;
+  background: rgba(255, 255, 255, 0.64);
+  padding: 10px;
+}
+
+.risk-focus-card h3,
+.risk-focus-list strong,
+.risk-focus-list span,
+.risk-focus-list small {
+  display: block;
+  overflow-wrap: anywhere;
+}
+
+.risk-focus-list span {
+  margin-top: 4px;
+  color: var(--blue);
+  font-size: 12px;
+  font-weight: 900;
+}
+
+.risk-focus-list small {
+  margin-top: 4px;
+  color: var(--muted);
   line-height: 1.45;
 }
 
@@ -1968,6 +2138,21 @@ summary {
   color: var(--blue);
 }
 
+@media (max-width: 1280px) {
+  .risk-compact-layout {
+    grid-template-columns: minmax(150px, 180px) minmax(220px, 1fr);
+  }
+
+  .risk-donut {
+    align-self: center;
+    justify-self: center;
+  }
+
+  .risk-focus-card {
+    grid-column: 1 / -1;
+  }
+}
+
 @media (max-width: 1120px) {
   .app-shell {
     grid-template-columns: 1fr;
@@ -2062,8 +2247,7 @@ summary {
   }
 
   .worker-journey-panel,
-  .risk-pie-layout,
-  .risk-breakdown-row {
+  .risk-compact-layout {
     grid-template-columns: 1fr;
   }
 

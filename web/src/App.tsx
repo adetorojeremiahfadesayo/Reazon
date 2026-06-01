@@ -132,6 +132,34 @@ export function App() {
     setTourOpen(false);
   };
 
+  const renderedView =
+    activeView === "learner" ? (
+      <LearnerDashboard
+        selectedLearner={selectedLearner}
+        workspace={workspace}
+        reports={reports}
+        reportsLoading={loadingReports}
+        onRefreshReports={refreshReports}
+        prompt={prompt}
+        onPromptChange={setPrompt}
+        weeks={weeks}
+        onRun={runWorkspace}
+        loading={loadingLearner}
+      />
+    ) : activeView === "exam" ? (
+      <FinalExamPanel selectedLearner={selectedLearner} prompt={prompt} onAssessmentComplete={refreshReports} />
+    ) : (
+      <ManagerDashboard
+        insights={managerInsights}
+        selectedLearner={selectedLearner}
+        reports={reports}
+        reportsLoading={loadingReports}
+        loading={loadingManager}
+        onRefresh={refreshManager}
+        onRefreshReports={refreshReports}
+      />
+    );
+
   return (
     <AppShell
       activeView={activeView}
@@ -146,32 +174,9 @@ export function App() {
       onStartTour={() => setTourOpen(true)}
     >
       {error ? <div className="error-banner">{error}</div> : null}
-      {activeView === "learner" ? (
-        <LearnerDashboard
-          selectedLearner={selectedLearner}
-          workspace={workspace}
-          reports={reports}
-          reportsLoading={loadingReports}
-          onRefreshReports={refreshReports}
-          prompt={prompt}
-          onPromptChange={setPrompt}
-          weeks={weeks}
-          onRun={runWorkspace}
-          loading={loadingLearner}
-        />
-      ) : activeView === "exam" ? (
-        <FinalExamPanel selectedLearner={selectedLearner} prompt={prompt} onAssessmentComplete={refreshReports} />
-      ) : (
-        <ManagerDashboard
-          insights={managerInsights}
-          selectedLearner={selectedLearner}
-          reports={reports}
-          reportsLoading={loadingReports}
-          loading={loadingManager}
-          onRefresh={refreshManager}
-          onRefreshReports={refreshReports}
-        />
-      )}
+      <div className="view-transition" key={activeView}>
+        {renderedView}
+      </div>
       <GuidedTour
         active={tourOpen}
         activeView={activeView}

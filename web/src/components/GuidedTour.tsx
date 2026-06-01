@@ -45,7 +45,7 @@ const tourSteps: TourStep[] = [
     view: "learner",
     eyebrow: "What it means",
     title: "Follow the reasoning stages",
-    body: "The stage rail shows how Reazon turns learner context into a workload-aware certification plan and badge decision."
+    body: "The stage rail shows how Reazon: Microsoft Certification Readiness turns learner context into a workload-aware certification plan and badge decision."
   },
   {
     selector: '[data-tour="manager-command"]',

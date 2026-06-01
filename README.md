@@ -1,4 +1,4 @@
-# Reazon Workforce Development Program
+# Reazon: Microsoft Certification Readiness
 
 A 10-agent workforce development and Microsoft certification readiness system for startup teams. It helps companies onboard interns and employees into role-aligned technical tracks, generate workload-aware study plans, take weekly checkpoints, run timed final exam simulations, unlock synthetic badges, and give program managers aggregate readiness visibility.
 
@@ -20,11 +20,11 @@ This project is built for the Reasoning Agents track and uses synthetic data onl
 
 ## Workforce Development Story
 
-The demo can be presented as a company workforce development program: a startup hires interns and develops employees across cloud, AI, data, security, operations, and business application roles, then uses Reazon to assign each person a Microsoft-aligned development track. Reazon turns the role and target track into a study plan, monitors learning evidence, runs weekly checkpoints, offers a timed final exam simulator, and gives managers a simple view of who is ready, who needs remediation, and which PDFs document progress.
+The demo can be presented as a company workforce development program: a startup hires interns and develops employees across cloud, AI, data, security, operations, and business application roles, then uses Reazon: Microsoft Certification Readiness to assign each person a Microsoft-aligned development track. Reazon: Microsoft Certification Readiness turns the role and target track into a study plan, monitors learning evidence, runs weekly checkpoints, offers a timed final exam simulator, and gives managers a simple view of who is ready, who needs remediation, and which PDFs document progress.
 
 ## Course Specificity
 
-The courses are not random general courses. Reazon maps each person to a specific Microsoft certification target, such as `AI-200`, `AI-901`, `DP-600`, or `SC-900`, then uses that exam's weighted domains to build the course path. The current demo links to Microsoft Learn certification/search surfaces and cites local guide files in `data/documents`; in production, those links can be replaced with exact company LMS course IDs or Microsoft Learn module assignments.
+The courses are not random general courses. Reazon: Microsoft Certification Readiness maps each person to a specific Microsoft certification target, such as `AI-200`, `AI-901`, `DP-600`, or `SC-900`, then uses that exam's weighted domains to build the course path. The current demo links to Microsoft Learn certification/search surfaces and cites local guide files in `data/documents`; in production, those links can be replaced with exact company LMS course IDs or Microsoft Learn module assignments.
 
 ## Agent Architecture
 
@@ -33,7 +33,7 @@ The courses are not random general courses. Reazon maps each person to a specifi
 3. `StudyPlanAgent` creates workload-aware schedules.
 4. `EngagementAgent` recommends study windows.
 5. `AssessmentAgent` generates cited exam questions.
-6. `ProgressAgent` computes Reazon readiness scores using exam mastery, assessment score, study momentum, and workload fit.
+6. `ProgressAgent` computes platform readiness scores using exam mastery, assessment score, study momentum, and workload fit.
 7. `BookingRecommenderAgent` issues booking guidance.
 8. `LearningActivityVerifierAgent` validates whether planned learning actually happened.
 9. `ManagerInsightsAgent` aggregates team readiness and risk.
@@ -42,7 +42,7 @@ The courses are not random general courses. Reazon maps each person to a specifi
 
 ## Readiness Logic
 
-Each learner is measured against their own Microsoft exam target. The certification ontology supplies that exam's domains and weights, then Reazon applies this formula:
+Each learner is measured against their own Microsoft exam target. The certification ontology supplies that exam's domains and weights, then Reazon: Microsoft Certification Readiness applies this readiness formula:
 
 ```text
 Readiness = 0.45 * exam-domain mastery
@@ -187,6 +187,10 @@ The learner profiler supports a real three-tier fallback path:
 
 Copy `.env.example` to `.env` and set `FORCE_MOCK_MODE=false` to attempt the Azure tiers.
 
+Repeated profiler inputs are cached in SQLite by learner, target exam, model, mode, prompt, and Work IQ signals.
+In live mode, cache hits reuse previously validated Azure profiler output instead of repeating the same Foundry/OpenAI
+call. The API also prewarms the first learner profile in the background at startup for smoother judge demos.
+
 ## Responsible AI and Data Safety
 
 All learner records, work signals, course guides, and certification scenarios are synthetic. The content is not official Microsoft exam material and is not an exam dump. Learners should verify real certification objectives through Microsoft Learn before booking a real exam.
@@ -201,3 +205,8 @@ Do not commit `.env`, API keys, tenant data, customer data, real employee data, 
 4. Add Entra ID auth and manager role checks to FastAPI.
 5. Deploy the Docker image to Azure Container Apps, App Service, or Foundry Hosted Agents.
 6. Import the FastAPI OpenAPI schema into Copilot Studio as custom actions.
+
+For separate Azure frontend and API services, build the web app with `VITE_API_BASE_URL`
+set to the deployed FastAPI URL, and set `CORS_ALLOW_ORIGINS` on the API to the deployed
+frontend URL. If both are served behind the same Azure origin or reverse proxy, the web app
+can keep using same-origin `/api`, `/health`, and `/reports` requests.

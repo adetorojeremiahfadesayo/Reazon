@@ -1,5 +1,5 @@
 import { AlertTriangle, RefreshCw, Users } from "lucide-react";
-import { type CSSProperties, useMemo } from "react";
+import { type CSSProperties, useMemo, useState } from "react";
 import type { LearnerOption, ManagerInsights, ReportFile } from "../types";
 import { ReportList } from "./ReportList";
 import { StatCard } from "./StatCard";
@@ -32,6 +32,8 @@ export function ManagerDashboard({
   onRefresh,
   onRefreshReports
 }: ManagerDashboardProps) {
+  const [riskView, setRiskView] = useState<"compact" | "detailed">("compact");
+  const [selectedRiskLevel, setSelectedRiskLevel] = useState<"High" | "Medium" | "Low">("High");
   const readinessReports = useMemo(() => {
     if (!selectedLearner) return [];
     return reports.filter(
@@ -71,6 +73,7 @@ export function ManagerDashboard({
   const totalRiskCount = sortedRisks.length;
   const highPercent = totalRiskCount ? Math.round((riskGroups.High.length / totalRiskCount) * 100) : 0;
   const mediumPercent = totalRiskCount ? Math.round((riskGroups.Medium.length / totalRiskCount) * 100) : 0;
+  const selectedRisks = riskGroups[selectedRiskLevel];
 
   return (
     <div className="manager-grid">
@@ -174,73 +177,107 @@ export function ManagerDashboard({
             <div className="section-heading">
               <div>
                 <p>Calendar overload</p>
-                <h2>Risk triage heatmap</h2>
+                <h2>Interactive risk triage</h2>
               </div>
               <AlertTriangle size={20} />
             </div>
-            <div className="risk-heatmap" aria-label="At-risk learners ranked by risk level and meeting load">
-              {sortedRisks.map((risk) => (
-                <article className={`risk-row ${risk.risk_level.toLowerCase()}`} key={risk.name}>
-                  <div className="risk-row-header">
-                    <strong>{risk.name}</strong>
-                    <span className="risk-level">{risk.risk_level}</span>
-                  </div>
-                  <div className="risk-meter">
-                    <span>Meeting load</span>
-                    <div>
-                      <i style={{ inlineSize: `${Math.min(100, (risk.meeting_hours / MAX_RISK_MEETING_HOURS) * 100)}%` }} />
-                    </div>
-                    <strong>{risk.meeting_hours}h/wk</strong>
-                  </div>
-                  <p>{risk.reason}</p>
-                  <small>{risk.meeting_hours >= 30 ? "Action: protect study time this week" : "Action: monitor workload and checkpoints"}</small>
-                </article>
-              ))}
-            </div>
-          </section>
-
-          <section className="panel risk-summary-panel">
-            <div className="section-heading">
-              <div>
-                <p>Risk distribution</p>
-                <h2>Overall risk by worker</h2>
-              </div>
-              <AlertTriangle size={20} />
-            </div>
-            <div className="risk-pie-layout">
-              <div
-                className="risk-donut"
-                style={
-                  {
-                    "--high": `${highPercent}%`,
-                    "--medium": `${highPercent + mediumPercent}%`
-                  } as CSSProperties
-                }
-                role="img"
-                aria-label={`Risk distribution: ${riskGroups.High.length} high, ${riskGroups.Medium.length} medium, ${riskGroups.Low.length} low.`}
+            <div className="risk-view-tabs" aria-label="Risk view mode">
+              <button
+                type="button"
+                className={riskView === "compact" ? "active" : ""}
+                onClick={() => setRiskView("compact")}
               >
-                <div>
-                  <strong>{totalRiskCount}</strong>
-                  <span>at risk</span>
+                Compact pieces
+              </button>
+              <button
+                type="button"
+                className={riskView === "detailed" ? "active" : ""}
+                onClick={() => setRiskView("detailed")}
+              >
+                Detailed bars
+              </button>
+            </div>
+
+            {riskView === "compact" ? (
+              <div className="risk-compact-layout">
+                <div
+                  className="risk-donut animated-chart"
+                  style={
+                    {
+                      "--high": `${highPercent}%`,
+                      "--medium": `${highPercent + mediumPercent}%`
+                    } as CSSProperties
+                  }
+                  role="img"
+                  aria-label={`Risk distribution: ${riskGroups.High.length} high, ${riskGroups.Medium.length} medium, ${riskGroups.Low.length} low.`}
+                >
+                  <div>
+                    <strong>{totalRiskCount}</strong>
+                    <span>at risk</span>
+                  </div>
                 </div>
-              </div>
-              <div className="risk-breakdown">
-                {(["High", "Medium", "Low"] as const).map((level) => (
-                  <article className="risk-breakdown-row" key={level}>
-                    <div>
+
+                <div className="risk-tile-board">
+                  {(["High", "Medium", "Low"] as const).map((level) => (
+                    <button
+                      type="button"
+                      className={selectedRiskLevel === level ? `risk-tile active ${level.toLowerCase()}` : `risk-tile ${level.toLowerCase()}`}
+                      key={level}
+                      onClick={() => setSelectedRiskLevel(level)}
+                      aria-pressed={selectedRiskLevel === level}
+                    >
                       <span className="risk-dot" style={{ background: RISK_COLORS[level] }} />
                       <strong>{level}</strong>
                       <small>{riskGroups[level].length} worker(s)</small>
+                    </button>
+                  ))}
+                </div>
+
+                <div className="risk-focus-card">
+                  <div>
+                    <p>{selectedRiskLevel} risk workers</p>
+                    <h3>{selectedRisks.length ? selectedRisks.map((risk) => risk.name).join(", ") : "No workers in this tier"}</h3>
+                  </div>
+                  <div className="risk-focus-list">
+                    {selectedRisks.length ? (
+                      selectedRisks.map((risk) => (
+                        <article key={risk.name}>
+                          <strong>{risk.name}</strong>
+                          <span>{risk.meeting_hours}h/wk meetings</span>
+                          <small>{risk.reason}</small>
+                        </article>
+                      ))
+                    ) : (
+                      <article>
+                        <strong>Clear tier</strong>
+                        <span>No immediate manager action.</span>
+                        <small>Keep monitoring checkpoint activity.</small>
+                      </article>
+                    )}
+                  </div>
+                </div>
+              </div>
+            ) : (
+              <div className="risk-heatmap" aria-label="At-risk learners ranked by risk level and meeting load">
+                {sortedRisks.map((risk) => (
+                  <article className={`risk-row ${risk.risk_level.toLowerCase()}`} key={risk.name}>
+                    <div className="risk-row-header">
+                      <strong>{risk.name}</strong>
+                      <span className="risk-level">{risk.risk_level}</span>
                     </div>
-                    <p>
-                      {riskGroups[level].length
-                        ? riskGroups[level].map((risk) => `${risk.name} (${risk.meeting_hours}h)`).join(", ")
-                        : "No workers in this tier"}
-                    </p>
+                    <div className="risk-meter">
+                      <span>Meeting load</span>
+                      <div>
+                        <i style={{ inlineSize: `${Math.min(100, (risk.meeting_hours / MAX_RISK_MEETING_HOURS) * 100)}%` }} />
+                      </div>
+                      <strong>{risk.meeting_hours}h/wk</strong>
+                    </div>
+                    <p>{risk.reason}</p>
+                    <small>{risk.meeting_hours >= 30 ? "Action: protect study time this week" : "Action: monitor workload and checkpoints"}</small>
                   </article>
                 ))}
               </div>
-            </div>
+            )}
           </section>
 
           <section className="panel buddy-panel">

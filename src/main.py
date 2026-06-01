@@ -108,6 +108,20 @@ class OrchestratorEngine:
                 badge_json TEXT
             )
         """)
+        c.execute("""
+            CREATE TABLE IF NOT EXISTS profile_cache (
+                cache_key TEXT PRIMARY KEY,
+                mode TEXT NOT NULL,
+                tier TEXT NOT NULL,
+                model TEXT NOT NULL,
+                employee_id TEXT NOT NULL,
+                target_certification TEXT NOT NULL,
+                profile_json TEXT NOT NULL,
+                hit_count INTEGER NOT NULL DEFAULT 0,
+                created_at TEXT NOT NULL,
+                updated_at TEXT NOT NULL
+            )
+        """)
         conn.commit()
         conn.close()
 
@@ -137,6 +151,18 @@ class OrchestratorEngine:
         c.execute("DELETE FROM traces WHERE session_id = ?", (session_id,))
         conn.commit()
         conn.close()
+
+    def prewarm_profile_cache(self, employee_id: str, text_input: str) -> LearnerProfile:
+        """
+        Warms the profiler cache without writing session traces or reports.
+        Used by hosted demos so the most common first learner is ready before a judge clicks.
+        """
+        critic = QualityCriticAgent()
+        profiler = LearnerProfilerAgent()
+        clean_text = critic.audit_input(text_input)
+        profile = profiler.execute(clean_text, employee_id, self.work_iq, self.fabric_iq)
+        critic.audit_profile(profile)
+        return profile
 
     def save_badge(self, badge: ExamBadge, learner_id: str):
         conn = sqlite3.connect(DB_PATH)

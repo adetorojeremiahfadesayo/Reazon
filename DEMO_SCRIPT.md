@@ -2,7 +2,7 @@
 
 ## 1. Opening
 
-This is the Microsoft Workforce Development Exam Pack, a 10-agent certification readiness platform for startup teams preparing workers and interns for Microsoft exams.
+This is Reazon: Microsoft Certification Readiness, a 10-agent workforce development platform for startup teams preparing workers and interns for Microsoft exams.
 
 The system uses synthetic data only and demonstrates Foundry IQ, Fabric IQ, and Work IQ concepts locally for reliable demo execution.
 

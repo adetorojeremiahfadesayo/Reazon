@@ -42,7 +42,7 @@ export function AppShell({
           <div className="brand-mark">R</div>
           <div>
             <strong>Reazon</strong>
-            <span>Workforce development</span>
+            <span>Microsoft Certification Readiness</span>
           </div>
         </div>
 
@@ -75,14 +75,14 @@ export function AppShell({
 
         <div className="side-note">
           <Gauge size={18} />
-          <span>Workforce development program using synthetic Microsoft Learn, LMS, and Work IQ signals.</span>
+          <span>Microsoft certification readiness program using synthetic Microsoft Learn, LMS, and Work IQ signals.</span>
         </div>
       </aside>
 
       <main className="workspace">
         <header className="topbar">
           <div>
-            <p className="eyeline">Reazon Workforce Development Program</p>
+            <p className="eyeline">Reazon: Microsoft Certification Readiness</p>
             <h1>{titleByView[activeView]}</h1>
           </div>
 

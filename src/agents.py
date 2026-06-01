@@ -13,6 +13,7 @@ from src.config import (
 )
 from src.iq_integration import FoundryIQ, FabricIQ, WorkIQ
 from src.guardrails import GuardrailsPipeline, GuardrailException
+from src.profile_cache import build_profile_cache_key, get_cached_profile, set_cached_profile
 from src.scheduling import generate_workload_aware_schedule
 
 # Optional Azure AI Imports
@@ -185,9 +186,24 @@ class LearnerProfilerAgent(BaseAgent):
 
         # 3-Tier Fallback Chain implementation
         profile_data = None
+        profile_tier = None
+        profile_mode = "mock" if FORCE_MOCK_MODE else "live"
+        cache_key = build_profile_cache_key(
+            mode=profile_mode,
+            model=AZURE_AI_MODEL_DEPLOYMENT,
+            employee_id=employee_id,
+            target_certification=target_cert,
+            text_input=text_input,
+            work_signals=work_signals,
+        )
+        cached_profile = get_cached_profile(cache_key)
+        if cached_profile is not None:
+            profile_data = cached_profile
+            profile_tier = "cache"
+            self.log_reasoning("Profile cache hit. Reusing previously validated profiler output.")
         
         # Tier 1: Try Azure AI Foundry Projects SDK.
-        if not FORCE_MOCK_MODE and AZURE_AI_PROJECT_ENDPOINT and AIProjectClient is not None and DefaultAzureCredential is not None:
+        if profile_data is None and not FORCE_MOCK_MODE and AZURE_AI_PROJECT_ENDPOINT and AIProjectClient is not None and DefaultAzureCredential is not None:
             self.log_reasoning("Tier 1: Querying Azure AI Foundry project client...")
             try:
                 project = AIProjectClient(
@@ -197,6 +213,7 @@ class LearnerProfilerAgent(BaseAgent):
                 client = project.get_openai_client()
                 raw_profile = self._call_chat_json(client, text_input, employee_id, target_cert, work_signals)
                 profile_data = self._normalize_profile_data(raw_profile, employee_id, target_cert)
+                profile_tier = "foundry"
                 self.log_reasoning("Tier 1: Successfully profiled via Azure AI Foundry project client.")
             except Exception as e:
                 self.log_reasoning(f"Tier 1: Failed. Error: {e}. Falling back to Tier 2...")
@@ -212,6 +229,7 @@ class LearnerProfilerAgent(BaseAgent):
                 )
                 raw_profile = self._call_chat_json(client, text_input, employee_id, target_cert, work_signals)
                 profile_data = self._normalize_profile_data(raw_profile, employee_id, target_cert)
+                profile_tier = "openai"
                 self.log_reasoning("Tier 2: Successfully profiled via Azure OpenAI JSON Mode.")
             except Exception as e:
                 self.log_reasoning(f"Tier 2: Failed. Error: {e}. Falling back to Tier 3...")
@@ -246,6 +264,7 @@ class LearnerProfilerAgent(BaseAgent):
                     "exam_outcome": matched_learner["exam_outcome"],
                     "status": matched_learner["status"]
                 }
+                profile_tier = "mock"
             else:
                 self.log_reasoning("Tier 3: Generating new synthetic profile from input clues.")
                 name = "Candidate Employee"
@@ -263,7 +282,20 @@ class LearnerProfilerAgent(BaseAgent):
                     "exam_outcome": "None",
                     "status": "NOT YET"
                 }
+                profile_tier = "mock"
                 
+        if profile_tier in {"foundry", "openai"} or (FORCE_MOCK_MODE and profile_tier == "mock"):
+            set_cached_profile(
+                cache_key=cache_key,
+                mode=profile_mode,
+                tier=profile_tier,
+                model=AZURE_AI_MODEL_DEPLOYMENT,
+                employee_id=employee_id,
+                target_certification=target_cert,
+                profile_data=profile_data,
+            )
+            self.log_reasoning(f"Profile cache stored for tier: {profile_tier}.")
+
         # Merge Work IQ signals without letting connector metadata overwrite profile identity.
         safe_work_signals = work_signals.copy()
         safe_work_signals.pop("employee_id", None)
@@ -601,7 +633,7 @@ class AssessmentAgent(BaseAgent):
 class ProgressAgent(BaseAgent):
     """
     Agent 6: ProgressAgent
-    Calculates Reazon's WorkIQ-aware readiness score:
+    Calculates the Reazon: Microsoft Certification Readiness WorkIQ-aware readiness score:
     0.45 * exam domain mastery + 0.25 * latest assessment + 0.15 * study hours + 0.15 * workload fit.
     """
     def __init__(self):
@@ -650,7 +682,7 @@ class ProgressAgent(BaseAgent):
             f"Workload fit: {workload_fit}% from focus={profile.focus_hours_per_week}h, meetings={profile.meeting_hours_per_week}h."
         )
 
-        # Reazon readiness formula:
+        # Platform readiness formula:
         # 0.45 * Exam Domain Mastery + 0.25 * Latest Assessment
         # + 0.15 * Study Hours Utilization + 0.15 * Workload Fit
         overall = (
@@ -922,7 +954,7 @@ class PeerCollaborationAgent(BaseAgent):
 class QualityCriticAgent(BaseAgent):
     """
     Agent 11: QualityCriticAgent
-    Runs the Reazon guardrail policy at all agent boundaries.
+    Runs the Reazon: Microsoft Certification Readiness guardrail policy at all agent boundaries.
     """
     def __init__(self):
         super().__init__(

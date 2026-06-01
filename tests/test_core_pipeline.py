@@ -3,7 +3,9 @@ import os
 import pytest
 
 from src.config import SYNTHETIC_DIR
+from src import agents as agents_module
 from src.main import OrchestratorEngine
+from src.profile_cache import build_profile_cache_key, set_cached_profile
 from src.connectors.graph_connector import MicrosoftGraphConnector
 from src.connectors.lms_connector import MoodleLmsConnector
 
@@ -101,6 +103,54 @@ def test_graph_and_lms_demo_connectors_return_synthetic_signals():
     assert signals["meeting_hours_per_week"] == 26
     assert graph.get_attendance_records("EMP-001")
     assert lms.get_completion_records("L-1001")
+
+
+def test_live_profile_cache_hit_skips_azure_profiler_call(monkeypatch):
+    engine = OrchestratorEngine()
+    prompt = (
+        "I am Avery Stone, a Intern - Cloud Developer. "
+        "I am taking the exam to qualify for a worker role. My target exam is AI-200."
+    )
+    work_signals = engine.work_iq.get_signals_by_employee("EMP-001")
+    cache_key = build_profile_cache_key(
+        mode="live",
+        model=agents_module.AZURE_AI_MODEL_DEPLOYMENT,
+        employee_id="EMP-001",
+        target_certification="AI-200",
+        text_input=prompt,
+        work_signals=work_signals,
+    )
+    set_cached_profile(
+        cache_key=cache_key,
+        mode="live",
+        tier="openai",
+        model=agents_module.AZURE_AI_MODEL_DEPLOYMENT,
+        employee_id="EMP-001",
+        target_certification="AI-200",
+        profile_data={
+            "learner_id": "L-1001",
+            "employee_id": "EMP-001",
+            "name": "Avery Stone",
+            "role": "Intern - Cloud Developer",
+            "certification_target": "AI-200",
+            "practice_score_avg": 68.5,
+            "hours_studied": 12,
+            "exam_outcome": "None",
+            "status": "IN PROGRESS",
+        },
+    )
+
+    def fail_if_azure_called(*args, **kwargs):
+        raise AssertionError("Azure profiler should not be called on cache hit")
+
+    monkeypatch.setattr(agents_module, "FORCE_MOCK_MODE", False)
+    monkeypatch.setattr(agents_module.LearnerProfilerAgent, "_call_chat_json", fail_if_azure_called)
+
+    profile = engine.profiler.execute(prompt, "EMP-001", engine.work_iq, engine.fabric_iq)
+
+    assert profile.learner_id == "L-1001"
+    assert profile.certification_target == "AI-200"
+    assert any("Profile cache hit" in trace for trace in engine.profiler.get_traces())
 
 
 def test_worker_comments_apply_penalty_after_three_misses():

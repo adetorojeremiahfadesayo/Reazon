@@ -7,7 +7,7 @@ import type {
   ReportFile
 } from "./types";
 
-const API_BASE = import.meta.env.VITE_API_BASE_URL ?? (import.meta.env.DEV ? "http://127.0.0.1:8000" : "");
+const API_BASE = import.meta.env.VITE_API_BASE_URL ?? "";
 
 async function request<T>(path: string, init?: RequestInit): Promise<T> {
   let response: Response;
@@ -22,7 +22,7 @@ async function request<T>(path: string, init?: RequestInit): Promise<T> {
   } catch (err) {
     const target = API_BASE || "the local API proxy";
     throw new Error(
-      `Cannot reach ${target}. Check that the FastAPI backend is running on http://127.0.0.1:8000 and reload the app.`
+      `Cannot reach ${target}. Start the app with npm run dev from the web folder so the Reazon backend can launch automatically.`
     );
   }
 

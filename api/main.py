@@ -2,7 +2,9 @@ import sys
 import os
 import json
 import re
+import threading
 import uuid
+from contextlib import asynccontextmanager
 from datetime import datetime
 from typing import List, Optional
 from fastapi import FastAPI, HTTPException
@@ -161,16 +163,35 @@ class ReportFileResponse(BaseModel):
 # FastAPI App
 # ---------------------------------------------------------------------------
 
+
+@asynccontextmanager
+async def lifespan(app: FastAPI):
+    threading.Thread(target=_prewarm_first_profile_cache, daemon=True).start()
+    yield
+
+
 app = FastAPI(
     title="CertPrep-Ex Multi-Agent System",
     description="10-agent orchestration for Microsoft certification readiness. "
                 "Integrates with Microsoft Copilot Studio via REST API.",
-    version="1.0.0"
+    version="1.0.0",
+    lifespan=lifespan
+)
+
+cors_allow_origins = [
+    origin.strip()
+    for origin in os.getenv("CORS_ALLOW_ORIGINS", "").split(",")
+    if origin.strip()
+]
+cors_allow_origin_regex = os.getenv(
+    "CORS_ALLOW_ORIGIN_REGEX",
+    r"^http://(localhost|127\.0\.0\.1):\d+$"
 )
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origin_regex=r"^http://(localhost|127\.0\.0\.1):\d+$",
+    allow_origins=cors_allow_origins,
+    allow_origin_regex=cors_allow_origin_regex,
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
@@ -179,6 +200,38 @@ app.add_middleware(
 app.mount("/reports", StaticFiles(directory=REPORTS_DIR), name="reports")
 
 engine = OrchestratorEngine()
+
+
+def _persona_goal(role: str) -> str:
+    return (
+        "I am taking the exam to qualify for a worker role."
+        if "intern" in role.lower()
+        else "I am taking the exam to prepare for promotion."
+    )
+
+
+def _build_prompt_for_learner(learner: dict) -> str:
+    return (
+        f"I am {learner['name']}, a {learner['role']}. "
+        f"{_persona_goal(learner['role'])} "
+        f"My target exam is {learner['certification_target']}."
+    )
+
+
+def _prewarm_first_profile_cache() -> None:
+    if os.getenv("REAZON_PREWARM_PROFILE_CACHE", "true").lower() not in {"1", "true", "yes", "on"}:
+        return
+    try:
+        learners_path = os.path.join(engine.fabric_iq.certifications_path.replace("certifications.json", "learners.json"))
+        with open(learners_path, "r", encoding="utf-8") as f:
+            learners = json.load(f)
+        if not learners:
+            return
+        first = learners[0]
+        engine.prewarm_profile_cache(first["employee_id"], _build_prompt_for_learner(first))
+    except Exception:
+        # Prewarming is a performance optimization. Never block the demo if Azure/cache warmup fails.
+        return
 
 
 @app.get("/health", tags=["System"])
