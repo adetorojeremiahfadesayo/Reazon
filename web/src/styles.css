@@ -2138,6 +2138,100 @@ summary {
   color: var(--blue);
 }
 
+.judge-demo-strip,
+.cache-strategy-strip {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-height: 42px;
+  margin-bottom: 16px;
+  padding: 10px 14px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: #ffffff;
+  color: var(--muted);
+}
+
+.judge-demo-strip strong,
+.cache-strategy-strip strong {
+  color: var(--text);
+}
+
+.cache-strategy-strip {
+  display: grid;
+  grid-template-columns: auto auto minmax(0, 1fr);
+  margin-bottom: 14px;
+}
+
+.cache-strategy-strip small {
+  overflow-wrap: anywhere;
+}
+
+.story-grid,
+.comparison-grid,
+.formula-grid,
+.manager-action-grid,
+.failure-path-list {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 12px;
+}
+
+.formula-grid,
+.failure-path-list {
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  margin-bottom: 12px;
+}
+
+.story-grid article,
+.comparison-grid article,
+.manager-action-grid article,
+.formula-grid span,
+.failure-path-list span {
+  display: grid;
+  gap: 6px;
+  min-width: 0;
+  padding: 12px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: #ffffff;
+}
+
+.story-grid strong,
+.comparison-grid strong,
+.manager-action-grid strong {
+  color: var(--text);
+}
+
+.story-grid span,
+.comparison-grid span,
+.manager-action-grid span,
+.formula-grid span,
+.failure-path-list span {
+  color: var(--muted);
+  font-size: 13px;
+  overflow-wrap: anywhere;
+}
+
+.report-empty-state {
+  display: grid;
+  gap: 6px;
+}
+
+.report-mini-row em {
+  display: inline-grid;
+  width: fit-content;
+  margin-top: 6px;
+  padding: 3px 7px;
+  border-radius: 999px;
+  background: var(--green-2);
+  color: var(--green);
+  font-size: 11px;
+  font-style: normal;
+  font-weight: 900;
+  text-transform: uppercase;
+}
+
 @media (max-width: 1280px) {
   .risk-compact-layout {
     grid-template-columns: minmax(150px, 180px) minmax(220px, 1fr);
@@ -2188,7 +2282,12 @@ summary {
 
   .pipeline-stage-rail,
   .report-card-grid,
-  .report-mini-list {
+  .report-mini-list,
+  .story-grid,
+  .comparison-grid,
+  .manager-action-grid,
+  .formula-grid,
+  .failure-path-list {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 }
@@ -2242,8 +2341,19 @@ summary {
   .pipeline-stage-rail,
   .journey-steps,
   .report-card-grid,
-  .report-mini-list {
+  .report-mini-list,
+  .story-grid,
+  .comparison-grid,
+  .manager-action-grid,
+  .formula-grid,
+  .failure-path-list,
+  .cache-strategy-strip {
     grid-template-columns: 1fr;
+  }
+
+  .judge-demo-strip {
+    align-items: start;
+    display: grid;
   }
 
   .worker-journey-panel,

@@ -75,6 +75,15 @@ def get_cached_profile(cache_key: str) -> Optional[Dict[str, Any]]:
         conn.close()
 
 
+def delete_cached_profile(cache_key: str) -> None:
+    conn = _connect()
+    try:
+        conn.execute("DELETE FROM profile_cache WHERE cache_key = ?", (cache_key,))
+        conn.commit()
+    finally:
+        conn.close()
+
+
 def set_cached_profile(
     *,
     cache_key: str,

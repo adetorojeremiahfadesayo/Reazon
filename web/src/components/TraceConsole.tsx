@@ -14,6 +14,12 @@ const toneForAgent = (agent: string) => {
 };
 
 export function TraceConsole({ traces }: TraceConsoleProps) {
+  const cacheStatus = traces.some((trace) => trace.content.toLowerCase().includes("cache hit"))
+    ? "Cache hit"
+    : traces.some((trace) => trace.content.toLowerCase().includes("cache stored"))
+      ? "Fresh result cached"
+      : "No AI cache event yet";
+
   return (
     <section className="panel trace-panel">
       <div className="section-heading">
@@ -22,6 +28,15 @@ export function TraceConsole({ traces }: TraceConsoleProps) {
           <h2>Live agent trace console</h2>
         </div>
         <span>{traces.length} events</span>
+      </div>
+
+      <div className="cache-strategy-strip">
+        <strong>Cache strategy</strong>
+        <span>{cacheStatus}</span>
+        <small>
+          AI calls use deterministic request keys; profile outputs use a second typed cache so repeated judge demos stay
+          fast while traces disclose reuse.
+        </small>
       </div>
 
       <div className="trace-list">

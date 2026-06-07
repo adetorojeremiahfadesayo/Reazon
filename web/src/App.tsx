@@ -1,11 +1,19 @@
 import { useEffect, useMemo, useState } from "react";
-import { getHealth, getLearners, getManagerInsights, getReports, runLearnerWorkspace } from "./api";
+import { getHealth, getLearners, getManagerInsights, getReports, runLearnerWorkspace, submitAssessment } from "./api";
 import { AppShell } from "./components/AppShell";
 import { FinalExamPanel } from "./components/FinalExamPanel";
 import { GuidedTour } from "./components/GuidedTour";
 import { LearnerDashboard } from "./components/LearnerDashboard";
 import { ManagerDashboard } from "./components/ManagerDashboard";
-import type { AppView, Health, LearnerOption, LearnerWorkspace, ManagerInsights, ReportFile } from "./types";
+import type {
+  AppView,
+  AssessmentResult,
+  Health,
+  LearnerOption,
+  LearnerWorkspace,
+  ManagerInsights,
+  ReportFile
+} from "./types";
 
 const TOUR_STORAGE_KEY = "reazon-guided-tour-seen";
 
@@ -32,6 +40,9 @@ export function App() {
   const [loadingLearner, setLoadingLearner] = useState(false);
   const [loadingManager, setLoadingManager] = useState(false);
   const [loadingReports, setLoadingReports] = useState(false);
+  const [loadingJudgeDemo, setLoadingJudgeDemo] = useState(false);
+  const [judgeDemoStatus, setJudgeDemoStatus] = useState("Ready to run a guided judge demo.");
+  const [judgeAssessmentResult, setJudgeAssessmentResult] = useState<AssessmentResult | null>(null);
   const [tourOpen, setTourOpen] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
@@ -82,6 +93,41 @@ export function App() {
       setError(err instanceof Error ? err.message : "Learner pipeline failed");
     } finally {
       setLoadingLearner(false);
+    }
+  };
+
+  const runJudgeDemo = async () => {
+    if (!selectedEmployeeId) return;
+    setLoadingJudgeDemo(true);
+    setLoadingLearner(true);
+    setError(null);
+    setJudgeAssessmentResult(null);
+    setActiveView("learner");
+    try {
+      setJudgeDemoStatus("1/4 Building learner workspace, plan, citations, and trace evidence.");
+      const data = await runLearnerWorkspace(selectedEmployeeId, prompt, weeks);
+      setWorkspace(data);
+
+      setJudgeDemoStatus("2/4 Auto-filling the checkpoint with the synthetic passing path.");
+      const answers = Object.fromEntries(
+        data.quiz.questions.map((question) => [String(question.question_id), question.correct_option_index])
+      );
+      const result = await submitAssessment(selectedEmployeeId, prompt, answers);
+      setJudgeAssessmentResult(result);
+
+      setJudgeDemoStatus("3/4 Refreshing generated report evidence and cache-aware traces.");
+      await refreshReports();
+
+      setJudgeDemoStatus("4/4 Loading manager cohort analytics for triage and next-best actions.");
+      setManagerInsights(await getManagerInsights());
+      setActiveView("manager");
+      setJudgeDemoStatus("Judge demo completed: learner evidence, checkpoint result, PDFs, and manager triage are ready.");
+    } catch (err) {
+      setError(err instanceof Error ? err.message : "Judge demo failed");
+      setJudgeDemoStatus("Judge demo stopped. Check the error banner and trace console.");
+    } finally {
+      setLoadingLearner(false);
+      setLoadingJudgeDemo(false);
     }
   };
 
@@ -137,6 +183,9 @@ export function App() {
       <LearnerDashboard
         selectedLearner={selectedLearner}
         workspace={workspace}
+        learners={learners}
+        judgeDemoStatus={judgeDemoStatus}
+        judgeAssessmentResult={judgeAssessmentResult}
         reports={reports}
         reportsLoading={loadingReports}
         onRefreshReports={refreshReports}
@@ -172,6 +221,9 @@ export function App() {
       health={health}
       onRefreshHealth={refreshHealth}
       onStartTour={() => setTourOpen(true)}
+      onRunJudgeDemo={runJudgeDemo}
+      judgeDemoStatus={judgeDemoStatus}
+      judgeDemoRunning={loadingJudgeDemo}
     >
       {error ? <div className="error-banner">{error}</div> : null}
       <div className="view-transition" key={activeView}>

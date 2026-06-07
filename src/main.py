@@ -122,6 +122,18 @@ class OrchestratorEngine:
                 updated_at TEXT NOT NULL
             )
         """)
+        c.execute("""
+            CREATE TABLE IF NOT EXISTS ai_call_cache (
+                cache_key TEXT PRIMARY KEY,
+                call_type TEXT NOT NULL,
+                model TEXT NOT NULL,
+                request_json TEXT NOT NULL,
+                response_json TEXT NOT NULL,
+                hit_count INTEGER NOT NULL DEFAULT 0,
+                created_at TEXT NOT NULL,
+                updated_at TEXT NOT NULL
+            )
+        """)
         conn.commit()
         conn.close()
 

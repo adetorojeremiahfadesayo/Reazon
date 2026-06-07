@@ -1,4 +1,4 @@
-import { BrainCircuit, FileQuestion, Gauge, HelpCircle, RefreshCw, Users } from "lucide-react";
+import { BrainCircuit, FileQuestion, Gauge, HelpCircle, Play, RefreshCw, Users } from "lucide-react";
 import type { AppView, Health, LearnerOption } from "../types";
 import { TooltipButton } from "./TooltipButton";
 
@@ -13,6 +13,9 @@ type AppShellProps = {
   health?: Health | null;
   onRefreshHealth: () => void;
   onStartTour: () => void;
+  onRunJudgeDemo: () => void;
+  judgeDemoStatus: string;
+  judgeDemoRunning: boolean;
   children: React.ReactNode;
 };
 
@@ -33,6 +36,9 @@ export function AppShell({
   health,
   onRefreshHealth,
   onStartTour,
+  onRunJudgeDemo,
+  judgeDemoStatus,
+  judgeDemoRunning,
   children
 }: AppShellProps) {
   return (
@@ -137,8 +143,23 @@ export function AppShell({
             >
               Guided tour
             </TooltipButton>
+
+            <TooltipButton
+              tooltip={judgeDemoStatus}
+              icon={<Play size={16} />}
+              variant="primary"
+              onClick={onRunJudgeDemo}
+              disabled={!selectedEmployeeId || judgeDemoRunning}
+            >
+              {judgeDemoRunning ? "Running demo" : "Run judge demo"}
+            </TooltipButton>
           </div>
         </header>
+
+        <div className="judge-demo-strip" role="status">
+          <strong>Judge demo</strong>
+          <span>{judgeDemoStatus}</span>
+        </div>
 
         {children}
       </main>

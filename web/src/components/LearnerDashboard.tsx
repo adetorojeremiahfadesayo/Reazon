@@ -10,7 +10,7 @@ import {
   ShieldCheck,
   Trophy
 } from "lucide-react";
-import type { LearnerOption, LearnerWorkspace, ReportFile } from "../types";
+import type { AssessmentResult, LearnerOption, LearnerWorkspace, ReportFile } from "../types";
 import { AssessmentPanel } from "./AssessmentPanel";
 import { StatCard } from "./StatCard";
 import { TooltipButton } from "./TooltipButton";
@@ -19,6 +19,9 @@ import { TraceConsole } from "./TraceConsole";
 type LearnerDashboardProps = {
   selectedLearner?: LearnerOption;
   workspace: LearnerWorkspace | null;
+  learners: LearnerOption[];
+  judgeDemoStatus: string;
+  judgeAssessmentResult: AssessmentResult | null;
   reports: ReportFile[];
   reportsLoading: boolean;
   onRefreshReports: () => void | Promise<void>;
@@ -53,9 +56,21 @@ function getJourneyProgress(workspace: LearnerWorkspace | null, loading: boolean
   return 0;
 }
 
+function averagePracticeScore(learners: LearnerOption[]) {
+  if (learners.length === 0) return 0;
+  return Math.round(learners.reduce((total, learner) => total + learner.practice_score_avg, 0) / learners.length);
+}
+
+function getReportStatus(reports: ReportFile[], reportType: string) {
+  return reports.some((report) => report.report_type === reportType) ? "generated" : "pending";
+}
+
 export function LearnerDashboard({
   selectedLearner,
   workspace,
+  learners,
+  judgeDemoStatus,
+  judgeAssessmentResult,
   reports,
   reportsLoading,
   onRefreshReports,
@@ -74,6 +89,7 @@ export function LearnerDashboard({
     return learnerMatch && (report.report_type === "Study plan" || report.report_type === "Badge certificate");
   });
   const studyPlanReport = learnerReports.find((report) => report.report_type === "Study plan");
+  const cohortPracticeAverage = averagePracticeScore(learners);
   const journeyProgress = getJourneyProgress(workspace, loading);
   const badgeReportById = new Map(
     learnerReports
@@ -180,6 +196,60 @@ export function LearnerDashboard({
         />
       </section>
 
+      <section className="panel judge-story-panel">
+        <div className="section-heading">
+          <div>
+            <p>Judge path</p>
+            <h2>Demo command center</h2>
+          </div>
+        </div>
+        <div className="story-grid">
+          <article>
+            <strong>Current step</strong>
+            <span>{judgeDemoStatus}</span>
+          </article>
+          <article>
+            <strong>Evidence status</strong>
+            <span>Study plan {getReportStatus(learnerReports, "Study plan")}</span>
+            <span>Badge certificate {getReportStatus(learnerReports, "Badge certificate")}</span>
+          </article>
+          <article>
+            <strong>Checkpoint outcome</strong>
+            <span>
+              {judgeAssessmentResult
+                ? `${Math.round(judgeAssessmentResult.score_percentage)}% - ${judgeAssessmentResult.booking_recommendation}`
+                : "Run judge demo or submit checkpoint"}
+            </span>
+          </article>
+        </div>
+      </section>
+
+      <section className="panel comparison-panel">
+        <div className="section-heading">
+          <div>
+            <p>Learner comparison</p>
+            <h2>Compare selected learner to cohort</h2>
+          </div>
+        </div>
+        <div className="comparison-grid">
+          <article>
+            <strong>{learner?.name ?? "Selected learner"}</strong>
+            <span>{learner?.certification_target ?? "-"} target</span>
+            <span>{learner?.practice_score_avg ?? 0}% practice average</span>
+          </article>
+          <article>
+            <strong>Cohort baseline</strong>
+            <span>{learners.length} synthetic learners</span>
+            <span>{cohortPracticeAverage}% average practice</span>
+          </article>
+          <article>
+            <strong>Capacity signal</strong>
+            <span>{profile ? `${profile.weekly_study_budget_hours}h study budget` : "Run pipeline"}</span>
+            <span>{profile ? `${profile.focus_hours_per_week}h focus time` : "Awaiting Work IQ"}</span>
+          </article>
+        </div>
+      </section>
+
       {!workspace ? (
         <section className="panel first-run">
           <BrainCircuit size={34} />
@@ -189,6 +259,11 @@ export function LearnerDashboard({
               Select a worker or intern, adjust the prompt if needed, and execute the pipeline. Results will populate the
               study plan, learning resources, activity verification, weekly checkpoint, badge state, and trace console.
             </p>
+            <div className="failure-path-list first-run-paths">
+              <span>Run judge demo: happy path</span>
+              <span>Intentional failure path: leave answers blank or choose misses</span>
+              <span>Manager portal: cohort risk triage</span>
+            </div>
           </div>
         </section>
       ) : (
@@ -286,6 +361,25 @@ export function LearnerDashboard({
             </div>
           </section>
 
+          <section className="panel explainability-panel">
+            <div className="section-heading">
+              <div>
+                <p>Why this recommendation?</p>
+                <h2>Readiness formula preview</h2>
+              </div>
+            </div>
+            <div className="formula-grid">
+              <span>45% exam-domain mastery</span>
+              <span>25% latest assessment</span>
+              <span>15% study-hour utilization</span>
+              <span>15% WorkIQ workload fit</span>
+            </div>
+            <p>
+              The booking recommendation combines certification-domain strength, checkpoint performance, study effort,
+              and calendar capacity so high quiz scores do not hide meeting-heavy execution risk.
+            </p>
+          </section>
+
           <section className="panel path-panel">
             <div className="section-heading">
               <div>
@@ -339,6 +433,24 @@ export function LearnerDashboard({
               {workspace.activity.evidence_summary.slice(0, 5).map((item) => (
                 <span key={item}>{item}</span>
               ))}
+            </div>
+          </section>
+
+          <section className="panel failure-path-panel">
+            <div className="section-heading">
+              <div>
+                <p>Intentional failure path</p>
+                <h2>Not-ready scenario</h2>
+              </div>
+            </div>
+            <p>
+              Leave several checkpoint answers blank or choose incorrect options to show remediation, a lower readiness
+              recommendation, missing badge unlock, and the report evidence that stays pending until criteria are met.
+            </p>
+            <div className="failure-path-list">
+              <span>Below 65%: remediation loop</span>
+              <span>65-74%: conditional review</span>
+              <span>75%+: ready path</span>
             </div>
           </section>
 

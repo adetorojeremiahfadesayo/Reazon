@@ -8,12 +8,26 @@ import { fileURLToPath } from "node:url";
 
 const webDir = dirname(fileURLToPath(import.meta.url));
 const rootDir = resolve(webDir, "..");
-const apiPort = Number(process.env.VITE_API_PORT ?? process.env.API_PORT ?? 8000);
-const apiTarget = process.env.VITE_API_BASE_URL ?? `http://127.0.0.1:${apiPort}`;
+const externalApiBaseUrl = cleanEnvValue(process.env.VITE_API_BASE_URL);
+const requestedApiPort = Number(cleanEnvValue(process.env.VITE_API_PORT) ?? cleanEnvValue(process.env.API_PORT) ?? 8000);
+const apiPort = Number.isInteger(requestedApiPort) && requestedApiPort > 0 ? requestedApiPort : 8000;
+const apiTarget = externalApiBaseUrl ?? `http://127.0.0.1:${apiPort}`;
+
+function cleanEnvValue(value: string | undefined) {
+  const trimmed = value?.trim();
+  return trimmed ? trimmed.replace(/\/+$/, "") : undefined;
+}
+
+function envFlagEnabled(value: string | undefined) {
+  return ["1", "true", "yes", "on"].includes(value?.trim().toLowerCase() ?? "");
+}
 
 function localPythonPath() {
-  const venvPython = join(rootDir, ".venv", "Scripts", "python.exe");
-  return existsSync(venvPython) ? venvPython : process.env.PYTHON ?? "python";
+  const candidates = [
+    join(rootDir, ".venv", "Scripts", "python.exe"),
+    join(rootDir, ".venv", "bin", "python")
+  ];
+  return candidates.find((candidate) => existsSync(candidate)) ?? cleanEnvValue(process.env.PYTHON) ?? "python";
 }
 
 async function isApiHealthy(timeoutMs = 750) {
@@ -21,7 +35,11 @@ async function isApiHealthy(timeoutMs = 750) {
   const timeout = setTimeout(() => controller.abort(), timeoutMs);
   try {
     const response = await fetch(`${apiTarget}/health`, { signal: controller.signal });
-    return response.ok;
+    if (!response.ok) {
+      return false;
+    }
+    const data = (await response.json().catch(() => undefined)) as { status?: string } | undefined;
+    return data?.status === "healthy";
   } catch {
     return false;
   } finally {
@@ -97,7 +115,7 @@ function autoStartApi() {
     name: "reazon-auto-start-api",
     apply: "serve" as const,
     async configureServer(server) {
-      if (process.env.REAZON_DISABLE_AUTO_API === "true" || process.env.VITE_API_BASE_URL) {
+      if (envFlagEnabled(process.env.REAZON_DISABLE_AUTO_API) || externalApiBaseUrl) {
         return;
       }
 
@@ -128,8 +146,6 @@ function autoStartApi() {
         return;
       }
 
-      await ensureApiReady(server);
-
       const stopApi = () => {
         if (apiProcess && !apiProcess.killed) {
           apiProcess.kill();
@@ -139,13 +155,15 @@ function autoStartApi() {
       process.once("SIGTERM", stopApi);
       process.once("exit", stopApi);
 
-      if (await isApiHealthy()) {
-        server.config.logger.info(`Reazon API is ready at ${apiTarget}`);
-      } else {
-        server.config.logger.warn(
-          `Reazon API did not become healthy at ${apiTarget}. Check the API logs above.`
-        );
-      }
+      void ensureApiReady(server).then((ready) => {
+        if (ready) {
+          server.config.logger.info(`Reazon API is ready at ${apiTarget}`);
+        } else {
+          server.config.logger.warn(
+            `Reazon API did not become healthy at ${apiTarget}. Check the API logs above.`
+          );
+        }
+      });
     }
   };
 }

@@ -18,6 +18,13 @@ function formatBytes(bytes: number) {
   return `${(bytes / (1024 * 1024)).toFixed(1)} MB`;
 }
 
+function statusForReport(reportType: string) {
+  if (reportType === "Badge certificate") return "Unlocked";
+  if (reportType === "Study plan") return "Generated";
+  if (reportType === "Readiness report") return "Ready";
+  return "Available";
+}
+
 export function ReportList({ title, eyebrow, emptyText, reports, loading, onRefresh, dataTour }: ReportListProps) {
   return (
     <section className="panel embedded-reports" data-tour={dataTour}>
@@ -36,13 +43,17 @@ export function ReportList({ title, eyebrow, emptyText, reports, loading, onRefr
       </div>
 
       {reports.length === 0 ? (
-        <p className="empty-state">{emptyText}</p>
+        <div className="empty-state report-empty-state">
+          <strong>Evidence status</strong>
+          <span>{emptyText}</span>
+        </div>
       ) : (
         <div className="report-mini-list">
           {reports.map((report) => (
             <article className="report-mini-row" key={report.file_name}>
               <div>
                 <strong>{report.report_type}</strong>
+                <em>{statusForReport(report.report_type)}</em>
                 <span>{report.file_name}</span>
                 <small>
                   {report.certification_target} - {formatBytes(report.size_bytes)}

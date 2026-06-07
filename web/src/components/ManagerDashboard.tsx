@@ -74,6 +74,12 @@ export function ManagerDashboard({
   const highPercent = totalRiskCount ? Math.round((riskGroups.High.length / totalRiskCount) * 100) : 0;
   const mediumPercent = totalRiskCount ? Math.round((riskGroups.Medium.length / totalRiskCount) * 100) : 0;
   const selectedRisks = riskGroups[selectedRiskLevel];
+  const selectedLearnerRisk = sortedRisks.find((risk) => risk.name === selectedLearner?.name);
+  const nextBestActions = selectedRiskLevel === "High"
+    ? ["Protect study focus time this week", "Move learner to a 6 week plan", "Assign a study buddy"]
+    : selectedRiskLevel === "Medium"
+      ? ["Monitor checkpoint completion", "Recommend a 2 hour weak-domain review", "Keep buddy pairing active"]
+      : ["Maintain current plan", "Schedule final simulator when evidence is ready", "Refresh reports after checkpoint"];
 
   return (
     <div className="manager-grid">
@@ -107,6 +113,46 @@ export function ManagerDashboard({
         loading={reportsLoading}
         onRefresh={onRefreshReports}
       />
+
+      <section className="panel manager-action-panel">
+        <div className="section-heading">
+          <div>
+            <p>Next-best manager actions</p>
+            <h2>Program triage queue</h2>
+          </div>
+        </div>
+        <div className="manager-action-grid">
+          {nextBestActions.map((action) => (
+            <article key={action}>
+              <strong>{action}</strong>
+              <span>{selectedRiskLevel} risk lens</span>
+            </article>
+          ))}
+        </div>
+      </section>
+
+      <section className="panel manager-compare-panel">
+        <div className="section-heading">
+          <div>
+            <p>Compare selected learner to cohort</p>
+            <h2>{selectedLearner ? selectedLearner.name : "No learner selected"}</h2>
+          </div>
+        </div>
+        <div className="comparison-grid">
+          <article>
+            <strong>{selectedLearner?.certification_target ?? "-"}</strong>
+            <span>Certification track</span>
+          </article>
+          <article>
+            <strong>{selectedLearner?.practice_score_avg ?? 0}%</strong>
+            <span>Practice baseline</span>
+          </article>
+          <article>
+            <strong>{selectedLearnerRisk?.risk_level ?? "Low"}</strong>
+            <span>{selectedLearnerRisk?.reason ?? "No workload risk in manager triage"}</span>
+          </article>
+        </div>
+      </section>
 
       {insights ? (
         <>

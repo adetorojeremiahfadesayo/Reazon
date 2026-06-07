@@ -13,6 +13,7 @@ from src.config import (
 )
 from src.iq_integration import FoundryIQ, FabricIQ, WorkIQ
 from src.guardrails import GuardrailsPipeline, GuardrailException
+from src.ai_cache import build_ai_call_cache_key, get_cached_ai_call, set_cached_ai_call
 from src.profile_cache import build_profile_cache_key, get_cached_profile, set_cached_profile
 from src.scheduling import generate_workload_aware_schedule
 
@@ -128,15 +129,38 @@ class LearnerProfilerAgent(BaseAgent):
         }
 
     def _call_chat_json(self, client, text_input: str, employee_id: str, target_cert: str, work_signals: Dict[str, Any]) -> Dict[str, Any]:
+        messages = self._profile_schema_prompt(text_input, employee_id, target_cert, work_signals)
+        request_payload = {
+            "messages": messages,
+            "response_format": {"type": "json_object"},
+            "temperature": 0.1,
+            "max_tokens": 500,
+        }
+        cache_key = build_ai_call_cache_key(
+            call_type="chat_json",
+            model=AZURE_AI_MODEL_DEPLOYMENT,
+            request_payload=request_payload,
+        )
+        cached_response = get_cached_ai_call(cache_key)
+        if cached_response is not None:
+            self.log_reasoning("AI call cache hit. Reusing cached chat JSON response.")
+            return cached_response
+
         response = client.chat.completions.create(
             model=AZURE_AI_MODEL_DEPLOYMENT,
-            messages=self._profile_schema_prompt(text_input, employee_id, target_cert, work_signals),
-            response_format={"type": "json_object"},
-            temperature=0.1,
-            max_tokens=500
+            **request_payload
         )
         content = response.choices[0].message.content
-        return json.loads(content)
+        response_payload = json.loads(content)
+        set_cached_ai_call(
+            cache_key=cache_key,
+            call_type="chat_json",
+            model=AZURE_AI_MODEL_DEPLOYMENT,
+            request_payload=request_payload,
+            response_payload=response_payload,
+        )
+        self.log_reasoning("AI call cache stored for chat JSON response.")
+        return response_payload
 
     def execute(self, text_input: str, employee_id: str, work_iq: WorkIQ, fabric_iq: FabricIQ) -> LearnerProfile:
         self.clear_traces()
