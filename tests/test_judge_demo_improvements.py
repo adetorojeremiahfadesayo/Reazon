@@ -25,6 +25,8 @@ def test_learner_workspace_surfaces_explainability_and_cache_strategy():
     assert "Why this recommendation?" in learner
     assert "Learner comparison" in learner
     assert "Intentional failure path" in learner
+    assert "Recommended reminder time" in learner
+    assert "Role-level milestones" in learner
     assert "Cache strategy" in trace
     assert "cacheStatus" in trace
 
@@ -35,4 +37,6 @@ def test_manager_portal_surfaces_next_best_actions_and_report_status():
 
     assert "Next-best manager actions" in manager
     assert "Compare selected learner to cohort" in manager
+    assert "Progress by role" in manager
+    assert "Privacy-safe insights" in manager
     assert "Evidence status" in reports

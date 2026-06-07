@@ -2171,7 +2171,8 @@ summary {
 .comparison-grid,
 .formula-grid,
 .manager-action-grid,
-.failure-path-list {
+.failure-path-list,
+.milestone-list {
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
   gap: 12px;
@@ -2186,6 +2187,7 @@ summary {
 .story-grid article,
 .comparison-grid article,
 .manager-action-grid article,
+.milestone-list article,
 .formula-grid span,
 .failure-path-list span {
   display: grid;
@@ -2199,13 +2201,16 @@ summary {
 
 .story-grid strong,
 .comparison-grid strong,
-.manager-action-grid strong {
+.manager-action-grid strong,
+.milestone-list strong {
   color: var(--text);
 }
 
 .story-grid span,
 .comparison-grid span,
 .manager-action-grid span,
+.milestone-list span,
+.milestone-list small,
 .formula-grid span,
 .failure-path-list span {
   color: var(--muted);
@@ -2286,6 +2291,7 @@ summary {
   .story-grid,
   .comparison-grid,
   .manager-action-grid,
+  .milestone-list,
   .formula-grid,
   .failure-path-list {
     grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -2345,6 +2351,7 @@ summary {
   .story-grid,
   .comparison-grid,
   .manager-action-grid,
+  .milestone-list,
   .formula-grid,
   .failure-path-list,
   .cache-strategy-strip {

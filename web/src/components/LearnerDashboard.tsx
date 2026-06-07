@@ -65,6 +65,15 @@ function getReportStatus(reports: ReportFile[], reportType: string) {
   return reports.some((report) => report.report_type === reportType) ? "generated" : "pending";
 }
 
+function milestoneForWeek(role: string | undefined, certification: string | undefined, weekNumber: number) {
+  const roleLabel = role ?? "worker";
+  const certLabel = certification ?? "certification";
+  if (weekNumber === 1) return `Anchor ${roleLabel} fundamentals for ${certLabel}`;
+  if (weekNumber === 2) return "Complete first checkpoint and close prerequisite gaps";
+  if (weekNumber === 3) return "Move into higher-weight exam objectives";
+  return "Confirm final simulator readiness and evidence";
+}
+
 export function LearnerDashboard({
   selectedLearner,
   workspace,
@@ -343,12 +352,16 @@ export function LearnerDashboard({
             <div className="section-heading">
               <div>
                 <p>Work IQ</p>
-                <h2>Focus window</h2>
+                <h2>Recommended reminder time</h2>
               </div>
               <Clock size={20} />
             </div>
             <strong>{workspace.engagement.recommended_time ?? "No window"}</strong>
             <p>{workspace.engagement.reminder_message}</p>
+            <small>
+              Chosen from {workspace.profile.preferred_learning_slot.toLowerCase()} rhythm,
+              {` ${workspace.profile.focus_hours_per_week}h focus capacity, and ${workspace.profile.meeting_hours_per_week}h meetings/week.`}
+            </small>
             <div className="activity-summary">
               <span>
                 <Activity size={16} />
@@ -358,6 +371,25 @@ export function LearnerDashboard({
                 <CheckCircle2 size={16} />
                 {workspace.activity.completed_modules}/{workspace.activity.total_modules} modules
               </span>
+            </div>
+          </section>
+
+          <section className="panel milestones-panel">
+            <div className="section-heading">
+              <div>
+                <p>Role-level milestones</p>
+                <h2>{workspace.profile.role}</h2>
+              </div>
+              <CalendarDays size={20} />
+            </div>
+            <div className="milestone-list">
+              {workspace.plan.schedule.slice(0, 4).map((week) => (
+                <article key={week.week_number}>
+                  <strong>Week {week.week_number}</strong>
+                  <span>{milestoneForWeek(workspace.profile.role, workspace.profile.certification_target, week.week_number)}</span>
+                  <small>{week.workload_adjusted ? "Sequencing adjusted for workload" : "Standard sequence"}</small>
+                </article>
+              ))}
             </div>
           </section>
 

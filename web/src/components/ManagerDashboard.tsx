@@ -80,6 +80,29 @@ export function ManagerDashboard({
     : selectedRiskLevel === "Medium"
       ? ["Monitor checkpoint completion", "Recommend a 2 hour weak-domain review", "Keep buddy pairing active"]
       : ["Maintain current plan", "Schedule final simulator when evidence is ready", "Refresh reports after checkpoint"];
+  const progressByRole = useMemo(() => {
+    if (!selectedLearner) return [];
+    const roleFamily = selectedLearner.role.split(" - ")[0] || selectedLearner.role;
+    return [
+      {
+        label: roleFamily,
+        value: `${selectedLearner.practice_score_avg}%`,
+        helper: "Selected role baseline"
+      },
+      {
+        label: selectedLearner.certification_target,
+        value: sortedReadiness.find((item) => item.exam === selectedLearner.certification_target)?.score
+          ? `${sortedReadiness.find((item) => item.exam === selectedLearner.certification_target)?.score}%`
+          : "pending",
+        helper: "Track readiness"
+      },
+      {
+        label: selectedLearnerRisk?.risk_level ?? "Low",
+        value: selectedLearnerRisk ? `${selectedLearnerRisk.meeting_hours}h` : "clear",
+        helper: "Capacity risk"
+      }
+    ];
+  }, [selectedLearner, selectedLearnerRisk, sortedReadiness]);
 
   return (
     <div className="manager-grid">
@@ -152,6 +175,44 @@ export function ManagerDashboard({
             <span>{selectedLearnerRisk?.reason ?? "No workload risk in manager triage"}</span>
           </article>
         </div>
+      </section>
+
+      <section className="panel role-progress-panel">
+        <div className="section-heading">
+          <div>
+            <p>Progress by role</p>
+            <h2>Role, track, and capacity summary</h2>
+          </div>
+        </div>
+        <div className="comparison-grid">
+          {progressByRole.length ? (
+            progressByRole.map((item) => (
+              <article key={`${item.label}-${item.helper}`}>
+                <strong>{item.label}</strong>
+                <span>{item.value}</span>
+                <span>{item.helper}</span>
+              </article>
+            ))
+          ) : (
+            <article>
+              <strong>Select a learner</strong>
+              <span>Role progress appears after cohort insights are refreshed.</span>
+            </article>
+          )}
+        </div>
+      </section>
+
+      <section className="panel privacy-panel">
+        <div className="section-heading">
+          <div>
+            <p>Privacy-safe insights</p>
+            <h2>No sensitive personal data exposed</h2>
+          </div>
+        </div>
+        <p>
+          Manager analytics use synthetic names, certification tracks, readiness scores, meeting-hour risk, and learning
+          comments only. Guardrails block emails, phone numbers, and private identifiers from manager insight payloads.
+        </p>
       </section>
 
       {insights ? (
