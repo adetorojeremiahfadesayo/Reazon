@@ -170,6 +170,9 @@ function autoStartApi() {
 
 export default defineConfig({
   plugins: [react(), autoStartApi()],
+  preview: {
+    allowedHosts: true
+  },
   server: {
     port: 5173,
     proxy: {
