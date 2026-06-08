@@ -234,6 +234,18 @@ def _prewarm_first_profile_cache() -> None:
         return
 
 
+@app.get("/", tags=["System"])
+def root():
+    """Friendly root response for hosted backend URLs."""
+    return {
+        "status": "ok",
+        "service": "Reazon API",
+        "health": "/health",
+        "docs": "/docs",
+        "frontend_note": "Open the deployed web frontend URL for the full app."
+    }
+
+
 @app.get("/health", tags=["System"])
 def health_check():
     """Simple health check endpoint."""
