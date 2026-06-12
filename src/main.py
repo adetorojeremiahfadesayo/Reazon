@@ -1,13 +1,16 @@
 import os
 import json
-import sqlite3
+import logging
 from concurrent.futures import ThreadPoolExecutor
 from typing import Dict, Any, List, Tuple
 from src.config import (
-    DB_PATH, FINAL_EXAM_PASS_THRESHOLD, LearnerProfile, StudyPlan, Quiz,
+    FINAL_EXAM_PASS_THRESHOLD, LearnerProfile, StudyPlan, Quiz,
     ReadinessReport, ManagerInsights, ExamBadge, FinalExamResult,
     LearningActivityRecord, LearningActivityReport, WorkerLearningComment,
     SYNTHETIC_DIR
+)
+from src.db_utils import (
+    execute_query, execute_update, execute_many, get_db_transaction, init_db_tables
 )
 from src.iq_integration import FoundryIQ, FabricIQ, WorkIQ
 from src.agents import (
@@ -19,6 +22,8 @@ from src.agents import (
 from src.reports import export_badge_pdf, export_readiness_pdf, export_study_plan_pdf
 from src.connectors.graph_connector import MicrosoftGraphConnector
 from src.connectors.lms_connector import MoodleLmsConnector
+
+logger = logging.getLogger(__name__)
 
 class OrchestratorEngine:
     def __init__(self):
@@ -88,81 +93,77 @@ class OrchestratorEngine:
         return records
 
     def _init_db(self):
-        conn = sqlite3.connect(DB_PATH)
-        c = conn.cursor()
-        c.execute("""
-            CREATE TABLE IF NOT EXISTS traces (
-                id INTEGER PRIMARY KEY AUTOINCREMENT,
-                session_id TEXT,
-                agent_name TEXT,
-                trace_content TEXT
-            )
-        """)
-        c.execute("""
-            CREATE TABLE IF NOT EXISTS badges (
-                badge_id TEXT PRIMARY KEY,
-                learner_id TEXT,
-                certification_target TEXT,
-                issued_to TEXT,
-                score REAL,
-                badge_json TEXT
-            )
-        """)
-        c.execute("""
-            CREATE TABLE IF NOT EXISTS profile_cache (
-                cache_key TEXT PRIMARY KEY,
-                mode TEXT NOT NULL,
-                tier TEXT NOT NULL,
-                model TEXT NOT NULL,
-                employee_id TEXT NOT NULL,
-                target_certification TEXT NOT NULL,
-                profile_json TEXT NOT NULL,
-                hit_count INTEGER NOT NULL DEFAULT 0,
-                created_at TEXT NOT NULL,
-                updated_at TEXT NOT NULL
-            )
-        """)
-        c.execute("""
-            CREATE TABLE IF NOT EXISTS ai_call_cache (
-                cache_key TEXT PRIMARY KEY,
-                call_type TEXT NOT NULL,
-                model TEXT NOT NULL,
-                request_json TEXT NOT NULL,
-                response_json TEXT NOT NULL,
-                hit_count INTEGER NOT NULL DEFAULT 0,
-                created_at TEXT NOT NULL,
-                updated_at TEXT NOT NULL
-            )
-        """)
-        conn.commit()
-        conn.close()
+        """Initialize database tables safely with proper connection management."""
+        try:
+            init_db_tables()
+            logger.info("Database initialized successfully")
+        except Exception as e:
+            logger.error(f"Database initialization error: {e}")
+            raise
 
     def save_agent_traces(self, session_id: str, agent):
-        conn = sqlite3.connect(DB_PATH)
-        c = conn.cursor()
-        for t in agent.get_traces():
-            c.execute(
+        """
+        Save agent traces safely with proper connection management.
+        
+        Args:
+            session_id: Session identifier
+            agent: Agent object with get_traces() method
+        """
+        try:
+            traces = agent.get_traces()
+            if not traces:
+                return
+            
+            # Prepare batch data
+            trace_params = [
+                (session_id, agent.name, t) for t in traces
+            ]
+            
+            # Use batch insert
+            execute_many(
                 "INSERT INTO traces (session_id, agent_name, trace_content) VALUES (?, ?, ?)",
-                (session_id, agent.name, t)
+                trace_params
             )
-        conn.commit()
-        conn.close()
+        except Exception as e:
+            logger.error(f"Error saving traces for session {session_id}: {e}")
+            raise
 
     def get_traces_by_session(self, session_id: str) -> List[Dict[str, str]]:
-        conn = sqlite3.connect(DB_PATH)
-        conn.row_factory = sqlite3.Row
-        c = conn.cursor()
-        c.execute("SELECT agent_name, trace_content FROM traces WHERE session_id = ?", (session_id,))
-        rows = c.fetchall()
-        conn.close()
-        return [{"agent": r["agent_name"], "content": r["trace_content"]} for r in rows]
+        """
+        Retrieve all traces for a session safely.
+        
+        Args:
+            session_id: Session identifier
+            
+        Returns:
+            List of trace dictionaries with agent and content
+        """
+        try:
+            rows = execute_query(
+                "SELECT agent_name, trace_content FROM traces WHERE session_id = ?",
+                (session_id,),
+                fetch_all=True
+            )
+            return [{"agent": r[0], "content": r[1]} for r in rows] if rows else []
+        except Exception as e:
+            logger.error(f"Error retrieving traces for session {session_id}: {e}")
+            raise
 
     def clear_session_traces(self, session_id: str):
-        conn = sqlite3.connect(DB_PATH)
-        c = conn.cursor()
-        c.execute("DELETE FROM traces WHERE session_id = ?", (session_id,))
-        conn.commit()
-        conn.close()
+        """
+        Clear all traces for a session safely.
+        
+        Args:
+            session_id: Session identifier
+        """
+        try:
+            execute_update(
+                "DELETE FROM traces WHERE session_id = ?",
+                (session_id,)
+            )
+        except Exception as e:
+            logger.error(f"Error clearing traces for session {session_id}: {e}")
+            raise
 
     def prewarm_profile_cache(self, employee_id: str, text_input: str) -> LearnerProfile:
         """
@@ -177,46 +178,70 @@ class OrchestratorEngine:
         return profile
 
     def save_badge(self, badge: ExamBadge, learner_id: str):
-        conn = sqlite3.connect(DB_PATH)
-        c = conn.cursor()
-        c.execute(
-            """
-            INSERT OR REPLACE INTO badges
-            (badge_id, learner_id, certification_target, issued_to, score, badge_json)
-            VALUES (?, ?, ?, ?, ?, ?)
-            """,
-            (
-                badge.badge_id,
-                learner_id,
-                badge.certification_target,
-                badge.issued_to,
-                badge.score,
-                json.dumps(badge.model_dump())
+        """
+        Save an exam badge safely with proper connection management.
+        
+        Args:
+            badge: ExamBadge object
+            learner_id: Learner identifier
+        """
+        try:
+            execute_update(
+                """
+                INSERT OR REPLACE INTO badges
+                (badge_id, learner_id, certification_target, issued_to, score, badge_json)
+                VALUES (?, ?, ?, ?, ?, ?)
+                """,
+                (
+                    badge.badge_id,
+                    learner_id,
+                    badge.certification_target,
+                    badge.issued_to,
+                    badge.score,
+                    json.dumps(badge.model_dump())
+                )
             )
-        )
-        conn.commit()
-        conn.close()
+        except Exception as e:
+            logger.error(f"Error saving badge {badge.badge_id}: {e}")
+            raise
 
     def get_badges_by_learner(self, learner_id: str) -> List[ExamBadge]:
-        conn = sqlite3.connect(DB_PATH)
-        conn.row_factory = sqlite3.Row
-        c = conn.cursor()
-        c.execute(
-            "SELECT badge_json FROM badges WHERE learner_id = ? ORDER BY certification_target",
-            (learner_id,)
-        )
-        rows = c.fetchall()
-        conn.close()
-        return [ExamBadge(**json.loads(r["badge_json"])) for r in rows]
+        """
+        Get all badges for a learner safely.
+        
+        Args:
+            learner_id: Learner identifier
+            
+        Returns:
+            List of ExamBadge objects
+        """
+        try:
+            rows = execute_query(
+                "SELECT badge_json FROM badges WHERE learner_id = ? ORDER BY certification_target",
+                (learner_id,),
+                fetch_all=True
+            )
+            return [ExamBadge(**json.loads(r[0])) for r in rows] if rows else []
+        except Exception as e:
+            logger.error(f"Error retrieving badges for learner {learner_id}: {e}")
+            raise
 
     def get_all_badges(self) -> List[ExamBadge]:
-        conn = sqlite3.connect(DB_PATH)
-        conn.row_factory = sqlite3.Row
-        c = conn.cursor()
-        c.execute("SELECT badge_json FROM badges ORDER BY certification_target, issued_to")
-        rows = c.fetchall()
-        conn.close()
-        return [ExamBadge(**json.loads(r["badge_json"])) for r in rows]
+        """
+        Get all badges safely.
+        
+        Returns:
+            List of all ExamBadge objects
+        """
+        try:
+            rows = execute_query(
+                "SELECT badge_json FROM badges ORDER BY certification_target, issued_to",
+                fetch_all=True
+            )
+            return [ExamBadge(**json.loads(r[0])) for r in rows] if rows else []
+        except Exception as e:
+            logger.error(f"Error retrieving all badges: {e}")
+            raise
 
     def run_learner_pipeline(
         self,

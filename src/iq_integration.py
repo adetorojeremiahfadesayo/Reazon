@@ -25,7 +25,15 @@ class FoundryIQ:
     Toggles between Azure AI search query and local mock search against MD guides.
     """
     def __init__(self):
-        self.use_azure = not FORCE_MOCK_MODE and AZURE_AI_PROJECT_ENDPOINT and AIProjectClient is not None
+        self.azure_search_endpoint = os.getenv("AZURE_SEARCH_ENDPOINT", "").rstrip("/")
+        self.azure_search_api_key = os.getenv("AZURE_SEARCH_API_KEY", "")
+        self.azure_search_index = os.getenv("AZURE_SEARCH_INDEX", "reazon-cert-guides")
+        self.use_azure = (
+            not FORCE_MOCK_MODE
+            and bool(self.azure_search_endpoint)
+            and bool(self.azure_search_api_key)
+            and bool(self.azure_search_index)
+        )
         self._local_docs_cache = {}
 
     def _get_local_doc_content(self, cert_id: str) -> str:
@@ -48,13 +56,31 @@ class FoundryIQ:
         """
         if self.use_azure:
             try:
-                # Live implementation would retrieve from active Azure search index connection
-                # client = AIProjectClient(endpoint=AZURE_AI_PROJECT_ENDPOINT, credential=DefaultAzureCredential())
-                # For safety and speed, we implement a fallback inside live mode too
-                pass
+                import urllib.request
+
+                safe_cert_id = cert_id.upper().replace("'", "''")
+                url = f"{self.azure_search_endpoint}/indexes/{self.azure_search_index}/docs/search?api-version=2024-07-01"
+                body = json.dumps({
+                    "search": query,
+                    "filter": f"cert_id eq '{safe_cert_id}'",
+                    "top": 5
+                }).encode("utf-8")
+                req = urllib.request.Request(url, data=body, method="POST")
+                req.add_header("Content-Type", "application/json")
+                req.add_header("api-key", self.azure_search_api_key)
+                with urllib.request.urlopen(req, timeout=10) as r:
+                    data = json.loads(r.read().decode())
+                azure_results = []
+                for doc in data.get("value", []):
+                    azure_results.append({
+                        "text": doc.get("content", ""),
+                        "score": doc.get("@search.score", 1.0),
+                        "citation": doc.get("citation", "") or doc.get("source_path", "Azure AI Search")
+                    })
+                if azure_results:
+                    return azure_results
             except Exception as e:
                 print(f"[Foundry IQ] Azure retrieval error: {e}. Falling back to local search.")
-
         # Local search implementation (Regex & Keyword Match)
         content = self._get_local_doc_content(cert_id)
         if not content:

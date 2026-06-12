@@ -1,92 +1,241 @@
-# Reazon: Microsoft Certification Readiness
+# Reazon AI: Microsoft Workforce Certification Platform
 
-A 10-agent workforce development and Microsoft certification readiness system for startup teams. It helps companies onboard interns and employees into role-aligned technical tracks, generate workload-aware study plans, take weekly checkpoints, run timed final exam simulations, unlock synthetic badges, and give program managers aggregate readiness visibility.
+An 11-agent reasoning platform that helps organizations develop interns and junior workers through Microsoft certification readiness by planning study paths, scheduling learning, testing readiness, verifying progress, and surfacing manager insights with synthetic workforce data and grounded Azure retrieval.
 
-This project is built for the Reasoning Agents track and uses synthetic data only.
+[![Track: Reasoning Agents](https://img.shields.io/badge/Track-Reasoning_Agents-5C2D91)](.)
+[![Microsoft IQ](https://img.shields.io/badge/Microsoft_IQ-Foundry_IQ_style_retrieval-0078D4)](.)
+[![Data](https://img.shields.io/badge/Data-Synthetic_only-107C10)](.)
+[![Backend](https://img.shields.io/badge/API-FastAPI-009688)](.)
+[![Frontend](https://img.shields.io/badge/UI-React_%2B_Streamlit-61DAFB)](.)
+
+## At A Glance
+
+| Question | Answer |
+|---|---|
+| What it is | A multi-agent workforce learning and certification readiness platform |
+| Who it helps | Startup teams, interns, junior workers, team leads, and program managers |
+| Why reasoning matters | Readiness depends on role, exam domain weights, study evidence, workload, assessments, and manager risk signals |
+| Microsoft IQ usage | Synthetic certification guides are retrieved through Azure AI Search as a Foundry IQ-style grounded knowledge layer |
+| Data policy | Synthetic learner, work, LMS, and certification data only |
+| Main surfaces | React web app, FastAPI backend, Streamlit app, PDF reports |
+
+## The Problem
+
+Organizations want interns and junior workers to grow into productive cloud, AI, data, security, and business application roles, but certification programs are difficult to manage at team scale.
+
+Managers often rely on spreadsheets, manual reminders, generic learning links, and self-reported progress. That makes it hard to answer practical questions:
+
+- Which Microsoft certification should each worker pursue?
+- What should they study this week?
+- Does their calendar leave enough focus time to complete the plan?
+- Are checkpoint scores grounded in approved study material?
+- Who is ready to book an exam, who needs remediation, and who is at risk?
+
+Reazon AI was built for that gap.
+
+## The Solution
+
+Reazon AI coordinates 11 specialized agents to turn a worker role and certification goal into an evidence-backed readiness workflow.
+
+The system profiles the learner, retrieves cited certification knowledge, maps exam domains to study resources, creates a workload-aware schedule, generates grounded practice tests, verifies learning activity, scores readiness, recommends a booking decision, unlocks synthetic badges, and gives managers aggregate team visibility.
+
+The demo uses synthetic data for safety, but the retrieval layer can run against a real Azure AI Search index named `reazon-cert-guides`, giving the agents cited knowledge before they generate plans, tests, and recommendations.
+
+## Screenshots
+
+| Learner workspace | Final exam simulator | Manager portal |
+|---|---|---|
+| ![Learner workspace](assets/screenshots/learner-workspace.png) | ![Final exam simulator](assets/screenshots/final-exam-simulator.png) | ![Manager portal](assets/screenshots/manager-dashboard.png) |
 
 ## What It Does
 
-- Profiles workers and interns from role and exam goals.
-- Supports current-forward Microsoft certification tracks across Azure, AI, Fabric, data, security, Microsoft 365, Dynamics, Power Platform, DevOps, and architecture.
-- Curates certification-specific Microsoft Learn-style course paths using a local registry and cited markdown guides.
-- Generates week-by-week study plans with workload-aware Largest Remainder allocation.
-- Creates grounded weekly checkpoint questions with citations.
-- Provides a timed final exam simulator with Microsoft-style question counts and exam durations.
-- Verifies learning activity from Microsoft Learn/LMS/Teams-style evidence.
-- Calculates WorkIQ-aware worker readiness and returns `GO`, `CONDITIONAL GO`, or `NOT YET`.
-- Unlocks a synthetic badge when the final exam score is at least 65%.
-- Persists traces and badges in SQLite.
-- Exposes both Streamlit and FastAPI surfaces.
+```text
+Worker role + target exam
+    -> learner profile
+    -> cited certification knowledge retrieval
+    -> domain-specific learning path
+    -> workload-aware weekly study schedule
+    -> grounded checkpoint questions
+    -> learning activity verification
+    -> readiness score
+    -> GO / CONDITIONAL GO / NOT YET
+    -> final exam simulator
+    -> synthetic badge and manager dashboard
+```
 
-## Workforce Development Story
+Core capabilities:
 
-The demo can be presented as a company workforce development program: a startup hires interns and develops employees across cloud, AI, data, security, operations, and business application roles, then uses Reazon: Microsoft Certification Readiness to assign each person a Microsoft-aligned development track. Reazon: Microsoft Certification Readiness turns the role and target track into a study plan, monitors learning evidence, runs weekly checkpoints, offers a timed final exam simulator, and gives managers a simple view of who is ready, who needs remediation, and which PDFs document progress.
-
-## Course Specificity
-
-The courses are not random general courses. Reazon: Microsoft Certification Readiness maps each person to a specific Microsoft certification target, such as `AI-200`, `AI-901`, `DP-600`, or `SC-900`, then uses that exam's weighted domains to build the course path. The current demo links to Microsoft Learn certification/search surfaces and cites local guide files in `data/documents`; in production, those links can be replaced with exact company LMS course IDs or Microsoft Learn module assignments.
+- Profiles interns and workers from role, experience, and certification goals.
+- Supports Microsoft certification tracks across Azure, AI, Fabric, data, security, Microsoft 365, Dynamics, Power Platform, DevOps, and architecture.
+- Retrieves cited certification guide content from Azure AI Search when configured.
+- Falls back to local synthetic markdown guides for reliable demos.
+- Builds week-by-week study plans using workload-aware Largest Remainder allocation.
+- Generates cited checkpoint questions and timed final exam simulations.
+- Verifies synthetic learning activity from Microsoft Learn/LMS/Teams-style evidence.
+- Calculates WorkIQ-aware readiness using exam mastery, assessment score, study momentum, and workload fit.
+- Returns `GO`, `CONDITIONAL GO`, or `NOT YET`.
+- Unlocks a synthetic badge when final exam score is at least 65%.
+- Persists agent traces and badges in SQLite.
+- Exports PDF study plans, readiness reports, and badge certificates.
 
 ## Agent Architecture
 
-1. `LearnerProfilerAgent` builds structured learner profiles.
-2. `LearningPathCuratorAgent` maps exam domains to Microsoft Learn resources.
-3. `StudyPlanAgent` creates workload-aware schedules.
-4. `EngagementAgent` recommends study windows.
-5. `AssessmentAgent` generates cited exam questions.
-6. `ProgressAgent` computes platform readiness scores using exam mastery, assessment score, study momentum, and workload fit.
-7. `BookingRecommenderAgent` issues booking guidance.
-8. `LearningActivityVerifierAgent` validates whether planned learning actually happened.
-9. `ManagerInsightsAgent` aggregates team readiness and risk.
-10. `PeerCollaborationAgent` recommends study buddies.
-11. `QualityCriticAgent` validates inputs, outputs, citations, scores, privacy, badge rules, workload signals, and manager penalty policy.
+```mermaid
+flowchart TD
+    A["Learner request"] --> B["QualityCriticAgent: input audit"]
+    B --> C["LearnerProfilerAgent"]
+    C --> D["LearningPathCuratorAgent"]
+    C --> E["StudyPlanAgent"]
+    C --> F["AssessmentAgent"]
+    D --> G["EngagementAgent"]
+    E --> G
+    F --> H["LearningActivityVerifierAgent"]
+    H --> I["ProgressAgent"]
+    I --> J["BookingRecommenderAgent"]
+    J --> K["Final exam simulator and badge logic"]
+    C --> L["ManagerInsightsAgent"]
+    L --> M["PeerCollaborationAgent"]
+    B -. validates .-> D
+    B -. validates .-> E
+    B -. validates .-> F
+    B -. validates .-> I
+    B -. validates .-> K
+
+    N["Azure AI Search / Foundry IQ-style retrieval"] --> D
+    N --> F
+    O["Fabric IQ-style certification ontology"] --> C
+    O --> E
+    O --> I
+    P["Work IQ-style workload signals"] --> C
+    P --> E
+    P --> G
+```
+
+| # | Agent | Responsibility |
+|---|---|---|
+| 1 | `LearnerProfilerAgent` | Builds structured learner profiles from role and exam goals |
+| 2 | `LearningPathCuratorAgent` | Maps exam domains to Microsoft Learn-style resources with citations |
+| 3 | `StudyPlanAgent` | Creates workload-aware weekly study schedules |
+| 4 | `EngagementAgent` | Recommends study windows around focus time and meeting load |
+| 5 | `AssessmentAgent` | Generates cited checkpoint and final exam questions |
+| 6 | `ProgressAgent` | Computes readiness using weighted evidence signals |
+| 7 | `BookingRecommenderAgent` | Returns `GO`, `CONDITIONAL GO`, or `NOT YET` |
+| 8 | `LearningActivityVerifierAgent` | Verifies planned learning against synthetic LMS and Teams-style evidence |
+| 9 | `ManagerInsightsAgent` | Aggregates cohort readiness and workload risk |
+| 10 | `PeerCollaborationAgent` | Recommends study buddy pairings |
+| 11 | `QualityCriticAgent` | Validates inputs, outputs, citations, scores, privacy, and badge rules |
+
+## Multi-Step Reasoning Flow
+
+Reazon AI is built for the Reasoning Agents track because it does more than retrieve content or answer a question. It decomposes certification readiness into a sequence of dependent decisions.
+
+1. Audit input for safety and prompt injection.
+2. Infer the learner profile and target certification.
+3. Retrieve grounded guide content from Azure AI Search or local synthetic guides.
+4. Use certification ontology data to identify exam domains, weights, and recommended hours.
+5. Allocate study time around workload and focus capacity.
+6. Generate cited checkpoint questions.
+7. Verify learning activity evidence.
+8. Calculate readiness across domain mastery, assessment score, study utilization, and workload fit.
+9. Recommend exam booking status.
+10. Produce manager insights, buddy matches, reports, and badge decisions.
+
+## Microsoft IQ Integration
+
+Reazon AI uses synthetic data for safety, but it connects that data to a real Microsoft retrieval layer when configured.
+
+| Layer | Current implementation | Why it matters |
+|---|---|---|
+| Foundry IQ-style retrieval | Azure AI Search index `reazon-cert-guides` with cited synthetic certification guides | Grounds study paths and practice questions in retrievable knowledge |
+| Fabric IQ-style semantics | `data/synthetic/certifications.json` ontology | Models exams, domains, weights, recommended hours, and role alignment |
+| Work IQ-style context | `data/synthetic/work_signals.json` plus Graph connector scaffolding | Adjusts schedules and readiness based on meetings, focus time, and study budget |
+
+The project keeps real employee, tenant, email, meeting, and customer data out of the demo. In production, the same architecture can connect to Azure AI Foundry knowledge bases, Fabric-backed semantic models, and consented Microsoft Graph/M365 work signals.
+
+### Live Azure Retrieval Configuration
+
+Set these values in `.env` to enable live grounded retrieval through Azure AI Search:
+
+```env
+FORCE_MOCK_MODE=false
+AZURE_AI_PROJECT_ENDPOINT=https://your-foundry-project.services.ai.azure.com/
+AZURE_AI_MODEL_DEPLOYMENT=gpt-4o
+
+AZURE_SEARCH_ENDPOINT=https://your-search-service.search.windows.net
+AZURE_SEARCH_INDEX=reazon-cert-guides
+AZURE_SEARCH_API_KEY=your-query-key
+```
+
+When these values are present, `FoundryIQ.search_knowledge()` queries Azure AI Search first and falls back to local markdown guides if Azure is unavailable.
 
 ## Readiness Logic
 
-Each learner is measured against their own Microsoft exam target. The certification ontology supplies that exam's domains and weights, then Reazon: Microsoft Certification Readiness applies this readiness formula:
+Each learner is measured against their own Microsoft exam target.
 
 ```text
 Readiness = 0.45 * exam-domain mastery
           + 0.25 * latest assessment score
           + 0.15 * study-hours utilization
-          + 0.15 * WorkIQ workload fit
+          + 0.15 * workload fit
 ```
 
-This keeps the product exam-pack focused while making it different from a generic cert-prep clone: a learner with strong quiz scores but a meeting-heavy calendar can still receive a lower readiness confidence because the system predicts less capacity to finish the plan.
+This keeps Reazon AI different from a generic certification prep tool. A learner with strong quiz scores but a meeting-heavy schedule can still receive a lower confidence score because the system reasons about whether they have enough focused capacity to finish the plan.
 
-## Microsoft IQ Layers
+| Result | Meaning |
+|---|---|
+| `GO` | Ready to book or continue final preparation |
+| `CONDITIONAL GO` | Close, but workload or weak-domain risk needs monitoring |
+| `NOT YET` | Needs remediation before booking |
 
-Demo mode uses synthetic local equivalents:
+## Demo Flow
 
-- **Foundry IQ:** local markdown course guides in `data/documents`.
-- **Fabric IQ:** certification ontology in `data/synthetic/certifications.json`.
-- **Work IQ:** synthetic meeting, focus, and study-budget signals in `data/synthetic/work_signals.json`.
-- **Microsoft Graph connector:** live-ready connector with synthetic Graph calendar/class-attendance demo data.
-- **LMS connector:** Moodle-style connector with synthetic completion/checkpoint demo data.
+1. Open the React web app.
+2. Select a synthetic worker or intern persona.
+3. Run the learner workspace pipeline.
+4. Review the profile, workload signals, study plan, citations, and agent traces.
+5. Submit a checkpoint assessment.
+6. Open the final exam simulator.
+7. Use the demo pass path to show badge unlock.
+8. Switch to Manager Portal.
+9. Review readiness by exam, workload risk, peer study pairs, and PDF reports.
 
-Production mode would replace these with Azure AI Foundry knowledge bases, Fabric-backed semantic data, and consented Microsoft Graph/M365 work signals.
+## Tech Stack
 
-## Live-Ready Connectors
+| Area | Tools |
+|---|---|
+| Backend | Python, FastAPI, Pydantic |
+| Agent orchestration | Custom Python agent engine |
+| LLM path | Azure AI Foundry project client, Azure OpenAI fallback, deterministic local parser |
+| Grounded retrieval | Azure AI Search, local markdown fallback |
+| Frontend | React, Vite, TypeScript |
+| Additional UI | Streamlit |
+| Storage | SQLite, synthetic JSON datasets |
+| Reports | ReportLab PDFs |
+| Testing | Pytest, Playwright |
 
-The repository includes deployment-ready connector scaffolds that default to synthetic data:
+## Project Structure
 
-- `MicrosoftGraphConnector`: reads synthetic Graph-style meeting/class attendance by default, or can call Microsoft Graph with app-only OAuth when `GRAPH_USE_LIVE=true`.
-- `MoodleLmsConnector`: chosen LMS adapter for course completion/checkpoint signals. It defaults to synthetic Moodle-style data and can be swapped for another LMS later.
-- Azure AI Foundry profile generation: Tier 1 in the 3-tier fallback chain uses `AIProjectClient` and `DefaultAzureCredential` when `FORCE_MOCK_MODE=false`.
-
-Do not commit real secrets. Use `.env`, managed identity, or Azure Key Vault.
+```text
+api/                    FastAPI application
+src/                    agent engine, IQ adapters, guardrails, scheduling, reports
+src/connectors/         Microsoft Graph and LMS connector scaffolds
+ui/                     Streamlit interface
+web/                    React + Vite web app
+data/documents/         synthetic certification guide markdown files
+data/synthetic/         learner, certification, activity, and workload data
+data/reports/           generated PDF outputs
+tests/                  Python test suite
+scripts/                demo launcher
+```
 
 ## Quick Start
+
+Create and activate a virtual environment:
 
 ```powershell
 python -m venv .venv
 .\.venv\Scripts\activate
 pip install -r requirements.txt
-```
-
-Run the Streamlit app:
-
-```powershell
-streamlit run ui/app.py
 ```
 
 Run the FastAPI backend:
@@ -109,104 +258,166 @@ Open:
 http://127.0.0.1:5173
 ```
 
-Open API docs:
+API docs:
 
 ```text
 http://127.0.0.1:8000/docs
 ```
 
-One-command demo launcher for Windows:
+Run the Streamlit app:
+
+```powershell
+streamlit run ui/app.py
+```
+
+One-command Windows demo launcher:
 
 ```powershell
 .\scripts\start_demo.ps1
 ```
 
-If the web app shows `Request failed with 500` on first load, confirm the API is running:
+## Verification
+
+Run the backend and agent tests:
 
 ```powershell
-curl.exe http://127.0.0.1:8000/health
-curl.exe http://127.0.0.1:8000/api/learners
+.\.venv\Scripts\python.exe verify_system.py
+.\.venv\Scripts\python.exe -m pytest -q
 ```
 
-Both commands should return JSON. If they do not, start the backend with the virtualenv command above.
-
-Run verification:
+Run the web build:
 
 ```powershell
-python verify_system.py
-pytest -q
+cd web
+npm run build
 ```
 
-Run the web automation test at 1.5x UI motion:
+Run the Playwright end-to-end test:
 
 ```powershell
 cd web
 npm run test:e2e
 ```
 
-The E2E test starts FastAPI and Vite, opens `/?testSpeed=1.5`, verifies the learner workspace, runs the pipeline, fills the demo passing answers, submits the assessment, and checks the tiered badge result.
+Recent local verification:
+
+- `verify_system.py`: 35 / 35 passed
+- `pytest`: 34 passed
+- `npm run build`: passed
+- `npm run test:e2e`: passed
+- Azure AI Search connectivity: index reachable with cited results
 
 ## API Endpoints
 
-- `GET /health`
-- `GET /api/learners`
-- `GET /api/reports`
-- `POST /api/learner/profile`
-- `POST /api/learner/plan`
-- `POST /api/learner/assessment`
-- `POST /api/learner/assessment/submit`
-- `POST /api/learner/activity`
-- `POST /api/manager/insights`
-
-## Reports
-
-The backend can export PDFs for:
-
-- Study plans
-- Readiness reports
-- Badge certificates
-
-PDFs are written to `data/reports`.
-
-## Demo Mode
-
-`FORCE_MOCK_MODE=True` is set by default for reliable live demos with no credentials. The pipeline runs using deterministic local data and validates the same typed contracts used by production integrations.
+| Method | Endpoint | Purpose |
+|---|---|---|
+| `GET` | `/health` | Service health and mock/live mode |
+| `GET` | `/api/learners` | List synthetic learner personas |
+| `GET` | `/api/reports` | List generated PDF reports |
+| `POST` | `/api/learner/workspace` | Run full learner workspace flow |
+| `POST` | `/api/learner/profile` | Create learner profile |
+| `POST` | `/api/learner/plan` | Generate study plan |
+| `POST` | `/api/learner/assessment` | Generate checkpoint assessment |
+| `POST` | `/api/learner/assessment/submit` | Submit answers and score readiness |
+| `POST` | `/api/learner/activity` | Verify learning activity evidence |
+| `POST` | `/api/manager/insights` | Generate manager dashboard metrics |
 
 ## 3-Tier LLM Fallback Chain
 
-The learner profiler supports a real three-tier fallback path:
+The learner profiler supports graceful degradation:
 
-1. **Tier 1: Azure AI Foundry project client**
-   Uses `AZURE_AI_PROJECT_ENDPOINT`, `AZURE_AI_MODEL_DEPLOYMENT`, and `DefaultAzureCredential` to create an Azure OpenAI-compatible client from the Foundry project.
+```text
+Tier 1: Azure AI Foundry project client
+    -> uses AZURE_AI_PROJECT_ENDPOINT and AZURE_AI_MODEL_DEPLOYMENT
 
-2. **Tier 2: Direct Azure OpenAI JSON mode**
-   Uses `AZURE_OPENAI_ENDPOINT`, `AZURE_OPENAI_API_KEY`, `AZURE_OPENAI_API_VERSION`, and `AZURE_AI_MODEL_DEPLOYMENT`.
+Tier 2: Direct Azure OpenAI JSON mode
+    -> uses AZURE_OPENAI_ENDPOINT, AZURE_OPENAI_API_KEY, and API version
 
-3. **Tier 3: deterministic local parser**
-   Uses synthetic learner data and rule-based parsing. This is the default demo path when `FORCE_MOCK_MODE=true` or cloud credentials are unavailable.
+Tier 3: deterministic local parser
+    -> uses synthetic learner data and rule-based parsing
+```
 
-Copy `.env.example` to `.env` and set `FORCE_MOCK_MODE=false` to attempt the Azure tiers.
+Repeated profiler calls are cached in SQLite by learner, target exam, model, mode, prompt, and workload signals. This keeps live demos fast while preserving typed validation and fallback behavior.
 
-Repeated profiler inputs are cached in SQLite by learner, target exam, model, mode, prompt, and Work IQ signals.
-In live mode, cache hits reuse previously validated Azure profiler output instead of repeating the same Foundry/OpenAI
-call. The API also prewarms the first learner profile in the background at startup for smoother judge demos.
+## Safety And Responsible AI
 
-## Responsible AI and Data Safety
+Reazon AI uses synthetic data only. It does not include real employee records, private tenant data, email content, real meeting transcripts, customer data, or official exam dumps.
 
-All learner records, work signals, course guides, and certification scenarios are synthetic. The content is not official Microsoft exam material and is not an exam dump. Learners should verify real certification objectives through Microsoft Learn before booking a real exam.
+Guardrails validate:
 
-Do not commit `.env`, API keys, tenant data, customer data, real employee data, or confidential content.
+- PII scrubbing
+- prompt injection phrases
+- supported certification targets
+- study-hour bounds
+- citation presence
+- readiness score ranges
+- final exam badge policy
+- manager insight privacy
+- learning activity evidence quality
+
+Learners should always verify official certification objectives through Microsoft Learn before booking a real exam.
 
 ## Production Path
 
-1. Replace local markdown search with Foundry IQ.
-2. Replace JSON ontology with Fabric-backed semantic storage.
-3. Replace synthetic Work IQ with Microsoft Graph/M365 signals under tenant consent.
-4. Add Entra ID auth and manager role checks to FastAPI.
-5. Deploy the Docker image to Azure Container Apps, App Service, or Foundry Hosted Agents.
-6. Import the FastAPI OpenAPI schema into Copilot Studio as custom actions.
+1. Replace the Azure AI Search demo index with a production Azure AI Foundry knowledge base or governed enterprise search index.
+2. Move the certification ontology into Fabric-backed semantic storage.
+3. Replace synthetic Work IQ signals with consented Microsoft Graph/M365 signals.
+4. Add Entra ID authentication and manager role checks.
+5. Deploy the backend to Azure Container Apps, Azure App Service, or Foundry-hosted infrastructure.
+6. Deploy the React frontend with the API URL configured through `VITE_API_BASE_URL`.
+7. Import the FastAPI OpenAPI schema into Copilot Studio as custom actions.
 
-For separate Azure frontend and API services, build the web app with `VITE_API_BASE_URL`
-set to the deployed FastAPI URL, and set `CORS_ALLOW_ORIGINS` on the API to the deployed
-frontend URL. If both are served behind the same Azure origin or reverse proxy, the web app
-can keep using same-origin `/api`, `/health`, and `/reports` requests.
+## Environment Variables
+
+Copy `.env.example` to `.env` and configure only what you need.
+
+```env
+FORCE_MOCK_MODE=true
+
+AZURE_AI_PROJECT_ENDPOINT=
+AZURE_AI_MODEL_DEPLOYMENT=gpt-4o
+AZURE_OPENAI_ENDPOINT=
+AZURE_OPENAI_API_KEY=
+AZURE_OPENAI_API_VERSION=2024-08-01-preview
+
+AZURE_SEARCH_ENDPOINT=
+AZURE_SEARCH_INDEX=reazon-cert-guides
+AZURE_SEARCH_API_KEY=
+
+GRAPH_USE_LIVE=false
+AZURE_TENANT_ID=
+AZURE_CLIENT_ID=
+AZURE_CLIENT_SECRET=
+GRAPH_TEST_USER_UPN=
+
+LMS_PLATFORM=moodle
+LMS_USE_LIVE=false
+LMS_BASE_URL=
+LMS_API_TOKEN=
+```
+
+Do not commit `.env`, API keys, client secrets, tenant data, or real employee data.
+
+## Submission Notes
+
+Recommended hackathon positioning:
+
+> Reazon AI uses synthetic learner, work, and certification data for safety. Its reasoning agents retrieve cited certification knowledge from Azure AI Search as a Microsoft Foundry IQ-style grounded knowledge layer, then generate study plans, assessments, readiness decisions, badge outcomes, and manager insights.
+
+## How GitHub Helped
+
+GitHub was the project hub for Reazon AI. It made the hackathon build easier by giving the team one place to organize the codebase, track changes, document the architecture, and prepare a reproducible submission.
+
+GitHub was especially useful for:
+
+- keeping the FastAPI backend, React frontend, Streamlit app, synthetic datasets, tests, and documentation together in one repository
+- reviewing changes safely as the agent architecture grew from a prototype into an 11-agent workflow
+- preserving a clear commit history for judging and future collaborators
+- making setup instructions, environment variables, API endpoints, and demo flow visible in this README
+- supporting automated verification with `pytest`, `verify_system.py`, and Playwright E2E tests before submission
+
+For a multi-agent project like Reazon AI, GitHub helped turn the idea into a shareable, inspectable, and repeatable engineering artifact rather than just a demo running on one machine.
+
+## License
+
+Hackathon prototype. Add your preferred license before production use.

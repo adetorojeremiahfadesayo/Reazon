@@ -1,32 +1,20 @@
 import hashlib
 import json
-import sqlite3
+import logging
 from datetime import datetime, timezone
 from typing import Any, Dict, Optional
 
-from src.config import DB_PATH
+from src.db_utils import execute_query, execute_update, get_db_transaction, init_db_tables
 
+logger = logging.getLogger(__name__)
 
 AI_CACHE_VERSION = "ai-call-v1"
 
-
-def _connect() -> sqlite3.Connection:
-    conn = sqlite3.connect(DB_PATH)
-    conn.execute(
-        """
-        CREATE TABLE IF NOT EXISTS ai_call_cache (
-            cache_key TEXT PRIMARY KEY,
-            call_type TEXT NOT NULL,
-            model TEXT NOT NULL,
-            request_json TEXT NOT NULL,
-            response_json TEXT NOT NULL,
-            hit_count INTEGER NOT NULL DEFAULT 0,
-            created_at TEXT NOT NULL,
-            updated_at TEXT NOT NULL
-        )
-        """
-    )
-    return conn
+# Initialize database tables on module import
+try:
+    init_db_tables()
+except Exception as e:
+    logger.warning(f"Database initialization check: {e}")
 
 
 def build_ai_call_cache_key(
@@ -45,26 +33,41 @@ def build_ai_call_cache_key(
 
 
 def get_cached_ai_call(cache_key: str) -> Optional[Dict[str, Any]]:
-    conn = _connect()
+    """
+    Retrieve cached AI call response and increment hit counter.
+    Safe: Handles connection management automatically.
+    
+    Args:
+        cache_key: The cache key to look up
+        
+    Returns:
+        Parsed response payload or None if not found
+    """
     try:
-        row = conn.execute(
+        row = execute_query(
             "SELECT response_json FROM ai_call_cache WHERE cache_key = ?",
             (cache_key,),
-        ).fetchone()
+            fetch_one=True
+        )
+        
         if row is None:
             return None
-        conn.execute(
+        
+        # Update hit count
+        now = datetime.now(timezone.utc).isoformat(timespec="seconds")
+        execute_update(
             """
             UPDATE ai_call_cache
             SET hit_count = hit_count + 1, updated_at = ?
             WHERE cache_key = ?
             """,
-            (datetime.now(timezone.utc).isoformat(timespec="seconds"), cache_key),
+            (now, cache_key),
         )
-        conn.commit()
+        
         return json.loads(row[0])
-    finally:
-        conn.close()
+    except Exception as e:
+        logger.error(f"Error retrieving cached AI call for key {cache_key}: {e}")
+        raise
 
 
 def set_cached_ai_call(
@@ -75,10 +78,20 @@ def set_cached_ai_call(
     request_payload: Dict[str, Any],
     response_payload: Dict[str, Any],
 ) -> None:
-    now = datetime.now(timezone.utc).isoformat(timespec="seconds")
-    conn = _connect()
+    """
+    Cache an AI call response.
+    Safe: Handles connection management and transactions automatically.
+    
+    Args:
+        cache_key: The cache key
+        call_type: Type of AI call
+        model: Model used
+        request_payload: Request data
+        response_payload: Response data
+    """
     try:
-        conn.execute(
+        now = datetime.now(timezone.utc).isoformat(timespec="seconds")
+        execute_update(
             """
             INSERT INTO ai_call_cache (
                 cache_key, call_type, model, request_json, response_json,
@@ -99,15 +112,24 @@ def set_cached_ai_call(
                 now,
             ),
         )
-        conn.commit()
-    finally:
-        conn.close()
+    except Exception as e:
+        logger.error(f"Error caching AI call with key {cache_key}: {e}")
+        raise
 
 
 def delete_cached_ai_call(cache_key: str) -> None:
-    conn = _connect()
+    """
+    Delete a cached AI call.
+    Safe: Handles connection management and transactions automatically.
+    
+    Args:
+        cache_key: The cache key to delete
+    """
     try:
-        conn.execute("DELETE FROM ai_call_cache WHERE cache_key = ?", (cache_key,))
-        conn.commit()
-    finally:
-        conn.close()
+        execute_update(
+            "DELETE FROM ai_call_cache WHERE cache_key = ?",
+            (cache_key,)
+        )
+    except Exception as e:
+        logger.error(f"Error deleting cached AI call for key {cache_key}: {e}")
+        raise

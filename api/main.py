@@ -18,7 +18,8 @@ sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 from src.main import OrchestratorEngine
 from src.config import (
     LearnerProfile, StudyPlan, Quiz, ReadinessReport,
-    ManagerInsights, FinalExamResult, FINAL_EXAM_PASS_THRESHOLD, REPORTS_DIR
+    ManagerInsights, FinalExamResult, FINAL_EXAM_PASS_THRESHOLD, REPORTS_DIR,
+    FORCE_MOCK_MODE
 )
 
 # ---------------------------------------------------------------------------
@@ -171,8 +172,8 @@ async def lifespan(app: FastAPI):
 
 
 app = FastAPI(
-    title="CertPrep-Ex Multi-Agent System",
-    description="10-agent orchestration for Microsoft certification readiness. "
+    title="Reazon Multi-Agent System",
+    description="11-agent orchestration for Microsoft certification readiness. "
                 "Integrates with Microsoft Copilot Studio via REST API.",
     version="1.0.0",
     lifespan=lifespan
@@ -249,7 +250,7 @@ def root():
 @app.get("/health", tags=["System"])
 def health_check():
     """Simple health check endpoint."""
-    return {"status": "healthy", "mock_mode": True}
+    return {"status": "healthy", "mock_mode": FORCE_MOCK_MODE}
 
 
 @app.get("/api/learners", response_model=List[LearnerOptionResponse], tags=["Learner"])
