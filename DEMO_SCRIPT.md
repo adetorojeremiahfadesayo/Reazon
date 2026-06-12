@@ -2,7 +2,7 @@
 
 ## 1. Opening
 
-This is Reazon: Microsoft Certification Readiness, a 10-agent workforce development platform for startup teams preparing workers and interns for Microsoft exams.
+This is Reazon: Microsoft Certification Readiness, an 11-agent workforce development platform for startup teams preparing workers and interns for Microsoft exams.
 
 The system uses synthetic data only and demonstrates Foundry IQ, Fabric IQ, and Work IQ concepts locally for reliable demo execution.
 
@@ -58,7 +58,7 @@ Show the endpoints for learner plan, assessment, final exam submission, and mana
 
 ## 6. Engineering Highlights
 
-- 10 specialized agents
+- 11 specialized agents, including a quality critic for guardrail checks
 - 18 Microsoft certification tracks
 - Synthetic Foundry/Fabric/Work IQ layers
 - Largest Remainder study allocation
