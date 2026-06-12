@@ -156,11 +156,6 @@ export function AppShell({
           </div>
         </header>
 
-        <div className="judge-demo-strip" role="status">
-          <strong>Judge demo</strong>
-          <span>{judgeDemoStatus}</span>
-        </div>
-
         {children}
       </main>
     </div>

@@ -7,7 +7,6 @@ import { LearnerDashboard } from "./components/LearnerDashboard";
 import { ManagerDashboard } from "./components/ManagerDashboard";
 import type {
   AppView,
-  AssessmentResult,
   Health,
   LearnerOption,
   LearnerWorkspace,
@@ -42,7 +41,6 @@ export function App() {
   const [loadingReports, setLoadingReports] = useState(false);
   const [loadingJudgeDemo, setLoadingJudgeDemo] = useState(false);
   const [judgeDemoStatus, setJudgeDemoStatus] = useState("Ready to run a guided judge demo.");
-  const [judgeAssessmentResult, setJudgeAssessmentResult] = useState<AssessmentResult | null>(null);
   const [tourOpen, setTourOpen] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
@@ -101,7 +99,6 @@ export function App() {
     setLoadingJudgeDemo(true);
     setLoadingLearner(true);
     setError(null);
-    setJudgeAssessmentResult(null);
     setActiveView("learner");
     try {
       setJudgeDemoStatus("1/4 Building learner workspace, plan, citations, and trace evidence.");
@@ -112,8 +109,7 @@ export function App() {
       const answers = Object.fromEntries(
         data.quiz.questions.map((question) => [String(question.question_id), question.correct_option_index])
       );
-      const result = await submitAssessment(selectedEmployeeId, prompt, answers);
-      setJudgeAssessmentResult(result);
+      await submitAssessment(selectedEmployeeId, prompt, answers);
 
       setJudgeDemoStatus("3/4 Refreshing generated report evidence and cache-aware traces.");
       await refreshReports();
@@ -161,6 +157,14 @@ export function App() {
 
   useEffect(() => {
     try {
+      const tourParam = new URLSearchParams(window.location.search).get("tour");
+      if (tourParam && ["1", "true", "open", "reset"].includes(tourParam.toLowerCase())) {
+        if (tourParam.toLowerCase() === "reset") {
+          window.localStorage.removeItem(TOUR_STORAGE_KEY);
+        }
+        setTourOpen(true);
+        return;
+      }
       if (window.localStorage.getItem(TOUR_STORAGE_KEY) !== "true") {
         setTourOpen(true);
       }
@@ -184,8 +188,6 @@ export function App() {
         selectedLearner={selectedLearner}
         workspace={workspace}
         learners={learners}
-        judgeDemoStatus={judgeDemoStatus}
-        judgeAssessmentResult={judgeAssessmentResult}
         reports={reports}
         reportsLoading={loadingReports}
         onRefreshReports={refreshReports}

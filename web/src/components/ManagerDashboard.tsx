@@ -202,19 +202,6 @@ export function ManagerDashboard({
         </div>
       </section>
 
-      <section className="panel privacy-panel">
-        <div className="section-heading">
-          <div>
-            <p>Privacy-safe insights</p>
-            <h2>No sensitive personal data exposed</h2>
-          </div>
-        </div>
-        <p>
-          Manager analytics use synthetic names, certification tracks, readiness scores, meeting-hour risk, and learning
-          comments only. Guardrails block emails, phone numbers, and private identifiers from manager insight payloads.
-        </p>
-      </section>
-
       {insights ? (
         <>
           <section className="metric-grid manager-metrics">

@@ -10,7 +10,7 @@ import {
   ShieldCheck,
   Trophy
 } from "lucide-react";
-import type { AssessmentResult, LearnerOption, LearnerWorkspace, ReportFile } from "../types";
+import type { LearnerOption, LearnerWorkspace, ReportFile } from "../types";
 import { AssessmentPanel } from "./AssessmentPanel";
 import { StatCard } from "./StatCard";
 import { TooltipButton } from "./TooltipButton";
@@ -20,8 +20,6 @@ type LearnerDashboardProps = {
   selectedLearner?: LearnerOption;
   workspace: LearnerWorkspace | null;
   learners: LearnerOption[];
-  judgeDemoStatus: string;
-  judgeAssessmentResult: AssessmentResult | null;
   reports: ReportFile[];
   reportsLoading: boolean;
   onRefreshReports: () => void | Promise<void>;
@@ -61,10 +59,6 @@ function averagePracticeScore(learners: LearnerOption[]) {
   return Math.round(learners.reduce((total, learner) => total + learner.practice_score_avg, 0) / learners.length);
 }
 
-function getReportStatus(reports: ReportFile[], reportType: string) {
-  return reports.some((report) => report.report_type === reportType) ? "generated" : "pending";
-}
-
 function milestoneForWeek(role: string | undefined, certification: string | undefined, weekNumber: number) {
   const roleLabel = role ?? "worker";
   const certLabel = certification ?? "certification";
@@ -78,8 +72,6 @@ export function LearnerDashboard({
   selectedLearner,
   workspace,
   learners,
-  judgeDemoStatus,
-  judgeAssessmentResult,
   reports,
   reportsLoading,
   onRefreshReports,
@@ -205,34 +197,6 @@ export function LearnerDashboard({
         />
       </section>
 
-      <section className="panel judge-story-panel">
-        <div className="section-heading">
-          <div>
-            <p>Judge path</p>
-            <h2>Demo command center</h2>
-          </div>
-        </div>
-        <div className="story-grid">
-          <article>
-            <strong>Current step</strong>
-            <span>{judgeDemoStatus}</span>
-          </article>
-          <article>
-            <strong>Evidence status</strong>
-            <span>Study plan {getReportStatus(learnerReports, "Study plan")}</span>
-            <span>Badge certificate {getReportStatus(learnerReports, "Badge certificate")}</span>
-          </article>
-          <article>
-            <strong>Checkpoint outcome</strong>
-            <span>
-              {judgeAssessmentResult
-                ? `${Math.round(judgeAssessmentResult.score_percentage)}% - ${judgeAssessmentResult.booking_recommendation}`
-                : "Run judge demo or submit checkpoint"}
-            </span>
-          </article>
-        </div>
-      </section>
-
       <section className="panel comparison-panel">
         <div className="section-heading">
           <div>
@@ -259,23 +223,7 @@ export function LearnerDashboard({
         </div>
       </section>
 
-      {!workspace ? (
-        <section className="panel first-run">
-          <BrainCircuit size={34} />
-          <div>
-            <h2>Ready for the web workflow</h2>
-            <p>
-              Select a worker or intern, adjust the prompt if needed, and execute the pipeline. Results will populate the
-              study plan, learning resources, activity verification, weekly checkpoint, badge state, and trace console.
-            </p>
-            <div className="failure-path-list first-run-paths">
-              <span>Run judge demo: happy path</span>
-              <span>Intentional failure path: leave answers blank or choose misses</span>
-              <span>Manager portal: cohort risk triage</span>
-            </div>
-          </div>
-        </section>
-      ) : (
+      {workspace ? (
         <>
           <section className="panel plan-panel">
             <div className="section-heading">
@@ -531,7 +479,7 @@ export function LearnerDashboard({
           />
           <TraceConsole traces={workspace.traces} />
         </>
-      )}
+      ) : null}
     </div>
   );
 }
