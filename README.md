@@ -19,7 +19,7 @@ An 11-agent reasoning platform that helps organizations develop interns and juni
 | Data policy | Synthetic learner, work, LMS, and certification data only |
 | Main surfaces | React web app, FastAPI backend, Streamlit app, PDF reports |
 | Youtube Video Link | React web app, FastAPI backend, Streamlit app, PDF reports |
-|Webapp link | React web app, FastAPI backend, Streamlit app, PDF reports |
+|Webapp link | https://reazon.up.railway.app/ |
 
 ## The Problem
 
