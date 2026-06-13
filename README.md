@@ -18,7 +18,7 @@ An 11-agent reasoning platform that helps organizations develop interns and juni
 | Microsoft IQ usage | Synthetic certification guides are retrieved through Azure AI Search as a Foundry IQ-style grounded knowledge layer |
 | Data policy | Synthetic learner, work, LMS, and certification data only |
 | Main surfaces | React web app, FastAPI backend, Streamlit app, PDF reports |
-| Youtube Video Link | React web app, FastAPI backend, Streamlit app, PDF reports |
+| Youtube Video Link | https://youtu.be/u4lk25aZIjM |
 |Webapp link | https://reazon.up.railway.app/ |
 
 ## The Problem
